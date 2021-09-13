@@ -8,6 +8,12 @@
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='user_id']" position="replace">
                     <field name="user_id" string="Related User" />
+                    
+				</xpath>
+                
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="line_manager"  invisible='0'/>
+                    
 				</xpath>
                
 				
@@ -19,6 +25,14 @@
       <template id="portal_main_layout" name="portal_main_layout_inherit" customize_show="True" inherit_id="portal.portal_layout" priority="41">
         <xpath expr="//div[hasclass('o_my_sidebar')]" position="replace">
            
+        </xpath>          
+    </template>
+
+   <template id="portal_main_home_layout" name="portal_main_layout_inherit" customize_show="True" inherit_id="portal.portal_my_home" priority="41">
+        <xpath expr="//h3" position="replace">
+          
+                <h3>Request/Approvals</h3>
+                
         </xpath>          
     </template>
       

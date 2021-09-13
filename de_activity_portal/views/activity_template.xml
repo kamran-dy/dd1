@@ -5,8 +5,8 @@
     <template id="portal_layout_activity" name="Portal layout: activity menu entry" inherit_id="portal.portal_breadcrumbs" priority="21">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'activities' or activity" class="col-lg-2" t-attf-class="breadcrumb-item #{'active ' if not activity else ''}">
-                <a t-if="activity" t-attf-href="/my/activities?{{ keep_query() }}">Approval Notification</a>
-                <t t-else="">Approval Notification</t>
+                <a t-if="activity" t-attf-href="/my/activities?{{ keep_query() }}">Activities</a>
+                <t t-else="">Activities</t>
             </li>
             <li t-if="activity" class="breadcrumb-item active text-truncate col-8 col-lg-10">
                 <t t-esc="activity.res_name"/>
@@ -17,8 +17,8 @@
     
     <template id="portal_my_home_activity" name="Show Activities" customize_show="True" inherit_id="portal.portal_my_home" priority="40">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-call="portal.portal_docs_entry" >
-                <t t-set="title">Approval Notification</t>
+            <t t-call="portal.portal_docs_entry"  groups="de_activity_portal.group_activity_portal">
+                <t t-set="title">Activities</t>
                 <t t-set="url" t-value="'/my/activities'"/>
                 <t t-set="placeholder_count" t-value="'activity_count'"/>
             </t>
@@ -30,11 +30,11 @@
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar">
-                <t t-set="title">Approval Notification</t>
+                <t t-set="title">Activities</t>
             </t>
             <t t-if="not grouped_activities">
                 <div class="alert alert-warning mt8" role="alert">
-                    There are no Approval Notification.
+                    There are no Activities.
                 </div>
             </t>
             

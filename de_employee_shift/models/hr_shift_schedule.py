@@ -12,6 +12,7 @@ class HrSchedule(models.Model):
     start_date = fields.Date(string="Date From", required=True, help="Starting date for the shift", readonly=True)
     end_date = fields.Date(string="Date To", required=True, help="Ending date for the shift", readonly=True)
     employee_id = fields.Many2one('hr.employee', string="Employee", readonly=True)
+    employee_number = fields.Char(string='Employee Number', compute='_compute_emp_number', store=True)	
     state = fields.Selection(selection=[
             ('draft', 'Draft'),
             ('posted', 'Posted'),
@@ -22,6 +23,13 @@ class HrSchedule(models.Model):
     dept_id = fields.Many2one('hr.department', string="Department")
     company_id = fields.Many2one('res.company', string="Company", help="Company", readonly=True)
     schedule_line_ids = fields.One2many('hr.shift.schedule.line', 'generate_id' , string="Shedule", required=False, help="Schedule")
+
+    @api.depends('employee_id')
+    def _compute_emp_number(self):
+        for shift in self:
+            shift.update({
+               'employee_number':  shift.employee_id.emp_number
+                 })   
     
     def action_cancel(self):
         for shift in self:
@@ -102,14 +110,22 @@ class HrScheduleLine(models.Model):
             ('draft', 'Draft'),
             ('posted', 'Posted'),
             ('cancel', 'Cancelled'),
-        ], string='Status', required=True, readonly=True, copy=False, tracking=True,
+        ], string='Status', required=True, readonly=False, copy=False, tracking=True,
         default='draft')
     employee_id = fields.Many2one('hr.employee', string='Employee')
+    employee_number = fields.Char(string='Employee Number', compute='_compute_emp_number', store=True) 
     first_shift_id = fields.Many2one('resource.calendar', string="First Shift", required=False, help="Shift", domain="['|',('company_id','=',company_id),('company_id','=',False)]")
     second_shift_id = fields.Many2one('resource.calendar', string="Second Shift", required=False, help="Shift", domain="['|',('company_id','=',company_id),('company_id','=',False)]")
     rest_day = fields.Boolean(string="Rest Day")
     generate_id = fields.Many2one('hr.shift.schedule', string='Generate', help="Generate")
     company_id = fields.Many2one(related='generate_id.company_id')
+
+    @api.depends('employee_id')
+    def _compute_emp_number(self):
+        for shift in self:
+            shift.update({
+               'employee_number':  shift.employee_id.emp_number
+                 }) 
     
    
     

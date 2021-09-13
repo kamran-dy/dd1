@@ -16,11 +16,12 @@ class HrAttendanceRectification(models.Model):
     employee_id = fields.Many2one('hr.employee', string="Employee", required=True)
     user_id = fields.Many2one('res.users', string="User")
     category_id = fields.Many2one(related='employee_id.category_id')
-    check_in = fields.Datetime(string="Check In", required=True)
-    check_out = fields.Datetime(string="Check Out", required=True)
+    check_in = fields.Datetime(string="Check In", required=False)
+    check_out = fields.Datetime(string="Check Out", required=False)
     approval_request_id = fields.Many2one('approval.request', string="Approval")
     date = fields.Date(string="Date")
     reason =  fields.Text(string="Reason")
+    partial = fields.Char(string='Type')
     attendance_id = fields.Many2one('hr.attendance', string="Attendance")
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -31,14 +32,28 @@ class HrAttendanceRectification(models.Model):
         readonly=True, string='State', default='draft')
     
     @api.constrains('check_in', 'check_out')
+    def _check_attendance_date(self):
+        for line in self:
+            if line.check_in:
+                line.update({
+                    'date': line.check_in
+                })
+            elif line.check_out:
+                line.update({
+                    'date': line.check_out
+                })    
+    
+    @api.constrains('check_in', 'check_out')
     def _check_validity_check_in_check_out(self):
         """ verifies if check_in is earlier than check_out. """
         for attendance in self:
             if attendance.check_in and attendance.check_out:
-#                 employee_attendance = self.env['hr.attendance'].search([('employee_id','=',attendance.employee_id.id)])
-#                 for hr_attendance in employee_attendance:
-#                     if str(attendance.check_in) >= str(hr_attendance.check_in) and str(attendance.check_out) <= str(hr_attendance.check_out):
-#                         raise exceptions.UserError(_('Attendance Exist between selected range.Please Select Other than this "Check In" ' + str(attendance.check_in) +' "Check Out" '+ str(str(attendance.check_out))))
+                hr_attendance = self.env['hr.attendance'].search([('employee_id','=',attendance.employee_id.id),('att_date','=',attendance.date)])
+                for line in hr_attendance:
+                    if line.check_in and line.check_out:
+                        if str(attendance.check_in) >= str(line.check_in) and str(attendance.check_in) <= str(line.check_out):
+                            raise exceptions.UserError(_('Attendance Already Exist between selected range!'))
+                                    
                 if attendance.check_out < attendance.check_in:
                     raise exceptions.UserError(_('"Check Out" time cannot be earlier than "Check In" time.'+ str(attendance.check_out) ))
                      
@@ -52,26 +67,64 @@ class HrAttendanceRectification(models.Model):
             
     def action_approve(self):
         for line in self:
-            if line.attendance_id:
-                attendance_rectify = self.env['hr.attendance'].search([('id','=',line.attendance_id.id)])
+            if line.state == 'submitted':
                 
-                attendance_rectify.update({
-                    'check_in': line.check_in,
-                    'check_out': line.check_out,
-                })
-                line.update({
-                    'state': 'approved'
-                }) 
-            else:
-                vals = {
-                    'employee_id': line.employee_id.id,
-                    'check_in': line.check_in,
-                    'check_out': line.check_out,
-                }
-                attendance = self.env['hr.attendance'].create(vals)
-                line.update({
-                    'state': 'approved'
-                }) 
+                if line.attendance_id:
+                    attendance_rectify = self.env['hr.attendance'].search([('id','=',line.attendance_id.id)])
+
+                    attendance_rectify.update({
+                        'check_in': line.check_in,
+                        'check_out': line.check_out,
+                    })
+                    line.update({
+                        'state': 'approved'
+                    })
+                elif line.date:
+                    attendance_rectify = self.env['hr.attendance'].search([('employee_id','=',line.employee_id.id),('att_date','=', line.date)])
+                    for rectify_attendance in attendance_rectify:
+                        if rectify_attendance.check_in and rectify_attendance.check_out:
+                            pass
+                        elif rectify_attendance.check_in:
+                            if line.check_out:
+                                if rectify_attendance.check_in > line.check_out:                           
+                                    rectify_attendance.update({
+                                        'check_in': line.check_out,
+                                        'check_out': rectify_attendance.check_in,
+                                        'remarks': 'In Time Is Missing',
+                                    })
+                                elif rectify_attendance.check_in < line.check_out: 
+                                    rectify_attendance.update({
+                                        'check_in': rectify_attendance.check_in,
+                                        'check_out': line.check_out,
+                                        'remarks': 'Out Time Is Missing',
+                                    })
+                            elif  line.check_in:
+                                if rectify_attendance.check_in > line.check_in:                           
+                                    rectify_attendance.update({
+                                        'check_in': line.check_in,
+                                        'check_out': rectify_attendance.check_in,
+                                        'remarks': 'In Time Is Missing',
+                                    })
+                                elif rectify_attendance.check_in < line.check_in: 
+                                    rectify_attendance.update({
+                                        'check_in': rectify_attendance.check_in,
+                                        'check_out': line.check_in,   
+                                        'remarks': 'Out Time Is Missing',
+                                    })                            
+                    line.update({
+                        'state': 'approved'
+                    })
+                else:
+                    vals = {
+                        'employee_id': line.employee_id.id,
+                        'check_in': line.check_in,
+                        'check_out': line.check_out,
+                        'remarks': 'Comitment Slip',
+                    }
+                    attendance = self.env['hr.attendance'].create(vals)
+                    line.update({
+                        'state': 'approved'
+                    }) 
                 
             
     def action_refuse(self):

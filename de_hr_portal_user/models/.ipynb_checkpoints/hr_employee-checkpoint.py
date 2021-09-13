@@ -27,10 +27,17 @@ class HrEmployee(models.Model):
     
     
     user_id = fields.Many2one('res.users', 'User', related='resource_id.user_id', store=True, readonly=False)
+    line_manager = fields.Char(string='Manager', compute='_compute_manager_name')
+    
+    @api.depends('parent_id')
+    def _compute_manager_name(self):
+        for manager in self:
+            manager.update({
+                'line_manager': manager.parent_id.name,
+            })    
+    
+    
 
-    
-    
-    
     
 class Users(models.Model):
     """ User class. A res.users record models an OpenERP user and is different

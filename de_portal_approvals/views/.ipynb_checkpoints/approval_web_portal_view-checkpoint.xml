@@ -4,19 +4,17 @@
     <template id="portal_layout" name="Portal layout: approval menu entry" inherit_id="portal.portal_breadcrumbs" priority="25">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'approval' or approval" class="col-lg-2" t-attf-class="breadcrumb-item #{'active ' if not approval else ''}">
-                <a t-if="approval" t-attf-href="/my/approvals?{{ keep_query() }}">approvals</a>
-                <t t-else="">approvals</t>
+                <a t-if="approval" t-attf-href="/my/approvals?{{ keep_query() }}">Approval Notification</a>
+                <t t-else="">Approval Notification</t>
             </li>
-            <li t-if="approval" class="breadcrumb-item active text-truncate col-8 col-lg-10">
-                <t t-esc="approval.name"/>
-            </li>
+
         </xpath>
     </template>
 
     <template id="portal_my_home" name="Show Approvals / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="25">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-call="portal.portal_docs_entry" groups='de_portal_approvals.group_approval_access'>
-                <t t-set="title">Approvals</t>
+                <t t-set="title">Approval Notification</t>
                 <t t-set="url" t-value="'/my/approvals'"/>
                 <t t-set="placeholder_count" t-value="'approval_count'"/>
             </t>
@@ -28,11 +26,11 @@
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar">
-                <t t-set="title">Approvals</t>
+                <t t-set="title">Approval Notification</t>
             </t>
             <t t-if="not grouped_approvals">
                 <div class="alert alert-warning mt8" role="alert">
-                    There are no Approvals.
+                    There are no Approval Notification.
                 </div>
             </t>
             <t t-if="grouped_approvals">
@@ -42,9 +40,8 @@
                             <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
                                 <th class="text-left">Ref</th>
                                 <th class="text-left">Name</th>
-                                <th class="text-left">Description</th>
+                                <th class="text-left">Type</th>
                                 <th class="text-left">Categories</th>
-                                <th class="text-left">Contact</th>
                                 <th class="text-center">Approver Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -61,16 +58,39 @@
                                      <td>
                                         <a t-attf-href="/my/approval/#{_approval_.id}?{{ keep_query() }}"><span t-field="_approval_.name"/></a>
                                     </td>
-                                    <td class="text-left">
-                                        <span t-esc="_approval_.reason" />
-                                    </td>
+                                     
+                                       <td class="text-left">
+                                        <t t-if="_approval_.leave_id">   
+                                          <t t-if="_approval_.leave_id.leave_category == 'day'">
+                                             <i class="badge badge-pill badge-info" >Day</i>
+                                           </t>
+                                           <t t-if="_approval_.leave_id.leave_category == 'half_day'">
+                                             <i class="badge badge-pill badge-info" >Half Day</i>
+                                           </t>
+                                           <t t-if="_approval_.leave_id.leave_category == 'hours'">
+                                             <i class="badge badge-pill badge-info" >Short leave</i>
+                                           </t>
+                                         </t> 
+                                           
+                                           <t t-if="not _approval_.leave_id">
+                                           <t t-if="not _approval_.rectification_id">
+                                              <span t-esc="_approval_.reason"/>
+                                         
+                                          </t> 
+                                          </t>   
+                                           <t t-if="_approval_.rectification_id">
+                                       
+                                              <span t-esc="_approval_.rectification_id.partial"/>
+                                                                             
+                                          </t>   
+                                       </td>
+                                        
+                                   
                                     <td class="text-left">
                                         <span t-esc="_approval_.category_id.name"/>
                                     </td>
                                     
-                                    <td class="text-left">
-                                        <span t-esc="_approval_.partner_id.name"/>
-                                    </td>
+                                   
                                   
                                     <td class="text-center">
                                          <t t-foreach="_approval_.approver_ids" t-as="lines">
@@ -98,7 +118,7 @@
                                     <t t-if="lines.user_id.id == uid">
                                         <t t-if = "lines.status == 'pending'">
                                              <a t-attf-href="/app/approval/accept/#{_approval_.id}?" title="Approve"><div class="btn btn-primary"><i class="fa fa-check"></i></div></a>
-                                             <a t-attf-href="/app/approval/reject/#{_approval_.id}?" title="Refuse"><div class="btn btn-warning"><i class="fa fa-times"></i></div></a> 
+                                             <a t-attf-href="/request/refuse/#{_approval_.id}?" title="Refuse"><div class="btn btn-warning"><i class="fa fa-times"></i></div></a> 
                                            </t>
                                          </t>   
                                         </t> 
@@ -120,11 +140,7 @@
     
     <template id="portal_my_approval" name="My Approval">
         <t t-call="portal.portal_layout">
-             <t t-set="o_portal_fullwidth_alert" >
-                <t t-call="portal.portal_back_in_edit_mode">
-                    <t t-set="backend_url" t-value="'/web#model=approval.request&amp;id=%s&amp;view_type=form' % (approval.id)"/>
-                </t> 
-            </t>
+             
           
             <div id="optional_placeholder"></div>
             <t t-call="portal.portal_record_layout">
@@ -182,8 +198,32 @@
                         </div>
                     </div>
                 </t>
-               <t t-set="card_body">          
+               <t t-set="card_body"> 
                     <div class="row mb-4">
+                         <div class="col-12 col-md-6 pb-2">
+                            <div class="row">
+                                <div class="col-md-6"> <strong>Requested By : </strong>
+                                    <t t-if="approval.request_owner_id">
+                                        <span t-esc="approval.request_owner_id.name"/>
+                                    </t>
+                                </div>
+                            </div>
+                             
+                        </div>
+                        
+                    </div> 
+                    <br/>
+                    <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Phone:</strong> <span t-field="approval.leave_id.employee_id.work_phone" />
+                        </div>
+                        <div class="col-12 col-md-6" t-if="approval.id">
+                            <strong>Email:</strong> <span t-field="approval.leave_id.employee_id.work_email" />
+                        </div>
+                    </div>
+                    
+                   <br/>
+                     <div class="row mb-4">
                         <div class="col-12 col-md-6 mb-1">
                             <strong>Date:</strong> <span t-field="approval.create_date" t-options='{"widget": "date"}'/>
                         </div>
@@ -191,51 +231,121 @@
                             <strong>Category:</strong> <span t-field="approval.category_id.name" />
                         </div>
                     </div>
-                    <div class="row mb-4">
-                         <div class="col-12 col-md-6 pb-2">
-                            <div class="row">
-                                <div class="col-md-6"> <strong>Request Owner : </strong>
-                                    <t t-if="approval.request_owner_id">
-                                        <span t-esc="approval.request_owner_id.name"/>
-                                    </t>
-                                </div>
-                            </div>
-                             <div class="row">            
-                                <div class="col-md-6"> <strong>Contact : </strong>
-                                    <t t-if="approval.partner_id">
-                                        <span t-esc="approval.partner_id.name"/>
-                                    </t>
-                                </div>
-                            </div>
+                   <br/>
+                   
+                   
+                       
+                 
+                   <t t-if='approval.leave_id'>
+                   <h3><p style='color:blue;'>Details</p></h3>
+                       <br/>    
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Leave Type:</strong> <span t-field="approval.leave_id.holiday_status_id.name" />
                         </div>
-                        <div class="col-12 col-md-6 pb-2">
-                            <strong>Active User</strong>
-                            <div class="row">
-                                <div class="col flex-grow-0 pr-3">
-                                    <t t-if="approval.activity_user_id">
-                                    <img t-if="approval.activity_user_id.image_1024" class="rounded-circle mt-1 o_portal_contact_img" t-att-src="image_data_uri(approval.activity_user_id.image_1024)" alt="Contact"/>
-                                     </t>
-                                    <img t-else="" class="rounded-circle mt-1 o_portal_contact_img" src="/web/static/src/img/user_menu_avatar.png" alt="Contact"/>
-                                </div>
-                                <div class="col pl-md-0">
-                                    <t t-if="approval.activity_user_id">
-                                        <div t-field="approval.activity_user_id" t-options='{"widget": "contact", "fields": ["name", "email", "phone"]}'/>
-                                    </t>
-                                </div>
-                            </div>
+                        <div class="col-12 col-md-6" t-if="approval.id">
+                            <strong>Duration Type:</strong> <span t-field="approval.leave_id.leave_category" />
                         </div>
-                    </div> 
+                    </div>
+                   <br/>
+                   </t>  
+                   
+                   <t t-if='approval.leave_id'>
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Request From:</strong> <span t-field="approval.leave_id.date_from"  t-options='{"widget": "date"}' />
+                        </div>
+                        <div class="col-12 col-md-6" t-if="approval.id">
+                            <strong>Request To:</strong> <span t-field="approval.leave_id.date_to"  t-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+                   <br/>
+                   </t> 
+                   
+                   <t t-if='approval.leave_id'>
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Duration : </strong> <span t-field="approval.leave_id.number_of_days"/>  day
+                        </div>
+                        <div class="col-12 col-md-6" t-if="approval.id">
+                            <strong></strong> 
+                        </div>
+                    </div>
+                   <br/>
+                   </t> 
+                    <t t-if='approval.leave_id'>
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Remakrs : </strong>  <span t-field="approval.leave_id.name"/>
+                        </div>
+                        <div class="col-12 col-md-6" t-if="approval.id">
+                            <strong></strong> 
+                        </div>
+                    </div>
+                   <br/>
+                   </t>
+                   
+                   <t t-if='approval.rectification_id'>
+                   <h3><p style='color:blue;'>Details</p></h3>
+                       <br/>    
+                   
+                  
+                   
+                   <t t-if='approval.rectification_id'>
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1" t-if="approval.rectification_id.check_in">
+                            <strong>Check In:</strong> <span t-field="approval.rectification_id.check_in"  t-options='{"widget": "datetime"}' />
+                        </div>
+                        <div class="col-12 col-md-6" t-if="approval.rectification_id.check_out">
+                            <strong>Check Out:</strong> <span t-field="approval.rectification_id.check_out"  t-options='{"widget": "datetime"}'/>
+                        </div>
+                    </div>
+                   <br/>
+                   </t> 
+                   
+                   <t t-if='approval.rectification_id'>
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Type : </strong> <span t-field="approval.rectification_id.partial"/>  
+                        </div>
+                        <div class="col-12 col-md-6" t-if="approval.id">
+                            <strong></strong> 
+                        </div>
+                    </div>
+                   <br/>
+                   </t> 
+                    <t t-if='approval.rectification_id'>
+                   <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Remakrs : </strong>  <span t-field="approval.rectification_id.reason"/>
+                        </div>
+                        <div class="col-12 col-md-6" t-if="approval.id">
+                            <strong></strong> 
+                        </div>
+                    </div>
+                   <br/>
+                   </t>
+                   </t>    
+                   
+                   
+                  
+                 <t t-if=' not approval.leave_id'>
+                   <t t-if='not approval.rectification_id'>  
+                     <h3><p style='color:blue;'>Details</p></h3>
+                     <br/>
                     <div class="row"> 
                         <div t-attf-class="col-12 col-lg-12  mb-md-0 ">
                             <hr class="mb-1"/>
                             <div class="d-flex my-2">
-                                <strong>Description</strong>
+                                <strong></strong>
                             </div>
                             <t t-if="approval.reason">                                        
                                 <div class="py-1 px-2 bg-100 small" t-field="approval.reason"/>
                             </t>
                         </div> 
                     </div>
+                   </t> 
+                  </t>    
                    <div class="row">
                        <t t-foreach="approval.approver_ids" t-as="lines">
                             <t t-if="lines.user_id.id == uid">
@@ -248,12 +358,7 @@
                                 <a t-attf-href="/app/approval/refuse/#{approval.id}?"><i class="btn btn-warning">Refuse</i></a>                   
                             </div>
                                    
-<!--                             <div class="offset-md-8 col-md-3" style="margin-top:20px;">
-                                <a t-attf-href="/app/approval/approve/#{approval.id}?"><i  class="btn btn-primary">Approve</i></a>
-                            </div>                  
-                            <div class="offset-md-10 col-md-3" style="margin-top:20px;">
-                                <a t-attf-href="/app/approval/refuse/#{approval.id}?"><i class="btn btn-warning">Refuse</i></a>                   
-                            </div> -->
+
                                 </t>
                            </t>
                        </t>

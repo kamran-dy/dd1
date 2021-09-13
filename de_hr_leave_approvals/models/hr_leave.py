@@ -19,6 +19,10 @@ from odoo.tools import float_compare
 from odoo.tools.float_utils import float_round
 from odoo.tools.translate import _
 from odoo.osv import expression
+from odoo import exceptions
+from dateutil.relativedelta import relativedelta
+from odoo.exceptions import UserError, ValidationError
+
 
 _logger = logging.getLogger(__name__)
 
@@ -29,14 +33,68 @@ DummyAttendance = namedtuple('DummyAttendance', 'hour_from, hour_to, dayofweek, 
 
 class HolidaysRequest(models.Model):
     _inherit = 'hr.leave'
+
+        
+    def action_compute_days(self):
+        for line in self:
+            shift_schedule_line = self.env['hr.shift.schedule.line'].sudo().search([('employee_id','=',line.employee_id.id),('date','>=',str(line.request_date_from)),('date','<=',str(line.request_date_to))])
+            tot_rest_days = 0
+            gazetted_days_count = 0
+            COUNT_1 = 0
+            for shift_line in shift_schedule_line:
+                shift = shift_line.first_shift_id
+                if not shift:
+                    shift = line.employee_id.shift_id
+                if not shift:
+                    shift = self.env['resource.calendar'].sudo().search([('company_id','=',line.employee_id.company_id.id)], limit=1)
+
+                for gazetted_day in shift.global_leave_ids:
+                    gazetted_date_from = gazetted_day.date_from +timedelta(1)
+                    gazetted_date_to = gazetted_day.date_to
+                    if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
+
+                        gazetted_days_count += 1 
+
+                if shift_line.rest_day == True:
+                    for gazetted_day in shift.global_leave_ids:
+                        gazetted_date_from = gazetted_day.date_from +timedelta(1)
+                        gazetted_date_to = gazetted_day.date_to
+                        if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
+                            tot_rest_days -= 1    
+
+                    tot_rest_days += 1    
+
+
+            total_days = line.number_of_days  - tot_rest_days - gazetted_days_count
+            delta_days = line.request_date_to - line.request_date_from
+            qdelta_days = delta_days.days 
+            line.update({
+                  'number_of_days': total_days
+                })    
+                
     
     category_id = fields.Many2one('approval.category', related='holiday_status_id.category_id', string="Approval Category", default=lambda self: self.holiday_status_id.category_id.id, required=False, readonly=True)
+    leave_category = fields.Selection([
+        ('day', 'Day'),
+        ('half_day', 'Half Day'),
+        ('hours', 'Short leave'),
+        ], string='Leave Category', tracking=True)
     approval_request_id = fields.Many2one('approval.request', string='Approval Request', copy=False, readonly=True)
     request_status = fields.Selection(related='approval_request_id.request_status')
     attachment_id = fields.Many2many('ir.attachment', relation="files_rel_leave",
                                             column1="doc_id",
                                             column2="attachment_id",
                                             string="Attachment")
+    approve_date = fields.Date(string='Approve Date')
+    
+    
+    def action_validate(self):
+       
+        res = super(HolidaysRequest, self).action_validate()
+        self.update({
+            'approve_date': fields.date.today()
+        })
+        return res
     
     
     def action_cancel(self):
@@ -189,8 +247,42 @@ class HolidaysRequest(models.Model):
                     holiday_sudo.action_create_approval_request()
                 elif not self._context.get('import_file'):
                     holiday_sudo.activity_update()
-            holiday._get_date_from_to()   
+            holiday._get_date_from_to()  
+            holiday._get_duration_update_approval()  
+            holiday.action_validate_leave_period()
+            holiday.action_onchange_attachment()  
         return holidays
+
+
+    
+    def action_onchange_attachment(self):
+        if not self.attachment_id:
+            if self.holiday_status_id.attachment  == True:
+                diff = self.number_of_days
+                if diff >= self.holiday_status_id.attachment_validity:
+                    raise ValidationError(_("Please Add Your Medical Certificate !"))
+           
+    
+    def action_validate_leave_period(self):
+        restrict_date = '2021-07-16'
+        for line in self:
+            if str(line.request_date_from)  < restrict_date:
+                pass
+                #raise UserError('Not Allow to Enter Leave Request before 16 JULY 2021!')
+    
+    def _get_duration_update_approval(self):
+        for line in self:
+            if line.approval_request_id:
+                duration_type = ' '
+                if line.leave_category == 'day':
+                    duration_type = 'Days' 
+                elif line.leave_category == 'half_day':
+                    duration_type = 'Half Day' 
+                elif line.leave_category == 'hours':
+                    duration_type = 'Short leave'     
+                line.approval_request_id.update({
+                    'reason': ' Leave Type:  ' + str(line.holiday_status_id.name)+"\n"+' Duration type:  '+str(duration_type)+"\n"+' Request from:      '+str(line.request_date_from.strftime("%d %b %Y "))+ "\n" +' Request To:  '+str(line.request_date_to.strftime("%d %b %Y"))+ "\n" +' Duration :  '+str(line.number_of_days) +' Days'+ "\n"  +"\n" +"\n" + ' Remarks:   ' +str(line.name)+"\n", 
+                })
     
     @api.depends('request_status','approval_request_id.request_status')
     @api.onchange('request_status','approval_request_id.request_status')
@@ -231,15 +323,33 @@ class HolidaysRequest(models.Model):
         
         request_list = []
         for line in self:
-            
+            duration_type = ' '
+            if line.leave_category == 'day':
+                duration_type = 'Days' 
+            elif line.leave_category == 'half_day':
+                duration_type = 'Half Day' 
+            elif line.leave_category == 'hours':
+                duration_type = 'Short leave'     
+                
             request_list.append({
-                'name': line.employee_id.name + "'s " + str(line.holiday_status_id.name) + ' request from ' + str(line.date_from) + ' to ' + str(line.date_to) + ' ' + (line.name if line.name else ""),
+                'name':  str(line.employee_id.name) ,
                 'request_owner_id': line.employee_id.user_id.id or line.user_id.id,
                 'category_id': line.category_id.id,
                 'leave_id': line.id,
+                'reason': ' Leave Type:  ' + str(line.holiday_status_id.name)+"\n"+' Request from:      '+str(line.request_date_from.strftime("%d %b %Y "))+ "\n" +' Request To:  '+str(line.request_date_to.strftime("%d %b %Y"))+ "\n" +' Duration :  '+str(line.number_of_days) +' Days'+ "\n" +' Duration type:  '+str(duration_type)+"\n" +"\n" +"\n" + ' Remarks:   ' +str(line.name)+"\n",
                 'request_status': 'new',
             })
             approval_request_id = self.env['approval.request'].create(request_list)
             approval_request_id._onchange_category_id()
             approval_request_id.action_confirm()
+            approval_request_id.action_date_confirm_update()
             line.approval_request_id = approval_request_id.id
+            if line.holiday_status_id.is_ceo_approval == True:
+                if line.employee_id.company_id.manager_id.user_id:
+                    approver_vals = {
+                        'user_id': line.employee_id.company_id.manager_id.user_id.id,
+                        'request_id': approval_request_id.id,
+                    }
+                    approver_lines = self.env['approval.approver'].sudo().create(approver_vals)
+
+

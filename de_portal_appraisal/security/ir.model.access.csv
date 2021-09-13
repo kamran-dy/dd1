@@ -1,3 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_appraisal_feedback_portal,access.hr.appraisal.feedback,model_hr_appraisal_feedback,base.group_portal,1,1,1,1
-access_res_company_portal,access.res.company,model_res_company,base.group_portal,1,1,1,1
+access_de_portal_appraisal_de_portal_appraisal,de_portal_appraisal.de_portal_appraisal,model_de_portal_appraisal_de_portal_appraisal,base.group_user,1,1,1,1

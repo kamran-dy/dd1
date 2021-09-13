@@ -53,14 +53,16 @@ class CreateKAttendance(http.Controller):
         current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         employee_id = kattendance_page_content()['employees']
         
-        att_exists = request.env['hr.attendance'].search([('employee_id','=', employee_id.id),('check_out','=',False)], order='check_in desc', limit=1)
+        att_exists = request.env['hr.attendance'].search([('employee_id','=', employee_id.id),('check_out','=',False),('att_date','=', fields.date.today())], order='check_in desc', limit=1)
         if att_exists:
             print(att_exists.check_in)
             return request.render("de_kiosk_attendance_portal.already_checkin_exists",kattendance_page_content()) 
         
         else:    
             att_val = {
-                'employee_id': employee_id.id,            
+                'employee_id': employee_id.id,
+                'att_date': fields.date.today(),
+                'remarks': 'WFH(Work From Home)',
                 'check_in': current_datetime,
             }
             record = request.env['hr.attendance'].sudo().create(att_val)
@@ -72,11 +74,13 @@ class CreateKAttendance(http.Controller):
         print('datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")',datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         employee_id = kattendance_page_content()['employees']
-        att_exists = request.env['hr.attendance'].search([('employee_id','=', employee_id.id),('check_out','=',False)])
+        att_date =  fields.date.today()
+        att_exists = request.env['hr.attendance'].search([('employee_id','=', employee_id.id),('check_out','=',False),('att_date','=',att_date)], order="check_in asc" , limit=1)
         
         if att_exists:
             att_val = {
                 'check_out':current_datetime,
+                'remarks': 'WFH(Work From Home)', 
             }
             record = att_exists.sudo().write(att_val)
             return request.render("de_kiosk_attendance_portal.kattendance_checkin_template",kattendance_page_content()) 

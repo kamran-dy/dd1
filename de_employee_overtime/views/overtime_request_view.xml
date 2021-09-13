@@ -24,6 +24,7 @@
                 <filter string="No Date to" name="nocheckout" domain="[('date_to', '=', False)]" />
                 <group expand="0" string="Group By">
                     <filter string="Employee" name="employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Work Location" name="work_location" context="{'group_by': 'workf_location_id'}"/>
                     <filter string="Date From" name="groupby_name" context="{'group_by': 'date_from'}"/>
                     <filter string="Date To" name="groupby_check_out" context="{'group_by': 'date_to'}"/>
                 </group>
@@ -132,6 +133,8 @@
             <field name="arch" type="xml">
                 <tree string="Overtime Request"  create="false" edit="false" decoration-danger="overtime_hours > 4">
                     <field name="employee_id"  readonly="1"/>
+                    <field name="work_location_id"  invisible="1"/>
+                     <field name="workf_location_id"  readonly="1"/>
                     <field name="date_from" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                     <field name="date_to" attrs="{'readonly': [('state', '!=', 'draft')]}" />
                    <field name="overtime_hours" attrs="{'readonly': [('state', '!=', 'draft')]}"  widget="float_time" />

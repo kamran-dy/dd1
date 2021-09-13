@@ -55,6 +55,18 @@ class OracleSettingConnector(models.Model):
         except Exception as e:
             raise ValidationError(e)
 
+
+    def action_view_attendance_data(self):
+        user_attendance = self.env['hr.user.attendance']
+        attendance_ids = []
+        conn = cx_Oracle.connect('xx_odoo/xxodoo123$@//10.8.8.191:1521/PROD')
+        cur = conn.cursor()
+        statement = 'select count(*) from attend_data p where p.creation_date >= cast(getdate() as Date)'
+        cur.execute(statement)
+        attendances = cur.fetchall()
+        raise UserError(str(attendances))
+
+
     def action_get_attendance_data(self):
         user_attendance = self.env['hr.user.attendance']
         attendance_ids = []
@@ -66,7 +78,6 @@ class OracleSettingConnector(models.Model):
         for attendance in attendances:
             duplicate_attendance = user_attendance.search([('card_no','=',attendance[2]),('time','=',attendance[0])], limit=1)
             if not duplicate_attendance:
-            
                 employee = self.env['hr.employee'].search([('barcode','=',attendance[2])], limit=1)
                 timestamdata = attendance[6]
                 timestamp1 = timestamdata.strftime("%Y-%m-%d %H:%M:%S")
@@ -76,16 +87,16 @@ class OracleSettingConnector(models.Model):
                 timedata = attendance[0]
                 time = timedata     
                 vals = {
-                'timestamp': timestamp,
-                'device_id': attendance[1],
-                'employee_id': employee.id,
-                'card_no': attendance[2],
-                'attendance_date': attendance_data,
-                'creation_date': attendance[4],
-                'company_id': employee.company_id.id, 
-                'remarks': attendance[5],
-                'time':  attendance[0],
-                'updation_date': attendance[6],
+                 'timestamp': timestamp,
+                 'device_id': attendance[1],
+                 'employee_id': employee.id,
+                 'card_no': attendance[2],
+                 'attendance_date': attendance_data,
+                 'creation_date': attendance[4],
+                 'company_id': employee.company_id.id, 
+                 'remarks': attendance[5],
+                 'time':  attendance[0],
+                 'updation_date': attendance[6],
                 }
                 user_attendance= self.env['hr.user.attendance'].create(vals)
             

@@ -24,7 +24,7 @@
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
+#         'security/ir.model.access.csv',
         'security/security.xml',
         'views/hr_appraisal_objective_templates.xml',
     ],

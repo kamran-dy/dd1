@@ -29,6 +29,7 @@
         'security/ir.model.access.csv',
         'views/approval_request_views.xml',
         'views/hr_employee_views.xml',
+        'views/hr_attendance_views.xml',
         'views/hr_attendance_rectify_views.xml',
     ],
     # only loaded in demonstration mode

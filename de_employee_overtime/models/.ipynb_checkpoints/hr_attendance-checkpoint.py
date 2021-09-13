@@ -28,7 +28,7 @@ class HrAttendance(models.Model):
     @api.depends('check_in', 'check_out')
     def _compute_rounded_worked_hours(self):
         for attendance in self:
-            if attendance.check_out:
+            if attendance.check_out and attendance.check_in:
                 delta = attendance.check_out - attendance.check_in
                 extra_time = 0
                 actual_time = delta.total_seconds() / 3600.0
@@ -139,7 +139,7 @@ class HrAttendance(models.Model):
         
         
     def cron_create_overtime(self):                
-        employees = self.env['hr.employee'].search([('allow_overtime','=',True)])
+        employees = self.env['hr.employee'].search([('allow_overtime','=',True),('id','=',334)])
         for employee in employees:
             employee_company = employee.company_id.id
             work_location = employee.work_location_id.id
@@ -173,7 +173,9 @@ class HrAttendance(models.Model):
                         overtime_limit = attendance.rounded_hours - employee.shift_id.hours_per_day
                     else:
                         overtime_limit = attendance.rounded_hours - 8
-                    request_date = attendance.check_in
+                    request_date = fields.date.today()  
+                    if attendance.check_in:
+                        request_date = attendance.check_in
                     ovt_request_date = request_date.strftime('%Y-%m-%d')
                     # get normal overtime type
                     overtime_type = self.get_normal_overtime_type(employee_company, work_location)

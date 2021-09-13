@@ -19,6 +19,10 @@ from odoo.tools import float_compare
 from odoo.tools.float_utils import float_round
 from odoo.tools.translate import _
 from odoo.osv import expression
+from odoo import exceptions
+from dateutil.relativedelta import relativedelta
+from odoo.exceptions import UserError, ValidationError
+
 
 _logger = logging.getLogger(__name__)
 
@@ -31,6 +35,11 @@ class HolidaysRequest(models.Model):
     _inherit = 'hr.leave'
     
     category_id = fields.Many2one('approval.category', related='holiday_status_id.category_id', string="Approval Category", default=lambda self: self.holiday_status_id.category_id.id, required=False, readonly=True)
+    leave_category = fields.Selection([
+        ('day', 'Day'),
+        ('half_day', 'Half Day'),
+        ('hours', 'Short leave'),
+        ], string='Status', tracking=True)
     approval_request_id = fields.Many2one('approval.request', string='Approval Request', copy=False, readonly=True)
     request_status = fields.Selection(related='approval_request_id.request_status')
     attachment_id = fields.Many2many('ir.attachment', relation="files_rel_leave",
@@ -189,8 +198,23 @@ class HolidaysRequest(models.Model):
                     holiday_sudo.action_create_approval_request()
                 elif not self._context.get('import_file'):
                     holiday_sudo.activity_update()
-            holiday._get_date_from_to()   
+            holiday._get_date_from_to()  
+            holiday._get_duration_update_approval()  
         return holidays
+    
+    def _get_duration_update_approval(self):
+        for line in self:
+            if line.approval_request_id:
+                duration_type = ' '
+                if line.leave_category == 'day':
+                    duration_type = 'Days' 
+                elif line.leave_category == 'half_day':
+                    duration_type = 'Half Day' 
+                elif line.leave_category == 'hours':
+                    duration_type = 'Short leave'     
+                line.approval_request_id.update({
+                    'reason': ' Leave Type:  ' + str(line.holiday_status_id.name)+"\n"+' Duration type:  '+str(duration_type)+"\n"+' Request from:      '+str(line.request_date_from.strftime("%d %b %Y "))+ "\n" +' Request To:  '+str(line.request_date_to.strftime("%d %b %Y"))+ "\n" +' Duration :  '+str(line.number_of_days) +' Days'+ "\n"  +"\n" +"\n" + ' Remarks:   ' +str(line.name)+"\n", 
+                })
     
     @api.depends('request_status','approval_request_id.request_status')
     @api.onchange('request_status','approval_request_id.request_status')
@@ -231,12 +255,20 @@ class HolidaysRequest(models.Model):
         
         request_list = []
         for line in self:
-            
+            duration_type = ' '
+            if line.leave_category == 'day':
+                duration_type = 'Days' 
+            elif line.leave_category == 'half_day':
+                duration_type = 'Half Day' 
+            elif line.leave_category == 'hours':
+                duration_type = 'Short leave'     
+                
             request_list.append({
-                'name': line.employee_id.name + "'s " + str(line.holiday_status_id.name) + ' request from ' + str(line.date_from) + ' to ' + str(line.date_to) + ' ' + (line.name if line.name else ""),
+                'name': ' Leave Request From '+ str(line.employee_id.name) ,
                 'request_owner_id': line.employee_id.user_id.id or line.user_id.id,
                 'category_id': line.category_id.id,
                 'leave_id': line.id,
+                'reason': ' Leave Type:  ' + str(line.holiday_status_id.name)+"\n"+' Request from:      '+str(line.request_date_from.strftime("%d %b %Y "))+ "\n" +' Request To:  '+str(line.request_date_to.strftime("%d %b %Y"))+ "\n" +' Duration :  '+str(line.number_of_days) +' Days'+ "\n" +' Duration type:  '+str(duration_type)+"\n" +"\n" +"\n" + ' Remarks:   ' +str(line.name)+"\n",
                 'request_status': 'new',
             })
             approval_request_id = self.env['approval.request'].create(request_list)

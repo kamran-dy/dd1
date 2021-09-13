@@ -26,6 +26,8 @@
         'digest',
         'base',
        'hr',
+       'de_hr_attendance_approvals',
+       'de_oracle_attendance_connector',
                 
 ],
 

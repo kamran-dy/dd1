@@ -1,5 +1,16 @@
 <odoo>
     <data>
+            <record id="compute_duration_server_action" model="ir.actions.server">
+                  <field name="name">Compute Duration</field>
+                  <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+                  <field name="binding_model_id" ref="hr_holidays.model_hr_leave"/>            
+                  <field name="binding_view_types">list</field>
+                  <field name="state">code</field>
+                  <field name="code">action = records.action_compute_days() </field>
+        
+          </record>
+
+
         <record id="hr_leave_view_form_inherit" model="ir.ui.view">
             <field name="name">hr.leave.view.form.inherit</field>
             <field name="model">hr.leave</field>
@@ -7,6 +18,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='department_id']" position="after">
                     <field name="category_id" readonly="1" invisible="0"/> 
+                    <field name="leave_category" readonly="0" invisible="0"/> 
                     <field name="request_status" string="Approval Status"/> 
                     <field name="approval_request_id" invisible="1"/>
 
@@ -47,6 +59,7 @@
                     <field name="category_id" readonly="1" invisible="0"/> 
                     <field name="request_status" string="Approval Status"/> 
                     <field name="approval_request_id" invisible="1"/> 
+                    <field name="approve_date" invisible="1"/> 
                 </xpath>
               
            </field>

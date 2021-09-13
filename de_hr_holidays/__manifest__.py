@@ -21,7 +21,7 @@
     'version': '14.0.0.3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr_holidays','hr_contract','hr_payroll', 'de_employee_shift'],
+    'depends': ['base','hr_holidays','hr_contract','hr_payroll', 'de_employee_shift','approvals','de_hr_leave_approvals'],
 
     # always loaded
     'data': [

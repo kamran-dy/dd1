@@ -35,6 +35,7 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+         'security/security.xml',
         'views/training_request_portal.xml',
     ],
     # only loaded in demonstration mode

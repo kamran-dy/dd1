@@ -1,5 +1,16 @@
 <odoo>
    <data>
+          
+        <record id="rectification_approval_action" model="ir.actions.server">
+            <field name="name">Approve</field>
+            <field name="model_id" ref="de_hr_attendance_approvals.model_hr_attendance_rectification"/>
+            <field name="binding_model_id" ref="de_hr_attendance_approvals.model_hr_attendance_rectification"/>   
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_approve() </field>
+        </record>
+        
+       
     <record id="view_hr_attendance_rectification_form" model="ir.ui.view">
 		<field name="name">hr.attendance.rectification.form</field>
 		<field name="model">hr.attendance.rectification</field>
@@ -41,9 +52,14 @@
                             <field name="check_in"  attrs="{'readonly': [('state','!=', 'draft')]}"/>
                             <field name="check_out" attrs="{'readonly': [('state','!=', 'draft')]}"/>
 							<field name="date" attrs="{'readonly': [('state','!=', 'draft')]}" />
+                             <field name="number_of_Days" attrs="{'readonly': [('state','!=', 'draft')]}" />
+
 						</group>
 
                         <group>
+                            <field name="partial"/>
+                            <field name="app_date" invisible='0'/> 
+                            <field name="create_date" invisible='1'/> 
 							<field name="approval_request_id" invisible="1" />
 							<field name="category_id" attrs="{'readonly': [('state','!=', 'draft')]}"/>
 							<field name="attendance_id"  invisible="1"/>
@@ -74,6 +90,8 @@
 				<field name="user_id"/>
 				<field name="check_in"/>
 				<field name="check_out"/>
+                <field name="partial"/>
+                <field name="state"/>
 			</search>
 
 		</field>
@@ -96,6 +114,8 @@
 				<field name="user_id"/>
 				<field name="check_in"/>
 				<field name="check_out"/>
+                <field name="partial"/>
+                <field name="state"/>
 			</tree>
 
 		    </field>
