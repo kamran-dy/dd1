@@ -62,6 +62,13 @@
             <field name="report_name">de_hr_employee_report.employee_status_pdf</field>
             <field name="report_file">de_hr_employee_report.employee_status_pdf</field>
         </record>
+        <record id="action_report_employee_entitled" model="ir.actions.report">
+            <field name="name">Employee Entitled</field>
+            <field name="model">employee.entitled</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">de_hr_employee_report.employee_entitled_pdf</field>
+            <field name="report_file">de_hr_employee_report.employee_entitled_pdf</field>
+        </record>
         
         
     </data>

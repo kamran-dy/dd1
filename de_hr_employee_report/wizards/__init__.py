@@ -6,3 +6,4 @@ from . import employee_information_wizard
 from . import dob_wizard
 from . import employee_experience_wizard
 from . import employee_status_wizard
+from . import ot_entitled_wizard
