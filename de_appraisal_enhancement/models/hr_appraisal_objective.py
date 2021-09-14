@@ -3,13 +3,15 @@ from odoo.exceptions import UserError
 
 class HrAppraisalObjective(models.Model):
     _name = 'hr.appraisal.objective'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _description='Appraisal Objective'
     _rec_name = 'employee_id'
     
     employee_id = fields.Many2one('hr.employee')
     description = fields.Char('Description')
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('waiting', 'Waiting for Employee Review'),
+        ('waiting', "Sent for Manager's review"),
         ('confirm', 'Confirmed'),
     ], string='State', index=True, copy=False, default='draft', track_visibility='onchange')
     

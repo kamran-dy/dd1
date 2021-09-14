@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'hr_appraisal','hr','hr_contract'],
+    'depends': ['base', 'digest', 'hr_appraisal','hr','hr_contract','de_employee_enhancement'],
 
     # always loaded
     'data': [

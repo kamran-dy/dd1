@@ -57,7 +57,7 @@
                             type="object" states='end_year_endorse_hod'
                             class='oe_highlight'/>
                     
-                    <field name="state" widget="statusbar"/>
+                    <field name="state" widget="statusbar" clickable="1" readonly="0"/>
                 </header>
 				<sheet>
                     <group string="Employee Information">
@@ -93,21 +93,33 @@
                     <group>
                         <group string="Agreement with Half Year Evaluation" attrs="{'invisible': [('state','in',('draft','confirm','expired'))]}">
                             <field name="agreement" widget="radio" attrs="{'readonly':[('state','!=','sent')]}"/>
-                            <field name="reason_for_disagreement" attrs="{'readonly':[('agreement','=','fully'),('state','!=','sent')]}"/>
+                            <field name="reason_for_disagreement"
+                                   attrs="{'readonly':['|',('agreement','=','fully'),('state','not in','sent')]}"/>
                         </group>
-                        <group string="Employee Overall Score" attrs="{'invisible': [('state','!=',('end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}">
+                        <group string="Employee Overall Score"
+                               attrs="{'invisible': [('state','in',('draft','confirm','expired','sent',
+                                                    'endorsed_employee','endorsed_hod','done',
+                                                    'end_year_appraisee_review'))]}">
+                            
                             <field name="objective_score" readonly = "1"/>
                             <field name="objective_rating" readonly = "1"/>
                             <field name="behavioral_score" readonly = "1"/>
                             <field name="behavioral_rating" readonly = "1"/>
                         </group>
-                        <group string="Agreement with Full Year Evaluation" attrs="{'invisible': [('state','in',('draft','confirm','expired'))]}">
-                            <field name="full_year_agreement" attrs="{'readonly':[('state','!=','end_year_sent_emp_view')]}" widget="radio"/>
-                            <field name="full_reason_for_disagreement" attrs="{'readonly':[('full_year_agreement','=','fully'),('state','!=','end_year_sent_emp_view')]}"/>
+                        <group string="Agreement with Full Year Evaluation"
+                               attrs="{'invisible': [('state','in',('draft','confirm','expired','sent',
+                                                    'endorsed_employee','endorsed_hod','done',
+                                                    'end_year_appraisee_review','end_year_appraiser_review'))]}">
+
+                            <field name="full_year_agreement"
+                                   attrs="{'readonly':[('state','!=','end_year_sent_emp_view')]}"
+                                   widget="radio"/>
+                            <field name="full_reason_for_disagreement"
+                                   attrs="{'readonly':['|',('full_year_agreement','=','fully'),('state','not in','end_year_sent_emp_view')]}"/>
                         </group>
 					</group>
                     <notebook>
-                        <page string="Appraisee's Response">
+                        <page string="Half Year Review">
                             <h2><b>Business Objectives</b></h2>
                             <field name='feedback_objective_appraisee_lines'>
                                 <tree create="false" delete="false" editable="false">
@@ -116,9 +128,8 @@
                                     <field name='priority' readonly="1"/>
                                     <field name="remarks" attrs="{'readonly':[('state','!=','draft')]}"/>
                                     <field name='percentage_score' attrs="{'readonly':[('state','!=','draft')]}"/>
-                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
-                                    <field name='weightage_score' readonly = "1"/>
-                                    <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+                                    <field name="remarks_mngr" attrs="{'readonly':[('state','!=','confirm')]}"/>
+                                    <field name='percentage_score_mngr' attrs="{'readonly':[('state','!=','confirm')]}"/>
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -126,10 +137,10 @@
                             </field>
                             <group>
                                 <group>
-                                    <field name='objective_comment' placeholder = "Half Year Comments..." attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name='objective_comment' placeholder = "Emp Half Year Comments..." attrs="{'readonly':[('state','!=','draft')]}"/>
                                 </group>
                                 <group>
-                                    <field name='full_year_objective_comment' placeholder = "Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+                                    <field name='full_year_objective_comment' placeholder = "Manager Half Year Comments..." attrs="{'readonly':[('state','!=','confirm')]}"/>
 <!--                                     attrs="{'readonly':[('state','!=',('end_year_appraisee_review','end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}" -->
                                 </group>
                             </group>
@@ -141,9 +152,8 @@
                                     <field name='priority' readonly = "1"/>
                                     <field name="remarks" attrs="{'readonly':[('state','!=','draft')]}"/>
                                     <field name='conformance_level' attrs="{'readonly':[('state','!=','draft')]}"/>
-                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
-                                    <field name='weightage_score' readonly = "1"/>
-                                    <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+                                    <field name="remarks_mngr" attrs="{'readonly':[('state','!=','confirm')]}"/>
+                                    <field name='conformance_level_mngr' attrs="{'readonly':[('state','!=','confirm')]}"/>
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -151,26 +161,27 @@
                              </field>
                             <group>
                                 <group>
-                                    <field name='value_comment' placeholder = "Half Year Comments..." attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name='value_comment' placeholder = "Emp Half Year Comments..." attrs="{'readonly':[('state','!=','draft')]}"/>
                                 </group>
                                 <group>
-                                    <field name='full_year_value_comment' placeholder = "Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+                                    <field name='full_year_value_comment' placeholder = "Manager Half Year Comments..." attrs="{'readonly':[('state','!=','confirm')]}"/>
 <!--                                     attrs="{'readonly':[('state','!=',('end_year_appraisee_review','end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}" -->
                                 </group>
                         </group>
                          </page>
-                         <page string="Appraiser's Response" attrs="{'invisible':[('state','in',('draft','end_year_appraisee_review'))]}">
+                         <page string="Full Year Review" attrs="{'invisible':[('state','not in',('end_year_appraisee_review','end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}">
                             <h2><b>Business Objectives</b></h2>
                             <field name='feedback_objective_lines'>
                                 <tree create="false" delete="false" editable="false">
                                     <field name='objective' readonly="1"/>
                                     <field name='weightage' readonly="1"/>
                                     <field name='priority' readonly="1"/>
-                                    <field name="remarks" attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name='percentage_score' attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
-                                    <field name='weightage_score' readonly = "1"/>
-                                    <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+<!--                                     <field name='weightage_score' readonly = "1"/> -->
+                                    <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+                                    <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name="full_remarks_mngr" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name='weightage_score_mngr' readonly="1"/>
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -178,10 +189,10 @@
                             </field>
                             <group>
                                 <group>
-                                    <field name='half_year_appraiser_objective_comment' placeholder = "Half Year Comments..." attrs="{'readonly':[('state','!=','confirm')]}"/>
+                                    <field name='half_year_appraiser_objective_comment' placeholder = "Emp Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
                                 </group>
                                 <group>
-                                     <field name='full_year_appraiser_objective_comment' placeholder = "Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                     <field name='full_year_appraiser_objective_comment' placeholder = "Manager Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
 <!--                                     attrs="{'readonly':[('state','!=',('end_year_appraisee_review','end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}" -->
                                 </group>
                             </group>
@@ -191,11 +202,12 @@
                                     <field name='core_values' readonly="1"/>
                                     <field name='weightage' readonly="1"/>
                                     <field name='priority' readonly = "1"/>
-                                    <field name="remarks" attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name='conformance_level' attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
-                                    <field name='weightage_score' readonly = "1"/>
-                                    <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+<!--                                     <field name='weightage_score' readonly = "1"/> -->
+                                    <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+                                    <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name="full_remarks_mngr" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name='weightage_score_mngr' readonly="1"/>
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -203,15 +215,15 @@
                              </field>
                              <group>
                                  <group>
-                                    <field name='half_year_appraiser_value_comment' placeholder = "Half Year Comments..." attrs="{'readonly':[('state','!=','confirm')]}"/>
+                                    <field name='half_year_appraiser_value_comment' placeholder = "Emp Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
                                  </group>
                                  <group>
-                                     <field name='full_year_appraiser_value_comment' placeholder = "Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                     <field name='full_year_appraiser_value_comment' placeholder = "Manager Full Year Comments..." attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
 <!--                                      attrs="{'readonly':[('state','!=',('end_year_appraisee_review','end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}" -->
                                  </group>
                             </group>
                          </page>
-                        <page string="Strengths/Weaknesses and Training" attrs="{'invisible':[('state','in',('draft','end_year_appraisee_review','sent','end_year_sent_emp_view'))]}">
+                        <page string="Strengths/Weaknesses and Training" attrs="{'invisible':[('state','not in',('end_year_appraiser_review','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}">
                             <group>  
                                 <group string="Strengths/Achievements"> 
                                     <div class="o_address_format">
@@ -251,7 +263,7 @@
                                 </group>
                              </group>
                         </page>
-                        <page string="Promotion" attrs="{'invisible':[('state','in',('draft','end_year_appraisee_review','sent','end_year_sent_emp_view'))]}">
+                        <page string="Promotion" attrs="{'invisible':[('state','not in',('end_year_appraiser_review','end_year_endorsed_emp','end_year_endorse_hod','closed'))]}">
                             <group>
                                 <group>
                                     <field name="recommend_promotion" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
