@@ -48,7 +48,9 @@
                                     <b>
                                        Employee Status:
                                    </b>
-                                   <span t-esc="employees[0]['employee_status']"/>
+                                    <t t-if="employees">
+                                       <span t-esc="employees[0]['employee_status']"/>
+                                    </t>
                                 </div>
                             </div>
                             <div class="row">
@@ -68,7 +70,9 @@
                                     <b>
                                        OT Entitled:
                                    </b>
-                                   <span t-esc="employees[0]['ot_entitled']"/>
+                                    <t t-if="employees">
+                                       <span t-esc="employees[0]['ot_entitled']"/>
+                                    </t>
                                 </div>
                             </div>
                         </div>
