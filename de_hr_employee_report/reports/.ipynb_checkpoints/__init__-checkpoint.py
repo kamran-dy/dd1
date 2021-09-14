@@ -12,3 +12,4 @@ from . import employee_dob_report_pdf
 from . import employee_experience_report_pdf
 from . import employee_status_report_pdf
 from . import employee_entitled_report_pdf
+from . import employee_retirement_report_pdf

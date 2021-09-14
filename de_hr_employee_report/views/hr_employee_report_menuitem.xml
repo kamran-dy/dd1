@@ -51,6 +51,11 @@
                   parent="hr.hr_menu_hr_reports"
                   action="de_hr_employee_report.action_ot_entitled_wizard" sequence="12"
         />
+<!--         <menuitem id="menu_ot_retirement_report"
+                  name="Retirement Details"
+                  parent="hr.hr_menu_hr_reports"
+                  action="de_hr_employee_report.action_retirement_details_wizard" sequence="21"
+        /> -->
     </data>
 </odoo>
 

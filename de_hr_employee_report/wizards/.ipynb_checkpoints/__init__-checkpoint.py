@@ -7,3 +7,4 @@ from . import dob_wizard
 from . import employee_experience_wizard
 from . import employee_status_wizard
 from . import ot_entitled_wizard
+from . import retirement_details_wizard
