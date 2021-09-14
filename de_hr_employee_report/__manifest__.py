@@ -25,7 +25,7 @@
         'wizards/employee_experience_wizard.xml',
         'wizards/employee_status_wizard_view.xml',
         'wizards/ot_entitled_wizard_view.xml',
-        'wizards/retirement_details_wizard_view.xml',
+        #'wizards/retirement_details_wizard_view.xml',
         'views/view_employee_type.xml',
         'views/hr_employee_report_menuitem.xml',
         'reports/contract_expiry_report_xlsx.xml',
@@ -44,7 +44,7 @@
         'reports/employee_experience_report_pdf.xml',
         'reports/employee_status_report_pdf.xml',
         'reports/employee_entitled_report_pdf.xml',
-        'reports/employee_retirement_report_pdf.xml'
+        #'reports/employee_retirement_report_pdf.xml'
 ],
     "installable": True,
     "application": False,

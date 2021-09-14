@@ -46,7 +46,7 @@ class EmployeeRetirementPDF(models.AbstractModel):
         for rec in company_ids:
             companyids.append(rec.name)
         company = ','.join(companyids)
-        
+        raise UserError(company)
         
         if employee_type and departments and locations and g_type and companyids:
             active_contract = self.env['hr.contract'].search(['|',
