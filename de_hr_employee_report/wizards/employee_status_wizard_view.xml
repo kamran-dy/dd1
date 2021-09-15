@@ -2,8 +2,8 @@
 
 <odoo>
     <record id="employee_status_wizard_view" model="ir.ui.view">
-        <field name="name">employee.status.report</field>
-        <field name="model">employee.status</field>
+        <field name="name">employee.status.wizard.report</field>
+        <field name="model">employee.status.wizard</field>
         <field name="arch" type="xml">
             <form string="Employee Status">
                 <group>
@@ -12,7 +12,7 @@
                 </group>
                 <group>
                     <field name="department_ids" widget="many2many_tags"/>
-                    <field name="cost_center_ids" widget="many2many_tags"/>
+                    <field name="costcenter_ids" widget="many2many_tags"/>
                     <field name="company_ids"  widget="many2many_tags"/>
                 </group>
                 <group>
@@ -31,7 +31,7 @@
     <record id="action_status_wizard" model="ir.actions.act_window">
         <field name="name">Status Report</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">employee.status</field>
+        <field name="res_model">employee.status.wizard</field>
         <field name="view_id" ref="de_hr_employee_report.employee_status_wizard_view"/>
         <field name="view_mode">form</field>
         <field name="target">new</field>

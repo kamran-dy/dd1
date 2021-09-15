@@ -11,7 +11,7 @@
     "sequence": 1,
     "author": "Dynexcel",
     "website": "http://www.dynexcel.co",
-    "version": '14.1.0.1',
+    "version": '14.1.0.2',
     # "depends": ['base', 'hr', 'report_xlsx', 'de_employee_enhancement'],
     "depends": ['base', 'hr','account', 'report_xlsx', 'de_employee_overtime'],
     "data": [
@@ -25,8 +25,9 @@
         'wizards/employee_experience_wizard.xml',
         'wizards/employee_status_wizard_view.xml',
         'wizards/ot_entitled_wizard_view.xml',
-        #'wizards/retirement_details_wizard_view.xml',
+        'wizards/retirement_details_wizard_view.xml',
         'views/view_employee_type.xml',
+        'views/view_res_company.xml',
         'views/hr_employee_report_menuitem.xml',
         'reports/contract_expiry_report_xlsx.xml',
         'reports/action_pdf_report.xml',
@@ -44,7 +45,7 @@
         'reports/employee_experience_report_pdf.xml',
         'reports/employee_status_report_pdf.xml',
         'reports/employee_entitled_report_pdf.xml',
-        #'reports/employee_retirement_report_pdf.xml'
+        'reports/employee_retirement_report_pdf.xml'
 ],
     "installable": True,
     "application": False,

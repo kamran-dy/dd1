@@ -46,176 +46,573 @@ class EmployeeRetirementPDF(models.AbstractModel):
         for rec in company_ids:
             companyids.append(rec.name)
         company = ','.join(companyids)
-        raise UserError(company)
+        #raise UserError(company)
         
+        employees = []
         if employee_type and departments and locations and g_type and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.grade_type', 'in', g_type),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
         
         
         elif employee_type and departments and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
         elif employee_type and locations and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        elif employee_type and cost_centers and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
+        elif employee_type and g_type and companyids:
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
-                                                              ('cost_center_information_line.cost_center', 'in',cost_centers),
+                                                            ('employee_id.grade_type', 'in', g_type),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
         elif employee_type and departments and locations and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        elif employee_type and departments and cost_centers and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
+        elif employee_type and departments and g_type and companyids:
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.department_id', 'in',departments),
-                                                              ('cost_center_information_line.cost_center', 'in',cost_centers),
+                                                              ('employee_id.grade_type', 'in', g_type),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        elif employee_type and locations and cost_centers and companyids:
-           active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
+        elif employee_type and locations and g_type and companyids:
+            
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.work_location_id', 'in',locations),
-                                                              ('cost_center_information_line.cost_center', 'in',cost_centers),
+                                                              ('employee_id.grade_type', 'in', g_type),
+                                                              
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        elif departments and locations and cost_centers and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
+        elif departments and locations and g_type and companyids:
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
-                                                              ('cost_center_information_line.cost_center', 'in',cost_centers),
+                                                            ('employee_id.grade_type', 'in', g_type),
+
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
         elif departments and locations and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        elif departments and cost_centers and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
+        elif departments and g_type and companyids:
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.department_id', 'in',departments),
-                                                              ('cost_center_information_line.cost_center', 'in',cost_centers),
+                                                              ('employee_id.grade_type', 'in', g_type),
+                                                              
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        elif locations and cost_centers and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
+        elif locations and g_type and companyids:
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.work_location_id', 'in',locations),
-                                                              ('cost_center_information_line.cost_center', 'in',cost_centers),
+                                                              ('employee_id.grade_type', 'in', g_type),
+                                                              
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
         elif employee_type and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
         elif locations and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
         
         elif departments and companyids:
-           active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+            
+            active_contract = self.env['hr.contract'].search([
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        elif cost_centers and companyids:
-            active_contract = self.env['hr.contract'].search(['|',
-                                                              '|',
-                                                             ('employee_id.resigned_date','>=',data['start_date']),
-                                                             ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
-                                                              ('cost_center_information_line.cost_center', 'in',cost_centers),
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
+        elif g_type and companyids:
+            active_contract = self.env['hr.contract'].search([
+                                                            ('employee_id.grade_type', 'in', g_type),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
-        
+            for contract in active_contract:
+                emp_code = contract.employee_id.emp_number
+                name = contract.employee_id.name
+                dep_name = contract.employee_id.department_id.name
+                emp_type = contract.employee_id.emp_type
+                g_type = contract.employee_id.grade_type.name
+                doj = contract.employee_id.date
+                retirement_age = contract.company_id.retirement_age
+                year = contract.employee_id.birthday.year
+                year = year + 60
+                month = contract.employee_id.birthday.month
+                date = contract.employee_id.birthday.day
+                retirement_date = str(year) + '/' + str(month) + '/' + str(date)
+                #company = contract.company_id.name
+                
+
+                employee_dict = {}
+                employee_dict['emp_code'] = emp_code
+                employee_dict['name'] = name
+                employee_dict['dep_name'] = dep_name
+                employee_dict['emp_type'] = emp_type
+                employee_dict['g_type'] = g_type
+                employee_dict['doj'] = doj
+                employee_dict['retirement_age'] = retirement_age
+                employee_dict['retirement_date'] = retirement_date
+                #employee_dict['company'] = company
+                
+
+                employees.append(employee_dict)
+                
         #raise UserError(active_contract.ids)
+        #raise UserError(employees.ids)
             
         return {
             'doc_ids': self.ids,
-            'doc_model': 'employee.status',
+            'doc_model': 'employee.retirement',
             'data': data,
             'location': loc,
             'employee_type': em_type,
             'department': dep,
-            'cost_center': cost_center,
+            'grade_type': gr_type,
             'active_contract': active_contract,
             'company_name':company,
             'start_date':data['start_date'],
             'end_date':data['end_date'],
+            'employees':employees
         }

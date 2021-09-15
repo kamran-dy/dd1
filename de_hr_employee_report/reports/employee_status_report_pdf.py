@@ -203,7 +203,7 @@ class EmployeeStatusPDF(models.AbstractModel):
             
         return {
             'doc_ids': self.ids,
-            'doc_model': 'employee.status',
+            'doc_model': 'employee.status.wizard',
             'data': data,
             'location': loc,
             'employee_type': em_type,
