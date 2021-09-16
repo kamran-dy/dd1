@@ -32,8 +32,9 @@ class HrEmployee(models.Model):
     @api.depends('parent_id')
     def _compute_manager_name(self):
         for manager in self:
+            mmanagername = self.env['hr.employee'].search([('id','=',manager.parent_id.id)])
             manager.update({
-                'line_manager': manager.parent_id.name,
+                'line_manager': mmanagername.name,
             })    
     
     
