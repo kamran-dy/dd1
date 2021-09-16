@@ -341,7 +341,10 @@ class PurchaseAttendanceReport(models.AbstractModel):
                         if date_after_month.strftime('%Y-%m-%d') >=  single_rectify.check_in.strftime('%Y-%m-%d') and date_after_month.strftime('%Y-%m-%d') <=  single_rectify.check_out.strftime('%Y-%m-%d'):
                             if  single_rectify:
                                 remarks =  'Rectification' +' ('+str(single_rectify.state) +')' 
-                                    
+                                if datecheck_in_time and not  datecheck_out_time:
+                                    rectify_color = '1'
+                                elif not datecheck_in_time and  datecheck_out_time:
+                                    rectify_color = '1'     
                     attendances.append({
                             'date': date_after_month.strftime('%d/%b/%Y'),
                             'day':  day1,
@@ -777,7 +780,11 @@ class PurchaseAttendanceReport(models.AbstractModel):
                     for single_rectify in daily_rectify:
                         if date_after_month.strftime('%Y-%m-%d') >=  single_rectify.check_in.strftime('%Y-%m-%d') and date_after_month.strftime('%Y-%m-%d') <=  single_rectify.check_out.strftime('%Y-%m-%d'):
                             if  single_rectify:
-                                remarks =  'Rectification' +' ('+str(single_rectify.state) +')' 
+                                remarks =  'Rectification' +' ('+str(single_rectify.state) +')'
+                                if datecheck_in_time and not  datecheck_out_time:
+                                    rectify_color = '1'
+                                elif not datecheck_in_time and  datecheck_out_time:
+                                    rectify_color = '1'
                     attendances.append({
                             'date': date_after_month.strftime('%d/%b/%Y'),
                             'day':  day1,
