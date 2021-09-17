@@ -90,23 +90,20 @@ class HrAttendanceRectification(models.Model):
             
     def action_approve(self):
         for line in self:
-            if line.state in ('submitted','approved'):
+            if line.state =='submitted':
                 line.app_date = fields.date.today()
                 if line.attendance_id:
                     count = 0
-                    attendance_rectify = self.env['hr.attendance'].search([('att_date','=',line.date),('employee_id','=',line.employee_id.id)])
-                    for attline in attendance_rectify:
-                        count += 1 
-                    if count == 1:   
-                        attendance_rectify.update({
-                        'check_in': line.check_in,
-                        'att_date':  line.check_in,
-                        'check_out': line.check_out,
-                        'remarks':line.partial,
-                        })
-                        line.update({
-                          'state': 'approved'
-                        })
+                    attendance_rectify = self.env['hr.attendance'].search([('id','=',line.attendance_id.id)])  
+                    attendance_rectify.update({
+                      'check_in': line.check_in,
+                      'att_date':  line.check_in,
+                      'check_out': line.check_out,
+                      'remarks':line.partial,
+                    })
+                    line.update({
+                      'state': 'approved'
+                    })
                 elif  line.partial == 'Partial':
                     vals = {
                             'employee_id': line.employee_id.id,
