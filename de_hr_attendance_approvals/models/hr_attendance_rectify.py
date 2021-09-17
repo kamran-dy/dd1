@@ -20,12 +20,18 @@ class HrAttendanceRectification(models.Model):
     user_id = fields.Many2one('res.users', string="User")
     category_id = fields.Many2one(related='employee_id.category_id')
     app_date = fields.Date(string='Approve Date')
-    check_in = fields.Datetime(string="Check In", required=False)
-    check_out = fields.Datetime(string="Check Out", required=False)
+    check_in = fields.Datetime(string="Check In", required=True)
+    check_out = fields.Datetime(string="Check Out", required=True)
     approval_request_id = fields.Many2one('approval.request', string="Approval")
     date = fields.Date(string="Date")
     reason =  fields.Text(string="Reason")
-    partial = fields.Char(string='Type')
+    partial = fields.Selection(selection=[
+            ('Full', 'Full'),
+            ('Partial', 'Partial'),
+            ('Check In Time Missing', 'Check In Time Missing'),
+            ('Out Time Missing', 'Out Time Missing'),
+        ], string='Type', required=True,
+        )
     attendance_id = fields.Many2one('hr.attendance', string="Attendance")
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -56,11 +62,11 @@ class HrAttendanceRectification(models.Model):
         for line in self:
             if line.check_in:
                 line.update({
-                    'date': line.check_in
+                    'date': line.check_in + relativedelta(hours =+ 5) 
                 })
             elif line.check_out:
                 line.update({
-                    'date': line.check_out
+                    'date': line.check_out + relativedelta(hours =+ 5)
                 })    
     
     @api.constrains('check_in', 'check_out')
@@ -76,7 +82,11 @@ class HrAttendanceRectification(models.Model):
                                     
                 if attendance.check_out < attendance.check_in:
                     raise exceptions.UserError(_('"Check Out" time cannot be earlier than "Check In" time.'+ str(attendance.check_out) ))
+                    
             if attendance.date:
+#                 attendance_present = self.env['hr.attendance'].search([('employee_id','=',attendance.employee_id.id),('att_date','=',attendance.date),('check_in','>=', attendance.check_in),('check_out','<=', attendance.check_out)])
+#                 if attendance_present:
+#                     raise exceptions.UserError(_('Attendance Already Exist between selected range!'+ str(attendance.check_in + relativedelta(hours =+ 5))+' to '+str(attendance.check_out+ relativedelta(hours =+ 5))))         
                 rectification = self.env['hr.attendance.rectification'].search([('employee_id','=',attendance.employee_id.id),('date','=',attendance.date),('state','in',('submitted','approved'))])
                 if rectification:
                     raise exceptions.UserError(_('Attendance Rectification Already Exist between selected range!'))         
