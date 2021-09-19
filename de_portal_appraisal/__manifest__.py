@@ -30,6 +30,7 @@
         'security/ir.model.access.csv',
         'security/security.xml',
         'views/hr_appraisal_objective_templates.xml',
+        'views/hr_appraisal_improvement_template.xml',
         'views/hr_appraisal_feedback_templates.xml',
         'views/hr_appraisal_probation_template.xml',
     ],

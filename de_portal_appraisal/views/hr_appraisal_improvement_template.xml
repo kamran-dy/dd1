@@ -2,170 +2,121 @@
 
 <odoo>
     
-    
-    <template id="portal_layout" name="Portal layout: appraisal menu entry" inherit_id="portal.portal_breadcrumbs" priority="25">
-        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
-            <li t-if="page_name == 'appraisal' or appraisal" class="col-lg-2" t-attf-class="breadcrumb-item #{'active ' if not appraisal else ''}">
-                <a t-if="appraisal" t-attf-href="/appraisal/objectives?{{ keep_query() }}">Appraisals Objective</a>
-                <t t-else="">Appraisals Objective</t>
-            </li>
-            <li t-if="appraisal" class="breadcrumb-item active text-truncate col-8 col-lg-10">
-                <t t-esc="appraisal.id"/>
-            </li>
-        </xpath>
-    </template>
-
-    
-    
-    
-    <template id="portal_my_home" name="Show appraisals / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="25">
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-call="portal.portal_docs_entry"  groups="de_portal_appraisal.group_appraisal">
-                <t t-set="title">Appraisals</t>
-                <t t-set="url" t-value="'/appraisal/create/'"/>
-                <t t-set="placeholder_count" t-value="'appraisal_count'"/>
-            </t>
-        </xpath>  
-    </template>
-    
-    
-    <template id="portal_appraisal" name="Appraisals">
-         <t t-set="foo" t-value="2 + 1"/>
-         <t t-call="portal.portal_layout">
-             <br/>
-            <br/>
-             <br/>  
-           <div class="card-deck">
-          <div class="card bg-primary">
-            <div class="card-body text-center">
-              <p class="card-text">
-                <a t-attf-href="/appraisal/objectives">Appraisal Objective</a>
-                </p>
-            </div>
-          </div>
-          <div class="card bg-warning">
-            <div class="card-body text-center">
-              <a t-attf-href="/appraisals/feedback">Appraisal FeedBack</a>
-            </div>
-          </div>
-           <div class="card bg-success">
-            <div class="card-body text-center">
-              <a t-attf-href="/appraisal/probations">Probation</a>
-            </div>
-          </div>
-         <div class="card bg-danger">
-            <div class="card-body text-center">
-              <a t-attf-href="/appraisal/improvements">Improvements</a>  
-            </div>
-          </div>
-        </div>
-                 
-           
-        </t>
-    </template>
-       
-
-    <template id="portal_appraisal_objectives" name="Appraisals Objective">
+    <template id="portal_appraisal_imrovements" name="improvements">
          <t t-set="foo" t-value="2 + 1"/>
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar">
-                <t t-set="title">Appraisals Objective</t>
+                <t t-set="title">Improvements</t>
             </t>
-            <t t-if="not grouped_appraisals">
+            <t t-if="not grouped_improvements">
                 <div class="alert alert-warning mt8" role="alert">
-                    There are no Appraisals Objective.
+                    There are no Improvements.
                 </div>
             </t>
-            <t t-if="grouped_appraisals">
+            <t t-if="grouped_improvements">
                 <t t-call="portal.portal_table">
-                    <t t-foreach="grouped_appraisals" t-as="appraisals">
+                    <t t-foreach="grouped_improvements" t-as="improvements">
                         <thead>
                             <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
                                 <th class="text-left">No#</th>
                                  <th class="text-left">Employee</th>
-                                <th class="text-left">Description</th>
-                                <th class="text-left">Year</th>
+                                <th class="text-left">Grade</th>
+                                <th class="text-left">Position</th>
                                 <th class="text-left">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <t t-foreach="appraisals" t-as="appraisal">   
-                            <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">   
+                            <t t-foreach="improvements" t-as="improvement">   
+                            <t t-if="improvement.employee_id.parent_id.user_id.id == uid">   
                                 
                                 <tr>
                                       <td class="text-left">
-                                        #<span t-esc="appraisal.id" />
+                                        #<span t-esc="improvement.id" />
                                     </td>
                                      <td>
-                                        <a t-attf-href="/appraisal/objective/#{appraisal.id}?{{ keep_query() }}"><span t-field="appraisal.employee_id.name"/></a>
-                                    </td>
-                                     <td class="text-left">
-                                        <span t-esc="appraisal.description" />
+                                        <a t-attf-href="/appraisal/improvement/#{improvement.id}?{{ keep_query() }}"><span t-field="improvement.employee_id.name"/></a>
                                     </td>
                                     
                                      
                                     <td class="text-left">
-                                        <span t-esc="appraisal.objective_year" />
+                                        <span t-esc="improvement.grade.name" />
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="improvement.position"  />
                                     </td>
                                    
                                     <td class="text-left">
-                                        <t t-if="appraisal.state == 'draft'">
+                                        <t t-if="improvement.state == 'draft'">
                                             <i class="badge badge-pill badge-info" >Draft</i>
                                         </t>
-                                        <t t-if="appraisal.state == 'waiting'">
-                                            <i class="badge badge-pill badge-info" >Submitted</i>
+                                        <t t-if="improvement.state == 'employee_waiting'">
+                                            <i class="badge badge-pill badge-info" >Sent For Employees Review</i>
                                         </t>
-                                        <t t-if="appraisal.state == 'confirmed'">
+                                        <t t-if="improvement.state == 'confirmed'">
                                             <i class="badge badge-pill badge-info" >Approved</i>
+                                        </t>
+                                        <t t-if="improvement.state == 'employee_review'">
+                                            <i class="badge badge-pill badge-info" >Reviewed By Employee</i>
+                                        </t>
+                                        <t t-if="improvement.state == 'follow_up'">
+                                            <i class="badge badge-pill badge-info" >Follow Up</i>
+                                        </t>
+                                         <t t-if="improvement.state == 'done'">
+                                            <i class="badge badge-pill badge-info" >Done</i>
                                         </t>
                                        
                                     </td>                                   
                             
                                 </tr>
                             </t>
-                                <t t-if="appraisal.employee_id.user_id.id == uid">   
+                                <t t-if="improvement.employee_id.user_id.id == uid">   
                                 
                                 <tr>
                                       <td class="text-left">
-                                        #<span t-esc="appraisal.id" />
+                                        #<span t-esc="improvement.id" />
                                     </td>
                                      <td>
-                                        <a t-attf-href="/appraisal/objective/#{appraisal.id}?{{ keep_query() }}"><span t-field="appraisal.employee_id.name"/></a>
-                                    </td>
-                                     <td class="text-left">
-                                        <span t-esc="appraisal.description" />
+                                        <a t-attf-href="/appraisal/improvement/#{improvement.id}?{{ keep_query() }}"><span t-field="improvement.employee_id.name"/></a>
                                     </td>
                                     
                                      
                                     <td class="text-left">
-                                        <span t-esc="appraisal.objective_year" />
+                                        <span t-esc="improvement.grade.name" />
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="improvement.position"  />
                                     </td>
                                    
                                     <td class="text-left">
-                                        <t t-if="appraisal.state == 'draft'">
+                                        <t t-if="improvement.state == 'draft'">
                                             <i class="badge badge-pill badge-info" >Draft</i>
                                         </t>
-                                        <t t-if="appraisal.state == 'waiting'">
-                                            <i class="badge badge-pill badge-info" >Submitted</i>
+                                        <t t-if="improvement.state == 'employee_waiting'">
+                                            <i class="badge badge-pill badge-info" >Sent For Employees Review</i>
                                         </t>
-                                        <t t-if="appraisal.state == 'confirm'">
+                                        <t t-if="improvement.state == 'confirmed'">
                                             <i class="badge badge-pill badge-info" >Approved</i>
+                                        </t>
+                                        <t t-if="improvement.state == 'employee_review'">
+                                            <i class="badge badge-pill badge-info" >Reviewed By Employee</i>
+                                        </t>
+                                        <t t-if="improvement.state == 'follow_up'">
+                                            <i class="badge badge-pill badge-info" >Follow Up</i>
+                                        </t>
+                                         <t t-if="improvement.state == 'done'">
+                                            <i class="badge badge-pill badge-info" >Done</i>
                                         </t>
                                        
                                     </td>                                   
                             
                                 </tr>
                             </t>
-                                
+                              
                             </t>    
 
                             <tr>
-                                <div>
-                                    <t class="col-lg-7 col-md-8" >
-                                        <a href="/appraisal/objective/create/" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Create</div> </a> 
-                                    </t>
-                                </div>
+                                
                             </tr> 
                         </tbody>
                     </t>
@@ -174,246 +125,76 @@
         </t>
     </template>
      
-    <template id="portal_appraisal_objective" name="Appraisal ">
+        <template id="portal_appraisal_improvement" name="Improvement">
         <t t-call="portal.portal_layout">
-            
-          
-            <div id="optional_placeholder"></div>
             <t t-call="portal.portal_record_layout">
                 <t t-set="card_header">
-                    <div id="optional_placeholder"></div>
-                    <div class="container">
-                         <t t-if="appraisal.employee_id.user_id.id == uid">
-                             <t t-if="appraisal.state in ('waiting','draft')">
-                               <t t-if="edit_objective==False">  
-                                <a t-attf-href="/appraisal/edit/objective/#{appraisal.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Edit</div> </a> 
-                            </t>
-                            </t>     
-                            </t> 
-                      <div class="card">
-                            
-                                     
-                        <div class="card-header">
-                             <div>
-                                  
+                    <div class="row no-gutters">
+                        <div class="col-12">
+                            <h5 class="d-flex mb-1 mb-md-0 row">
+                                <span t-field="improvement.id" class="col-9 text-truncate"/>
+                                <small class="text-muted d-none d-md-inline"> (#<span t-field="improvement.id"/>)</small>
+                                <div class="col-3 col-md-2 text-right">
+                                    <small class="text-right">Status:</small>
+                                    <span t-field="improvement.state" class=" badge badge-pill badge-info" title="Current stage of this improvement"/>
                                 </div>
-                               <div>
-                               
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-11">
-                                        <h5 class="d-flex mb-1 mb-md-0 row">
-                                            <small class="text-muted d-none d-md-inline"> (#<span t-field="appraisal.id"/>)</small>
-                                            <div class="col-3 col-md-3 text-left">
-                                              <small class="text-right">Status:</small>
-
-                                                    <span t-field="appraisal.state" class=" badge badge-pill badge-success" title="Current stage of this appraisal"/>
-
-                                            </div>
-                                        </h5>
-                                    </div>
-                                    
-                                    
-                                    <t t-set="prev_record" t-value="1" /> 
-                                    <t t-set="next_record" t-value="2" /> 
-                                    <div style="float:right; text-align:right; width:0ox; margin-right:0px;" class=" btn-group col-lg-1" role="group">
-                                    <h5>  
-                                        <t t-if="pre_id">
-                                            <a role="button"  t-attf-href="/appraisal/pre/#{appraisal.id}?" ><i style="margin-right:10px; align:right" class="fa fa-chevron-left" role="img" aria-label="Previous" title="Previous"></i></a>
-                                        </t>
-                                        <t t-else="">
-                                            <a role="button"  t-att-class="disabled"  ><i style="margin-right:10px; align:right; color:#B8B7B0" class="fa fa-chevron-left" aria-label="Previous" title="Previous"></i></a>
-
-                                        </t>
-                                        <t t-if="next_id">
-                                            <a role="button" t-attf-href="/appraisal/next/#{appraisal.id}?" ><i class="fa fa-chevron-right" role="img" aria-label="Next" title="Next"></i></a>
-                                        </t>
-                                        <t t-else="">
-                                            <a role="button"  t-att-class="disabled"  ><i style="color:#B8B7B0" class="fa fa-chevron-right" aria-label="Next" title="Next"></i></a>
-                                        </t>
-                                    </h5>
-                                </div>
-                            </div>
-                          </div>
+                            </h5>
                         </div>
                     </div>
                 </t>
-               <t t-set="card_body">          
-                    <div class="row mb-4">
-                       <t t-if="appraisal.state == 'waiting' ">
-                         <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">
-                                    <t class="col-lg-7 col-md-8" >
-                                       <t t-if="edit_objective == False"> 
-                                        <a t-attf-href="/action/confirm/objective/#{appraisal.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm</div> </a> 
-                                    </t>
-                                     </t>   
-                                 </t>  
-                            </t>  
-                       
+                <t t-set="card_body">
+                    <div class="mb-1" >
+                        <strong>Employee:</strong> <span t-field="improvement.employee_id.name" />
                     </div>
-                   <form id="objectiveForm" data-toggle="validator"   action="/objective/line/save"  method="post" enctype="multipart/form-data"> 
-                   <div class="row mb-4">
-                         <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
-                         <div style="width: 200px;" class="s_website_form_label"></div>                             
-                            <t t-if="edit_objective == True">
-                            <t t-if="appraisal.employee_id.user_id.id == uid">    
-                             <button id="objectiveButton"  type="submit" class="btn btn-primary pull-left">Save</button>
-                            </t>
-                            </t>    
-                                <span id="s_website_form_result"></span>
-                         </div> 
-                       
-                    </div>
-                    <div class="row mb-4">
-                         <div class="col-12 col-md-6 pb-2">
-                            <div class="row">
-                                <div class="col-md-6"> <strong>Employee : </strong>
-                                    <t t-if="appraisal.employee_id">
-                                        <span t-esc="appraisal.employee_id.name"/>
-                                    </t>
-                                </div>
-                            </div>
-                             <div class="row">            
-                                <div class="col-md-6"> <strong>Year : </strong>
-                                    <t t-if="appraisal.objective_year">
-                                        <span t-esc="appraisal.objective_year"/>
-                                    </t>
-                                </div>
-                                  
-                            </div>
-                              </div>
 
-                    </div> 
-                   
-                    <table class="table table-sm table-striped table-bordered" id="objectiveTable">
-                   
-                      
-                            <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
-                                
-                                <th class="text-left">Objective</th>
-                                <th class="text-left">Priority</th>
-                                <th class="text-left">Weightage</th>
-                            </tr>
-                        <t t-set="total_weigtage" t-value="0"/>
-                        <t t-foreach="appraisal.objective_lines" t-as="line">   
-                                
+                    <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Date Of Joining:</strong> <span t-field="improvement.date_of_joining" />
+                        </div>
+                        <div class="col-12 col-md-6" t-if="improvement.position">
+                            <strong>Position:</strong> <span t-field="improvement.position" />
+                        </div>
+                    </div>
+                    <h3>PIP Info</h3>
+                     <div class="row mb-4">
+                        <div class="col-12 col-md-6 mb-1">
+                            <strong>Rating Scale:</strong> <span t-field="improvement.rating_scale" />
+                        </div>
+                        <div class="col-12 col-md-6" t-if="improvement.follow_up_period">
+                            <strong>Follow Up Period:</strong> <span t-field="improvement.follow_up_period" />
+                        </div>
+                        <div class="col-12 col-md-6" t-if="improvement.follow_up_date">
+                            <strong>Follow Up Date:</strong> <span t-field="improvement.follow_up_date" />
+                        </div>   
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <table class="table table-sm table-striped table-bordered" id="improvementTable">
+                            <thead>
+                                <th>Performance Improvement Area</th>
+                                <th>Action Plan and Timeline</th>
+                                <th>Rating</th>
+                            </thead>
+                            <tbody>
+                              <t t-foreach="improvement.appraisal_improve_line" t-as="improve_line">    
                                 <tr>
-                                     
-                                     <td class="objective">
-                                      <t t-if="edit_objective==True">
-                                        <input type="float" class="form-control s_website_form_input" name="objective"  t-att-value="line.objective"  multiple="true" />
-                                      </t>    
-                                      <t t-if="edit_objective==False">
-                                        <span t-esc="line.objective" />
-                                      </t>    
-                                    </td>
-                                    
-                                    
-                                    <td class="priority">
-                                         <t t-if="edit_objective==True">
-                                        <select  id="priority" class="form-control  s_website_form_input" name="priority" >
-                                                <option value="low">Low</option>
-                                                <option value="medium">Medium</option>
-                                                <option value="high">High</option>
-                                                <option value="very_high">Very High</option>
-                                         </select> 
-                                      </t>    
-                                      <t t-if="edit_objective==False">
-                                        <span t-esc="line.priority" />
-                                      </t>   
-                                    </td>
-                                    
-                                     <td class="weightage">
-                                          <t t-if="edit_objective==True">
-                                        <input type="float" class="form-control s_website_form_input" name="weightage"  t-att-value="line.weightage"  multiple="true" />
-                                        <t t-set="total_weigtage" t-value="total_weigtage + line.weightage"/>
-      
-                                      </t>    
-                                      <t t-if="edit_objective==False">
-                                        <span t-esc="line.weightage" />
-                                        <t t-set="total_weigtage" t-value="total_weigtage + line.weightage"/>
-                                      </t>   
-                                    
-                                    </td>
-                                    <td class="lineids">
-                                        <input type="hidden" class="form-control s_website_form_input" name="lineid"  t-att-value="line.id"  multiple="true" />
-                                       
-                                    
-                                    </td>
-                            
+                                    <td><span t-field="improve_line.performance_improvement_area" /></td>
+                                    <td><span t-field="improve_line.action_plan" /></td>
+                                    <td><span t-field="improve_line.rating" /></td>
                                 </tr>
-                            </t>
-                       
-                    </table>
-                      <input type="hidden" id="objective_vals" class="form-control s_website_form_input" name="objective_vals"  multiple="true" />  
-                       <input type="hidden" id="objective_id" class="form-control s_website_form_input" name="objective_id" t-att-value="appraisal.id"  multiple="true" />  
-                         
-                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-                      <script type="text/javascript">
-                          
-                        $(document).ready(function(){
+                              </t>  
+                            </tbody>
+                        
+                        </table>
+                    </div>
 
-                        $("#objectiveButton").on('click',function(){
-                          
-                           var objectivedata=[];
-                           // loop over each table row (tr)
-                           $("#objectiveTable tr").each(function(){
-                                var currentRow=$(this);
-                                
-                                var col1_value=currentRow.find(".lineids input").val();
-                                var col2_value=currentRow.find(".weightage input").val();
-                                var col3_value=currentRow.find(".priority select").val();
-                                var col4_value=currentRow.find(".objective input").val();
-
-                                var obj={};
-                                obj.col1=col1_value;
-                                obj.col2=col2_value;
-                                obj.col3=col3_value;
-                                obj.col4=col4_value;
-
-                                objectivedata.push(obj);
-                          
-                           });
-                         objectivedictionary = JSON.stringify(objectivedata); 
-                         var lista = document.getElementById("objective_vals")
-                         lista.value = objectivedictionary 
-                         console.log(objectivedata);   
-                         });
-
-                       });
-                      </script> 
-                       
-                  </form>
-                     <div class="row">                             
-                           <br/>
-                       
-                            <div class="col-md-6"> <strong> </strong>
-                            
-                                
-                            </div>  
-                           
-                            <div class="col-md-6"> <strong> </strong>
-                            
-                                <span t-esc="total_weigtage" />
-                                
-                            </div>  
-                         
-                    </div>         
-                             
-                       
-                  
-
-                </t> 
-            </t>
-            <div class="mt32">
-                <h4><strong>Message and communication history</strong></h4>
-                <t t-call="portal.message_thread">
-                    <t t-set="object" t-value="appraisal"/>
-                    <t t-set="pid" t-value="pid"/>
-                    <t t-set="hash" t-value="hash"/>
+                    
+                    
+                    
                 </t>
-            </div>
+            </t>
+
+           
         </t>
     </template>
     
