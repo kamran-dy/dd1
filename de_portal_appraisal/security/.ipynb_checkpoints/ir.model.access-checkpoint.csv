@@ -12,3 +12,5 @@ access_hr_appraisal_feedback_objective_appraisee_line_portal,access.hr.appraisal
 access_hr_appraisal_feedback_objective_line_portal,access.hr.appraisal.feedback.objective.line,model_hr_appraisal_feedback_objective_line,base.group_portal,1,1,1,1
 access_hr_appraisal_feedback_values_line_portal,access.hr.appraisal.feedback.values.line,model_hr_appraisal_feedback_values_line,base.group_portal,1,1,1,1
 acces_hr_employee_portal,access.hr.employee,model_hr_employee,base.group_portal,1,0,0,0
+access_hr_ppraisal_improvements_portal,access.hr.appraisal.improvements,model_hr_appraisal_improvements,,1,1,1,1
+access_hr_ppraisal_improvements_line_portal,access.hr.appraisal.improvements.line,model_hr_appraisal_improvements_line,,1,1,1,1
