@@ -282,6 +282,33 @@ class CustomerPortal(CustomerPortal):
         return request.render("de_portal_attendance.attendance_rectify", values)
     
     
+    @http.route(['/hr/attendance/rectify/reverse/<int:attendance_id>'], type='http', auth="public", website=True)
+    def attendance_edit_reverse_template(self,attendance_id, access_token=None ,**kw):
+        id = attendance_id
+        try:
+            expense_sudo = self._document_check_access('hr.attendance', id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        
+        values = self._attendance_get_page_view_values(expense_sudo, **kw) 
+        exist_attendance = request.env['hr.attendance'].sudo().browse(id)
+        employees = request.env['hr.employee'].search([('user_id','=',http.request.env.context.get('uid'))])
+        managers = employees.line_manager
+        employee_name = employees
+        checkin_date_in = str(exist_attendance.check_in)
+        date_processing_in = checkin_date_in.replace(':', '-').replace('T', '-').split('-')
+        checkout_date_in = str(exist_attendance.check_out) 
+        date_processing_out = checkout_date_in.replace(':', '-').replace('T', '-').split('-')
+        values.update({
+            'exist_attendance': exist_attendance,
+            'date_processing_in': date_processing_in,
+            'managers': managers,
+            'employee_name': employee_name,
+            'date_processing_out': date_processing_out,
+             'emps' : employees,
+        })
+        return request.render("de_portal_attendance.attendance_rectify", values)
+    
 
   
     def _rectify_attendance_get_page_view_values(self,rectify, next_id = 0,pre_id= 0, attendance_user_flag = 0, access_token = None, **kwargs):
