@@ -174,7 +174,7 @@
         </t>
     </template>
      
-    <template id="portal_appraisal_objective" name="Appraisal ">
+    <template id="portal_appraisal_objective" name="Appraisal">
         <t t-call="portal.portal_layout">
             
           
@@ -291,6 +291,7 @@
                             <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
                                 
                                 <th class="text-left">Objective</th>
+                                 <th class="text-left">Description</th>
                                 <th class="text-left">Priority</th>
                                 <th class="text-left">Weightage</th>
                             </tr>

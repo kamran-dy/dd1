@@ -96,7 +96,7 @@
                                             <i class="badge badge-pill badge-info" >Sent For Employees Review</i>
                                         </t>
                                         <t t-if="improvement.state == 'confirmed'">
-                                            <i class="badge badge-pill badge-info" >Approved</i>
+                                            <i class="badge badge-pill badge-info" >Confirmed</i>
                                         </t>
                                         <t t-if="improvement.state == 'employee_review'">
                                             <i class="badge badge-pill badge-info" >Reviewed By Employee</i>
