@@ -78,6 +78,28 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     employees.append(employee_dict)
                 
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                
         
         
         elif employee_type and departments and companyids:
@@ -96,6 +118,28 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     emp_type = contract.employee_id.emp_type
                     g_type = contract.employee_id.grade_type.name
                     ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
                     location = contract.employee_id.work_location_id.name
                     
                     employee_dict = {}
@@ -141,6 +185,28 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
                     
         elif employee_type and g_type and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -158,6 +224,28 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     emp_type = contract.employee_id.emp_type
                     g_type = contract.employee_id.grade_type.name
                     ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
                     location = contract.employee_id.work_location_id.name
                     
                     employee_dict = {}
@@ -204,6 +292,28 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
                     
         elif employee_type and departments and g_type and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -236,6 +346,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         elif employee_type and locations and g_type and companyids:
             
@@ -255,6 +388,28 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     emp_type = contract.employee_id.emp_type
                     g_type = contract.employee_id.grade_type.name
                     ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
                     location = contract.employee_id.work_location_id.name
                     
                     employee_dict = {}
@@ -301,6 +456,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         elif departments and locations and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -332,6 +510,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         elif departments and g_type and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -363,6 +564,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         elif locations and g_type and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -394,6 +618,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         elif employee_type and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -424,6 +671,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         elif locations and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -454,6 +724,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         
         elif departments and companyids:
@@ -485,6 +778,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
                     
         elif g_type and companyids:
             active_contract = self.env['hr.contract'].search([
@@ -514,6 +830,29 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     employee_dict['employee_status'] = 'On Roll'
                     
                     employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+                    
         
         #raise UserError(active_contract.ids)
         #raise UserError(len(employees))

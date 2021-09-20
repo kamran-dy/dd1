@@ -262,5 +262,6 @@ class EmployeeExperiencePDF(models.AbstractModel):
             'doc_model': 'employee.dob',
             'data': data,
             'active_contract': active_contract,
-            'employees':employees
+            'employees':employees,
+            'grade_type':gr_type
         }

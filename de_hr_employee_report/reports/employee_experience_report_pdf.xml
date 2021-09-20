@@ -12,7 +12,7 @@
             <field name="margin_left">7</field>
             <field name="margin_right">7</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">0</field>
+            <field name="header_spacing">30</field>
             <field name="dpi">90</field>
         </record>
         
@@ -39,6 +39,10 @@
                                     <br></br>
                                     <a style="font-weight:bold;font-size:20px;color:blue;">Employee's Experience Report</a>
                                 </div>
+<!--                                 <div class="col-3">
+                                    <h1 style="font-size:20px;color:blue;"><strong t-esc="grade_type"/></h1>
+                                    
+                                </div> -->
                             </div>
                         </div>
                        <div>
@@ -50,7 +54,12 @@
                         <t t-set="count" t-value="1"/>
                         <t t-foreach="set(e_type)" t-as="e">
                             <div style="page-break-after:avoid;"/>
-                            <div><span t-esc="e" style="font-size:50px;margin-top: 500px;line-height: 200%"/></div>
+                            <div>
+                                <span t-esc="e" style="font-size:50px;margin-top: 500px;line-height: 200%;"/>
+                                <![CDATA[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]]>
+                                <span t-esc="grade_type" style="font-size:50px;margin-top: 500px;line-height: 200%"/>
+                            </div>
+                            
                             <table class="table table-condensed" style="border: 1px solid black;">
                                 <thead>
                                     <tr>

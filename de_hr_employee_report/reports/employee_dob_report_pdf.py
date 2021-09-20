@@ -32,7 +32,7 @@ class EmployeeDOBPDF(models.AbstractModel):
                 name = contract.employee_id.name
                 department = contract.employee_id.department_id.name
                 doj = contract.employee_id.date.strftime("%d-%m-%Y")
-                dob = contract.employee_id.birthday
+                dob = contract.employee_id.birthday.strftime("%d-%m-%Y")
                 birthday = contract.employee_id.birthday.strftime("%d-%m-{}".format(todays_year))
                 company = contract.employee_id.company_id.name
                 #raise UserError(emp_code)

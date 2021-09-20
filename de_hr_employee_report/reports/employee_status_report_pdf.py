@@ -48,7 +48,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
@@ -62,7 +62,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.company_id', 'in', companyids)
@@ -82,7 +82,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('cost_center_information_line.cost_center', 'in',cost_centers),
                                                               ('employee_id.company_id', 'in', companyids)
@@ -92,7 +92,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
@@ -103,7 +103,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('cost_center_information_line.cost_center', 'in',cost_centers),
@@ -114,7 +114,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('cost_center_information_line.cost_center', 'in',cost_centers),
@@ -125,7 +125,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('cost_center_information_line.cost_center', 'in',cost_centers),
@@ -136,7 +136,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.company_id', 'in', companyids)
@@ -146,7 +146,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('cost_center_information_line.cost_center', 'in',cost_centers),
                                                               ('employee_id.company_id', 'in', companyids)
@@ -156,7 +156,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('cost_center_information_line.cost_center', 'in',cost_centers),
                                                               ('employee_id.company_id', 'in', companyids)
@@ -166,7 +166,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.emp_type', 'in', employee_type),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
@@ -175,7 +175,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.work_location_id', 'in',locations),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
@@ -185,7 +185,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('employee_id.department_id', 'in',departments),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
@@ -194,7 +194,7 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               '|',
                                                              ('employee_id.resigned_date','>=',data['start_date']),
                                                              ('employee_id.resigned_date','<=',data['end_date']),
-                                                              '|',
+                                                              '&',
                                                               ('cost_center_information_line.cost_center', 'in',cost_centers),
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])

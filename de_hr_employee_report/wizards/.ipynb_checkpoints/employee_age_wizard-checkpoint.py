@@ -14,19 +14,17 @@ class EmployeeAge(models.TransientModel):
     age_from = fields.Integer('Age From')
     age_to = fields.Integer('Age To')
     
-    @api.constrains('age_to')
-    def check_age(self):
-        for rec in self:
-            if (rec.age_to < 18) and (rec.age_to > 100):
-                #raise UserError('Age must be between 18 and 100')
-                raise ValidationError(_('Age must be between 18 and 100'))
-    
     @api.constrains('age_from')
     def check_age(self):
         for rec in self:
-            if (rec.age_from < 18) and (rec.age_from > 100):
-                #raise UserError('Age must be between 18 and 100')
-                raise ValidationError(_('Age must be between 18 and 100'))
+            if rec.age_from < 18:
+                raise ValidationError(_('Age From must be greater than or equal to 18'))
+    
+    @api.constrains('age_to')
+    def check_age(self):
+        for rec in self:
+            if (rec.age_to > 100):
+                raise ValidationError(_('Age To must be less than or equal to 100'))
             
 
     def action_generate_pdf(self):

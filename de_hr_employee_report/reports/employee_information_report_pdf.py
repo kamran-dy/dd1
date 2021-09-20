@@ -8,7 +8,7 @@ from datetime import date
 
 
 class EmployeeInformationPDF(models.AbstractModel):
-    _name = 'report.de_hr_employee_report.employee_information_pdf'
+    _name = 'report.de_hr_employee_report.employeeinformation_pdf'
     _description = 'Employee Information PDF Report'
 
     def _get_report_values(self, docids, data):
