@@ -10,6 +10,12 @@ class PortalAppraisal(models.Model):
 class ResCompany(models.Model):
     _inherit = 'res.company'  
     
+class HrAppraisalImprovements(models.Model):
+    _inherit = 'hr.appraisal.improvements'  
+    
+class HrAppraisalImprovLine(models.Model):
+    _inherit = 'hr.appraisal.improvements.line'     
+    
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'      
     
