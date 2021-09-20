@@ -43,11 +43,48 @@ def paging(data, flag1 = 0, flag2 = 0):
                 
 class CreateImprovements(http.Controller):
     
-    @http.route('/improvements/line/save',type="http", website=True, auth='user')
+    @http.route('/appraisal/improvement/create/',type="http", website=True, auth='user')
+    def appraisal_improvement_template(self, **kw):
+        global appraisal_improvements_list
+        appraisal_improvements_list = []
+        return request.render("de_portal_appraisal.create_appraisal_improvement",appraisal_improvements_page_content()) 
+    
+    
+    @http.route('/appraisal/improvement/line/save',type="http", website=True, auth='user')
     def appraisal_improvements_template(self, **kw):
-        improvements = request.env['hr.appraisal.improvements.line'].search([('id','=', kw.get('improvementid'))])
-        
-        return request.redirect('/appraisal/improvement/%s'%(improvement.id))
+        global appraisal_improvements_list
+        appraisal_val = {
+            'performance_improvement_area': kw.get('performance_improvement_area'),
+            'action_plan':  kw.get('action_plan'),
+            'rating': kw.get('rating'),
+        }
+        appraisal_improvements_list.append(appraisal_val)
+        return request.render("de_portal_appraisal.create_appraisal_improvement",appraisal_improvements_page_content())
+    
+    @http.route('/appraisal/improvement/save', type="http", auth="public", website=True)
+    def create_appraisal_improvement(self, **kw):
+        obj_line = []
+        global appraisal_improvements_list
+        for emp_improve in appraisal_improvements_list:
+            obj_line.append((0,0,{
+                'performance_improvement_area':  emp_improve['performance_improvement_area'],
+                'action_plan':  emp_improve['action_plan'],
+                'rating': emp_improve['rating'],
+                }))
+        improvement_val = {
+            'follow_up_period': kw.get('follow_up_period'),
+            'employee_id': int(kw.get('employee_id')),
+            'follow_up_period': kw.get('follow_up_period'),
+            'comments': kw.get('comments'),
+            'appraisal_improve_line': obj_line,
+        }
+        record = request.env['hr.appraisal.improvements'].sudo().create(improvement_val)
+        record.action_confirmed()
+        appraisal_improvements_list = []
+        return request.render("de_portal_appraisal.appraisal_submited", {})
+    
+    
+    
                    
         
         
