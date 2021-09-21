@@ -221,7 +221,75 @@ class CreateAttendance(http.Controller):
                 return request.render("de_portal_attendance.rectification_submited", {})
 
     
+    @http.route('/attendance/rectify/reverse/save', type="http", auth="public", website=True)
+    def reverse_rectify_attendance(self, **kw):
+        checkin_date_in = kw.get('check_in')
+        
+        if kw.get('date'):
+            if kw.get('date') > str(date.today()):
+                return request.render("de_portal_attendance.cannot_submit_future_days_commitment_msg", attendance_page_content())
+            
+        if kw.get('id'):
+            exist_attendance1 = request.env['hr.attendance'].search([('id','=',int(kw.get('id')))])
+            if kw.get('check_out'):
+                check_out =  exist_attendance1.check_out
+                checkin1_date_rectify = check_out.strftime('%Y-%m-%d')
+                checkin_date_rectify = datetime.strptime(str(checkin1_date_rectify) , '%Y-%m-%d')
+                checkin_duration_obj = datetime.strptime(kw.get('check_out'), '%H:%M')
+                checkin_date_in = checkin_date_rectify + timedelta(hours=checkin_duration_obj.hour, minutes=checkin_duration_obj.minute)
+                
+                rectify_val = {
+                    'reason': kw.get('description'),
+                    'employee_id': int(kw.get('employee_id')),
+                    'check_in':  check_out,
+                    'check_out': checkin_date_in - relativedelta(hours =+ 5),
+                    'partial': 'IN/OUT Missing',
+                    'date':  check_out,
+                    'attendance_id':  int(kw.get('id')),
+                }
+                record = request.env['hr.attendance.rectification'].sudo().create(rectify_val)
+                if kw.get('partial'):
+                    record.update({
+                        'partial': 'Partial',
+                    })
+                record.action_submit()
+                return request.render("de_portal_attendance.rectification_submited", {})
+            elif kw.get('check_in'):
+                
+                check_in =  exist_attendance1.check_in
+                checkout1_date_rectify = check_in.strftime('%Y-%m-%d')
+                checkout_date_rectify = datetime.strptime(str(checkout1_date_rectify) , '%Y-%m-%d')
+                checkout_duration_obj = datetime.strptime(kw.get('check_in'), '%H:%M')
+                checkout_date_in = checkout_date_rectify + timedelta(hours=checkout_duration_obj.hour, minutes=checkout_duration_obj.minute)
+                if kw.get('night_shift'):
+                    check1_in =  checkout1_date_rectify + timedelta(1) 
+                    checkout_date_rectify = datetime.strptime(str(check1_in) , '%Y-%m-%d')
+                    checkout_duration_obj = datetime.strptime(kw.get('check_in'), '%H:%M')
+                    checkout_date_in = checkout_date_rectify + timedelta(hours=checkout_duration_obj.hour, minutes=checkout_duration_obj.minute)
+                
+                rectify_val = {
+                    'reason': kw.get('description'),
+                    'employee_id': int(kw.get('employee_id')),
+                    'check_in':  checkout_date_in - relativedelta(hours =+ 5),
+                    'check_out': check_in,
+                    'date':  check_in,
+                    'partial': 'IN/OUT Missing', 
+                    'attendance_id':  int(kw.get('id')),
+                }
+                record = request.env['hr.attendance.rectification'].sudo().create(rectify_val)
+                if kw.get('partial'):
+                    record.update({
+                        'partial': 'Partial',
+                    })
+                    
+               
+       
+                record.action_submit()
+                return request.render("de_portal_attendance.rectification_submited", {})        
+
     
+    
+       
    
 
 
@@ -306,6 +374,34 @@ class CustomerPortal(CustomerPortal):
              'emps' : employees,
         })
         return request.render("de_portal_attendance.attendance_rectify", values)
+
+
+    @http.route(['/hr/attendance/rectify/reverse/<int:attendance_id>'], type='http', auth="public", website=True)
+    def attendance_edit_reverse_template(self,attendance_id, access_token=None ,**kw):
+        id = attendance_id
+        try:
+            expense_sudo = self._document_check_access('hr.attendance', id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        
+        values = self._attendance_get_page_view_values(expense_sudo, **kw) 
+        exist_attendance = request.env['hr.attendance'].sudo().browse(id)
+        employees = request.env['hr.employee'].search([('user_id','=',http.request.env.context.get('uid'))])
+        managers = employees.line_manager
+        employee_name = employees
+        checkin_date_in = str(exist_attendance.check_in)
+        date_processing_in = checkin_date_in.replace(':', '-').replace('T', '-').split('-')
+        checkout_date_in = str(exist_attendance.check_out) 
+        date_processing_out = checkout_date_in.replace(':', '-').replace('T', '-').split('-')
+        values.update({
+            'exist_attendance': exist_attendance,
+            'date_processing_in': date_processing_in,
+            'managers': managers,
+            'employee_name': employee_name,
+            'date_processing_out': date_processing_out,
+             'emps' : employees,
+        })
+        return request.render("de_portal_attendance.attendance_rectify_reverse", values)
     
     
 
