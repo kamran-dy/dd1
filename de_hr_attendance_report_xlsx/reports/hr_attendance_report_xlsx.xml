@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+                id="attendance_report_xlsx"
+                model="attendance.report.excel.wizard"
+                string="Print to XLSX"
+                report_type="xlsx"
+                name="de_hr_attendance_report_xlsx.hr_attendance_report_xlsx"
+                file="Attendance Report Xlsx"/>
+    </data>
+</odoo>
