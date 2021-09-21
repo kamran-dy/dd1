@@ -961,7 +961,7 @@
             <div id="leave_section" data-oe-id="3374" data-oe-xpath="/data/xpath[2]/div" data-oe-model="ir.ui.view" data-oe-field="arch">
                     <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
                         <div class="container">
-                            <form id="portal_expense_form" data-toggle="validator" action="/hr/attendance/rectify/save">
+                            <form id="portal_expense_form" data-toggle="validator" action="/attendance/rectify/reverse/save">
 
                                 <div class="s_website_form_rows row s_col_no_bgcolor">
                                    
