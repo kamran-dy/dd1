@@ -852,6 +852,248 @@ class EmployeeEntitledPDF(models.AbstractModel):
                     
                     
                     employees.append(employee_dict)
+        
+        elif employee_type:
+            active_contract = self.env['hr.contract'].search([
+                                                              ('employee_id.emp_type', 'in', employee_type)
+                                                              
+                                                              ])
+            for contract in active_contract:
+                ot_entitled = contract.employee_id.allow_overtime
+                #raise UserError(ot_entitled)
+                if ot_entitled == True:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    employees.append(employee_dict)
+        
+        elif locations:
+            active_contract = self.env['hr.contract'].search([
+                                                              ('employee_id.work_location_id', 'in',locations)
+                                                              
+                                                              ])
+            for contract in active_contract:
+                ot_entitled = contract.employee_id.allow_overtime
+                #raise UserError(ot_entitled)
+                if ot_entitled == True:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    employees.append(employee_dict)
+        
+        elif departments:
+            active_contract = self.env['hr.contract'].search([
+                                                              ('employee_id.department_id', 'in',departments)
+                                                              
+                                                              ])
+            for contract in active_contract:
+                ot_entitled = contract.employee_id.allow_overtime
+                #raise UserError(ot_entitled)
+                if ot_entitled == True:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    employees.append(employee_dict)
+        
+        elif companyids:
+            active_contract = self.env['hr.contract'].search([
+                                                              ('employee_id.company_id', 'in', companyids)
+                                                              
+                                                              ])
+            for contract in active_contract:
+                ot_entitled = contract.employee_id.allow_overtime
+                #raise UserError(ot_entitled)
+                if ot_entitled == True:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+        
+        elif g_type:
+            active_contract = self.env['hr.contract'].search([
+                                                              ('employee_id.grade_type', 'in', g_type)
+                                                              
+                                                              ])
+            for contract in active_contract:
+                ot_entitled = contract.employee_id.allow_overtime
+                #raise UserError(ot_entitled)
+                if ot_entitled == True:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+        
+        else:
+            active_contract = self.env['hr.contract'].search([
+                                                              ('state', '=', 'open')
+                                                              
+                                                              ])
+            for contract in active_contract:
+                ot_entitled = contract.employee_id.allow_overtime
+                #raise UserError(ot_entitled)
+                if ot_entitled == True:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'Y'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    employees.append(employee_dict)
+                
+                elif ot_entitled == False:
+                    emp_code = contract.employee_id.emp_number
+                    name = contract.employee_id.name
+                    dep_name = contract.employee_id.department_id.name
+                    emp_type = contract.employee_id.emp_type
+                    g_type = contract.employee_id.grade_type.name
+                    ot_entitled = 'N'
+                    location = contract.employee_id.work_location_id.name
+                    
+                    employee_dict = {}
+                    employee_dict['emp_code'] = emp_code
+                    employee_dict['name'] = name
+                    employee_dict['dep_name'] = dep_name
+                    employee_dict['emp_type'] = emp_type
+                    employee_dict['g_type'] = g_type
+                    employee_dict['ot_entitled'] = ot_entitled
+                    employee_dict['location'] = location
+                    employee_dict['employee_status'] = 'On Roll'
+                    
+                    
+                    employees.append(employee_dict)
+        
+        
                     
         
         #raise UserError(active_contract.ids)

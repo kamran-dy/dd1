@@ -96,28 +96,35 @@ class EmployeeAgeReport(models.AbstractModel):
             
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -154,32 +161,39 @@ class EmployeeAgeReport(models.AbstractModel):
             
         elif employee_type and grade_type:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.emp_type', '=', employee_type),
-                                                              ('employee_id.grade_type', '=', grade_type)])
+                                                              ('employee_id.emp_type', 'in', employee_type),
+                                                              ('employee_id.grade_type', 'in', g_type)])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -213,32 +227,39 @@ class EmployeeAgeReport(models.AbstractModel):
                     
         elif employee_type and location:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.emp_type', '=', employee_type),
-                                                              ('employee_id.work_location_id', '=',location)])
+                                                              ('employee_id.emp_type', 'in', employee_type),
+                                                              ('employee_id.work_location_id', 'in',locations)])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -272,33 +293,40 @@ class EmployeeAgeReport(models.AbstractModel):
                     
         elif employee_type and department:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.emp_type', '=', employee_type),
-                                                              ('employee_id.department_id', '=',
-                                                               department)])
+                                                              ('employee_id.emp_type', 'in', employee_type),
+                                                              ('employee_id.department_id', 'in',
+                                                               departments)])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -332,34 +360,41 @@ class EmployeeAgeReport(models.AbstractModel):
                     
         elif employee_type and grade_type and location:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.emp_type', '=', employee_type),
-                                                              ('employee_id.grade_type', '=', grade_type),
-                                                              ('employee_id.work_location_id', '=',location)
+                                                              ('employee_id.emp_type', 'in', employee_type),
+                                                              ('employee_id.grade_type', 'in', g_type),
+                                                              ('employee_id.work_location_id', 'in',locations)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -393,35 +428,42 @@ class EmployeeAgeReport(models.AbstractModel):
                     
         elif employee_type and grade_type and department:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.emp_type', '=', employee_type),
-                                                              ('employee_id.grade_type', '=', grade_type),
-                                                              ('employee_id.department_id', '=',
-                                                               department)
+                                                              ('employee_id.emp_type', 'in', employee_type),
+                                                              ('employee_id.grade_type', 'in', g_type),
+                                                              ('employee_id.department_id', 'in',
+                                                               departments)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -455,35 +497,42 @@ class EmployeeAgeReport(models.AbstractModel):
                     
         elif employee_type and location and department:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.emp_type', '=', employee_type),
-                                                              ('employee_id.work_location_id', '=',location),
-                                                              ('employee_id.department_id', '=',
-                                                               department)
+                                                              ('employee_id.emp_type', 'in', employee_type),
+                                                              ('employee_id.work_location_id', 'in',locations),
+                                                              ('employee_id.department_id', 'in',
+                                                               departments)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -517,35 +566,42 @@ class EmployeeAgeReport(models.AbstractModel):
         
         elif grade_type and location and department:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.grade_type', '=', grade_type),
-                                                              ('employee_id.work_location_id', '=',location),
-                                                              ('employee_id.department_id', '=',
-                                                               department)
+                                                              ('employee_id.grade_type', 'in', g_type),
+                                                              ('employee_id.work_location_id', 'in',locations),
+                                                              ('employee_id.department_id', 'in',
+                                                               departments)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -581,34 +637,41 @@ class EmployeeAgeReport(models.AbstractModel):
         
         elif location and department:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.work_location_id', '=',location),
-                                                              ('employee_id.department_id', '=',
-                                                               department)
+                                                              ('employee_id.work_location_id', 'in',locations),
+                                                              ('employee_id.department_id', 'in',
+                                                               departments)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -642,33 +705,40 @@ class EmployeeAgeReport(models.AbstractModel):
         
         elif location and grade_type:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.work_location_id', '=',location),
-                                                              ('employee_id.grade_type', '=', grade_type)
+                                                              ('employee_id.work_location_id', 'in',locations),
+                                                              ('employee_id.grade_type', 'in', g_type)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -702,34 +772,41 @@ class EmployeeAgeReport(models.AbstractModel):
         
         elif department and grade_type:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.grade_type', '=', grade_type),
-                                                              ('employee_id.department_id', '=',
-                                                               department)
+                                                              ('employee_id.grade_type', 'in', g_type),
+                                                              ('employee_id.department_id', 'in',
+                                                               departments)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -762,33 +839,40 @@ class EmployeeAgeReport(models.AbstractModel):
                     employees.append(employee_dict)
         elif department:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.department_id', '=',
-                                                               department)
+                                                              ('employee_id.department_id', 'in',
+                                                               departments)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -822,32 +906,39 @@ class EmployeeAgeReport(models.AbstractModel):
         
         elif grade_type:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.grade_type', '=', grade_type)
+                                                              ('employee_id.grade_type', 'in', g_type)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -881,32 +972,39 @@ class EmployeeAgeReport(models.AbstractModel):
         
         elif location:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.work_location_id', '=',location)
+                                                              ('employee_id.work_location_id', 'in',locations)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -940,32 +1038,39 @@ class EmployeeAgeReport(models.AbstractModel):
         
         elif employee_type:
             active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
-                                                              ('employee_id.emp_type', '=', employee_type)
+                                                              ('employee_id.emp_type', 'in', employee_type)
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 
@@ -1002,28 +1107,35 @@ class EmployeeAgeReport(models.AbstractModel):
                                                               ])
             count = 1
             for contract in active_contract:
-                birth_date = contract.employee_id.birthday
-                parse_birth_date = birth_date.strftime("%Y-%m-%d")
-                birth_year = birth_date.year
-                birth_month = birth_date.month
-                birth_day = birth_date.day
-                
-                today = date.today()
-                t = today.strftime("%Y-%m-%d")
-                today_year = today.year
-                today_month = today.month
-                today_day = today.day
-                #raise UserError(today_year)
-                employee_age = today_year - birth_year
-                years = relativedelta(date.today(),birth_date).years
-                months = relativedelta(date.today(),birth_date).months
-                days = relativedelta(date.today(),birth_date).days
-                age_details = ''
-                age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
-                
-                total_days = (today - birth_date).days
-                total_months = months + (12*years)
-                total_years = years
+                if contract.employee_id.birthday:
+                    birth_date = contract.employee_id.birthday
+                    parse_birth_date = birth_date.strftime("%Y-%m-%d")
+                    birth_year = birth_date.year
+                    birth_month = birth_date.month
+                    birth_day = birth_date.day
+                    
+                    today = date.today()
+                    t = today.strftime("%Y-%m-%d")
+                    today_year = today.year
+                    today_month = today.month
+                    today_day = today.day
+                    #raise UserError(today_year)
+                    employee_age = today_year - birth_year
+                    years = relativedelta(date.today(),birth_date).years
+                    months = relativedelta(date.today(),birth_date).months
+                    days = relativedelta(date.today(),birth_date).days
+                    age_details = ''
+                    age_details = str(years)+'Y-'+str(months)+'M-'+str(days)+'D'
+
+                    total_days = (today - birth_date).days
+                    total_months = months + (12*years)
+                    total_years = years
+                else:
+                    parse_birth_date = None
+                    age_details = None
+                    total_years = None
+                    total_months = None
+                    total_days = None
                 #raise UserError(parse_birth_date)
                 #raise UserError(total_months)
                 

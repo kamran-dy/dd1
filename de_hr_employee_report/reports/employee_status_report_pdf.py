@@ -199,6 +199,13 @@ class EmployeeStatusPDF(models.AbstractModel):
                                                               ('employee_id.company_id', 'in', companyids)
                                                               ])
         
+        elif companyids:
+            active_contract = self.env['hr.contract'].search([
+                                                             ('employee_id.resigned_date','>=',data['start_date']),
+                                                             ('employee_id.resigned_date','<=',data['end_date']),
+                                                              ('employee_id.company_id', 'in', companyids)
+                                                              ])
+        
         #raise UserError(active_contract.ids)
             
         return {

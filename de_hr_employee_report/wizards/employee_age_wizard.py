@@ -15,13 +15,13 @@ class EmployeeAge(models.TransientModel):
     age_to = fields.Integer('Age To')
     
     @api.constrains('age_from')
-    def check_age(self):
+    def check_age_from(self):
         for rec in self:
             if rec.age_from < 18:
                 raise ValidationError(_('Age From must be greater than or equal to 18'))
     
     @api.constrains('age_to')
-    def check_age(self):
+    def check_age_to(self):
         for rec in self:
             if (rec.age_to > 100):
                 raise ValidationError(_('Age To must be less than or equal to 100'))

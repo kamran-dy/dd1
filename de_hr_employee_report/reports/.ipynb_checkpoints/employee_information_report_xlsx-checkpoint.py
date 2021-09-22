@@ -164,10 +164,16 @@ class EmployeeAgeReport(models.AbstractModel):
                     for al in o.employee_id.asset_lines:
                         if o.employee_id.emp_type:
                             emp_type = o.employee_id.emp_type
+                        else:
+                            emp_type = None
                         if o.employee_id.grade_type:
                             gtype = o.employee_id.grade_type.name
+                        else:
+                            gtype = None
                         if o.employee_id.department_id:
                             dept = o.employee_id.department_id.name
+                        else:
+                            dept = None
                         if data['email'] == True:
                             email = o.employee_id.private_email
                         else:
@@ -300,10 +306,16 @@ class EmployeeAgeReport(models.AbstractModel):
                 else:
                     if o.employee_id.emp_type:
                         emp_type = o.employee_id.emp_type
+                    else:
+                        emp_type = None
                     if o.employee_id.grade_type:
                         gtype = o.employee_id.grade_type.name
+                    else:
+                        gtype = None
                     if o.employee_id.department_id:
-                        dept = o.employee_id.department_id.name
+                        dept = o.employee_id.department_id.name#
+                    else:
+                        dept = None
                     if data['email'] == True:
                         email = o.employee_id.private_email
                     else:
@@ -441,10 +453,16 @@ class EmployeeAgeReport(models.AbstractModel):
                     for f in o.employee_id.employee_family_ids:
                         if o.employee_id.emp_type:
                             emp_type = o.employee_id.emp_type
+                        else:
+                            emp_type = None
                         if o.employee_id.grade_type:
                             gtype = o.employee_id.grade_type.name
+                        else:
+                            gtype = None
                         if o.employee_id.department_id:
                             dept = o.employee_id.department_id.name
+                        else:
+                            dept = None
                         if data['email'] == True:
                             email = o.employee_id.private_email
                         else:
@@ -569,10 +587,16 @@ class EmployeeAgeReport(models.AbstractModel):
                 else:
                     if o.employee_id.emp_type:
                         emp_type = o.employee_id.emp_type
+                    else:
+                        emp_type = None
                     if o.employee_id.grade_type:
                         gtype = o.employee_id.grade_type.name
+                    else:
+                        gtype = None
                     if o.employee_id.department_id:
                         dept = o.employee_id.department_id.name
+                    else:
+                        dept = None
                     if data['email'] == True:
                         email = o.employee_id.private_email
                     else:
@@ -704,10 +728,16 @@ class EmployeeAgeReport(models.AbstractModel):
             else:
                 if o.employee_id.emp_type:
                     emp_type = o.employee_id.emp_type
+                else:
+                    emp_type = None
                 if o.employee_id.grade_type:
                     gtype = o.employee_id.grade_type.name
+                else:
+                    gtype = None
                 if o.employee_id.department_id:
                     dept = o.employee_id.department_id.name
+                else:
+                    dept = None
                 if data['email'] == True:
                     email = o.employee_id.private_email
                 else:

@@ -76,6 +76,50 @@ class ContractExpiryReport(models.AbstractModel):
                                                                cost_centers)
                                                               ])
         
+        elif location and cost_center:
+            active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
+                                                              ('employee_id.work_location_id', '=',location),
+                                                              ('cost_center_information_line.cost_center', '=',
+                                                               cost_centers)
+                                                              ])
+        
+        elif grade_type and location:
+            active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
+                                                              ('employee_id.work_location_id', '=',location),
+                                                              ('employee_id.grade_type', '=', g_type)
+                                                              ])
+        
+        elif grade_type and cost_center:
+            active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
+                                                              ('employee_id.grade_type', '=', g_type),
+                                                              ('cost_center_information_line.cost_center', '=',
+                                                               cost_centers)
+                                                              ])
+        elif grade_type:
+            active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
+                                                              ('employee_id.grade_type', '=', g_type)
+                                                              
+                                                              ])
+        elif cost_center:
+           active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
+                                                              ('cost_center_information_line.cost_center', '=',
+                                                               cost_centers)
+                                                              
+                                                              ])
+        elif location:
+            active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
+                                                              ('employee_id.work_location_id', '=',location)
+                                                              
+                                                              ])
+        elif employee_type:
+            active_contract = self.env['hr.contract'].search([('state', '=', 'open'),
+                                                              ('employee_id.emp_type', 'in', employee_type)
+                                                              
+                                                              ])
+        else:
+            active_contract = self.env['hr.contract'].search([('state', '=', 'open')
+                                                              ])
+        
         format1 = workbook.add_format({'font_size': '14', 'align': 'vcenter', 'bold': True})
         sheet = workbook.add_worksheet('Cost Center Wise Report')
         
