@@ -3,11 +3,14 @@
     'name': "Portal Appraisal",
 
     'summary': """
-        Portal Appraisal Objective
+        Portal Appraisal
         """,
 
     'description': """
-        Portal Appraisal Objective
+        Portal Appraisal
+        1- Objective.
+        2- FeedBack.
+        3- Probation.
     """,
 
     'author': "Dynexcel",
@@ -20,13 +23,15 @@
     'version': '14.0.0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','web', 'hr_appraisal','de_hr_portal_user','de_expense_enhancement'],
+    'depends': ['base','web', 'hr_appraisal','de_hr_portal_user','de_expense_enhancement','de_employee_enhancement','de_appraisal_enhancement'],
 
     # always loaded
     'data': [
-#         'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'security/security.xml',
         'views/hr_appraisal_objective_templates.xml',
+        'views/hr_appraisal_feedback_templates.xml',
+        'views/hr_appraisal_probation_template.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
