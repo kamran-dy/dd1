@@ -49,16 +49,16 @@ class HolidaysRequest(models.Model):
                     shift = self.env['resource.calendar'].sudo().search([('company_id','=',line.employee_id.company_id.id)], limit=1)
 
                 for gazetted_day in shift.global_leave_ids:
-                    gazetted_date_from = gazetted_day.date_from +timedelta(1)
-                    gazetted_date_to = gazetted_day.date_to
+                    gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                    gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
                     if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
 
                         gazetted_days_count += 1 
 
                 if shift_line.rest_day == True:
                     for gazetted_day in shift.global_leave_ids:
-                        gazetted_date_from = gazetted_day.date_from +timedelta(1)
-                        gazetted_date_to = gazetted_day.date_to
+                        gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                        gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
                         if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                             tot_rest_days -= 1    
 
@@ -111,7 +111,7 @@ class HolidaysRequest(models.Model):
         if not self.attachment_id:
             if self.holiday_status_id.attachment  == True:
                 diff = self.number_of_days
-                if diff >= self.holiday_status_id.attachment_validity:
+                if diff > self.holiday_status_id.attachment_validity:
                     raise ValidationError(_("Please Add Your Medical Certificate !"))
            
     
@@ -267,8 +267,8 @@ class HolidaysRequest(models.Model):
         restrict_date = '2021-07-16'
         for line in self:
             if str(line.request_date_from)  < restrict_date:
-                pass
-                #raise UserError('Not Allow to Enter Leave Request before 16 JULY 2021!')
+
+                raise UserError('Not Allow to Enter Leave Request before 16 JULY 2021!')
     
     def _get_duration_update_approval(self):
         for line in self:
@@ -345,7 +345,7 @@ class HolidaysRequest(models.Model):
             approval_request_id.action_date_confirm_update()
             line.approval_request_id = approval_request_id.id
             if line.holiday_status_id.is_ceo_approval == True:
-                if line.employee_id.company_id.manager_id.user_id:
+                if line.employee_id.company_id.manager_id.user_id.id != line.employee_id.user_id.id:
                     approver_vals = {
                         'user_id': line.employee_id.company_id.manager_id.user_id.id,
                         'request_id': approval_request_id.id,

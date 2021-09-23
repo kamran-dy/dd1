@@ -31,15 +31,15 @@ class HrAppraisalFeedback(models.Model):
                                string="Performance Period", readonly=True)
     note = fields.Text('Note', compute = 'get_default_note')
     
-    objective_comment = fields.Text('Emp. Half Year Comments')
-    full_year_objective_comment = fields.Text('Manager Half Year Comments')
-    value_comment = fields.Text('Emp. Half Year Comments')
-    full_year_value_comment = fields.Text('Manager Half Year Comments')
+    objective_comment = fields.Text('Half Year Comments')
+    full_year_objective_comment = fields.Text('Full Year Comments')
+    value_comment = fields.Text('Half Year Comments')
+    full_year_value_comment = fields.Text('Full Year Comments')
     
-    half_year_appraiser_objective_comment = fields.Text('Emp. Full year Comments')
-    full_year_appraiser_objective_comment = fields.Text('Manager Full year Comments')
-    half_year_appraiser_value_comment = fields.Text('Emp. Full year Comments')
-    full_year_appraiser_value_comment = fields.Text('Manager Full year Comments')
+    half_year_appraiser_objective_comment = fields.Text('Half Year Comments')
+    full_year_appraiser_objective_comment = fields.Text('Full Year Comments')
+    half_year_appraiser_value_comment = fields.Text('Half Year Comments')
+    full_year_appraiser_value_comment = fields.Text('Full Year Comments')
     
     employee_feedback = fields.Char('Employee Feedback')
     
@@ -171,33 +171,6 @@ class HrAppraisalFeedback(models.Model):
     date_effective = fields.Date('With Effect From')
     
     
-    @api.onchange('recommend_promotion')
-    def promotion_check(self):
-        if self.recommend_promotion:
-            for rec in self:
-                rec.update({
-                    'promotion_position' : '',
-                    'promotion_grade' : '',
-                    'date_effective' : '',
-                })
-    
-    @api.onchange('agreement')
-    def agreement_check(self):
-        if self.agreement:
-            for rec in self:
-                rec.update({
-                    'reason_for_disagreement':''
-                })
-                
-    @api.onchange('full_year_agreement')
-    def agreement_full_check(self):
-        if self.agreement:
-            for rec in self:
-                rec.update({
-                    'full_reason_for_disagreement':''
-                })
-    
-    
     @api.onchange('feedback_objective_lines')
     def track_history(self):
         self.message_notify(body=_('Changes Recording'))
@@ -211,7 +184,7 @@ class HrAppraisalFeedback(models.Model):
         sum = 0
         if self.feedback_objective_lines:
             for rec in self.feedback_objective_lines:
-                sum = sum + rec.weightage_score_mngr
+                sum = sum + rec.weightage_score
         self.objective_score = sum
         if round(self.objective_score,0) in range(451,501):
             self.objective_rating = 'Outstanding'
@@ -233,7 +206,7 @@ class HrAppraisalFeedback(models.Model):
         sum = 0
         if self.feedback_values_lines:
             for rec in self.feedback_values_lines:
-                sum = sum + rec.weightage_score_mngr
+                sum = sum + rec.weightage_score
         self.behavioral_score = sum
         
         if round(self.behavioral_score,0) in range(451,501):
@@ -298,7 +271,8 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
     feedback_id = fields.Many2one('hr.appraisal.feedback')
     appraisal_period = fields.Selection(related='feedback_id.appraisal_period')
     concerned_person = fields.Selection(related='feedback_id.concerned_person')
-    full_remarks = fields.Char('Emp. Remarks')
+    remarks = fields.Char('Remarks')
+    full_remarks = fields.Char('Remarks')
     objective = fields.Char('Objective')
     weightage = fields.Float('Weightage')
     priority = fields.Selection([
@@ -307,13 +281,17 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
         ('high', 'High'),
         ('very_high', 'Very High'),
     ], string='Priority', index=True, copy=False, default='low', required = True, track_visibility='onchange')
-    rating = fields.Integer('Emp. Full Year Rating', track_visibility='onchange')
-#     weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
+    rating = fields.Integer('Full Year Rating', track_visibility='onchange')
+    weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
+    percentage_score = fields.Selection([
+        ('0', '0%'),
+        ('1', '20%'),
+        ('2', '40%'),
+        ('3', '60%'),
+        ('4', '80%'),
+        ('5', '100%'),
+    ], string='Half Year % Score', index=True, copy=False, default='0',required = True, track_visibility='onchange')
     comments = fields.Char('Comments')
-    
-    full_remarks_mngr = fields.Char('Manager Remarks')
-    rating_mngr = fields.Integer('Manager Full Year Rating')
-    weightage_score_mngr = fields.Float('Weightage Score', compute='compute_weightage_score')
     
     
     state = fields.Selection([
@@ -335,7 +313,7 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
     
     def compute_weightage_score(self):
         for rec in self:
-            rec.weightage_score_mngr = rec.weightage * (rec.rating_mngr / 100)
+            rec.weightage_score = rec.weightage * (rec.rating / 100)
     
     @api.onchange('rating')
     def limit_rating(self):
@@ -353,22 +331,25 @@ class HrAppraisalFeedbackValuesLine(models.Model):
     feedback_id = fields.Many2one('hr.appraisal.feedback')
     appraisal_period = fields.Selection(related='feedback_id.appraisal_period')
     concerned_person = fields.Selection(related='feedback_id.concerned_person')
-    full_remarks = fields.Char('Emp. Remarks')
+    remarks = fields.Char('Remarks')
+    full_remarks = fields.Char('Remarks')
     core_values = fields.Char('Core Values')
     weightage = fields.Float('Weightage')
-    
-    full_remarks_mngr = fields.Char('Manager Remarks')
-    rating_mngr = fields.Integer('Manager Full Year Rating')
-    weightage_score_mngr = fields.Float('Weightage Score', compute='compute_weightage_score')
     priority = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
         ('high', 'High'),
         ('very_high', 'Very High'),
     ], string='Priority', index=True, copy=False, default='low', required = True,track_visibility='onchange')
-    rating = fields.Integer('Emp. Full Year Rating', track_visibility=True)
-#     weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
+    rating = fields.Integer('Full Year Rating', track_visibility=True)
+    weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
     comments = fields.Char('Comments')
+    conformance_level = fields.Selection([
+        ('below', 'Below Average'),
+        ('satisfactory', 'Satisfactory'),
+        ('good', 'Good'),
+        ('role_model', 'Role Model'),
+    ], string='Half Year Conformance Level', index=True, copy=False, default='satisfactory', required = True, track_visibility=True)
     
     
     state = fields.Selection([
@@ -390,7 +371,7 @@ class HrAppraisalFeedbackValuesLine(models.Model):
     
     def compute_weightage_score(self):
         for rec in self:
-            rec.weightage_score_mngr = rec.weightage * (rec.rating_mngr / 100)
+            rec.weightage_score = rec.weightage * (rec.rating / 100)
     
     @api.onchange('rating')
     def limit_rating(self):
@@ -435,8 +416,8 @@ class HrAppraisalFeedbackObjectiveAppraiseeLine(models.Model):
     feedback_id = fields.Many2one('hr.appraisal.feedback')
     appraisal_period = fields.Selection(related='feedback_id.appraisal_period')
     concerned_person = fields.Selection(related='feedback_id.concerned_person')
-    remarks = fields.Char('Emp. Remarks')
-    remarks_mngr = fields.Char('Manager Remarks')
+    remarks = fields.Char('Remarks')
+    full_remarks = fields.Char('Remarks')
     objective = fields.Char('Objective')
     weightage = fields.Float('Weightage')
     priority = fields.Selection([
@@ -445,32 +426,16 @@ class HrAppraisalFeedbackObjectiveAppraiseeLine(models.Model):
         ('high', 'High'),
         ('very_high', 'Very High'),
     ], string='Priority',default='low')
+    rating = fields.Integer('Full Year Rating')
+    weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
     percentage_score = fields.Selection([
         ('0', '0%'),
-        ('1', '10%'),
-        ('2', '20%'),
-        ('3', '30%'),
-        ('4', '40%'),
-        ('5', '50%'),
-        ('6', '60%'),
-        ('7', '70%'),
-        ('8', '80%'),
-        ('9', '90%'),
-        ('10', '100%'),
-    ], string='Emp. Half Year % Score', default='0')
-    percentage_score_mngr = fields.Selection([
-        ('0', '0%'),
-        ('1', '10%'),
-        ('2', '20%'),
-        ('3', '30%'),
-        ('4', '40%'),
-        ('5', '50%'),
-        ('6', '60%'),
-        ('7', '70%'),
-        ('8', '80%'),
-        ('9', '90%'),
-        ('10', '100%'),
-    ], string='Manager Half Year % Score', index=True, copy=False, default='0',required = True, track_visibility='onchange')
+        ('1', '20%'),
+        ('2', '40%'),
+        ('3', '60%'),
+        ('4', '80%'),
+        ('5', '100%'),
+    ], string='Half Year % Score', default='0')
     comments = fields.Char('Comments')
     
     state = fields.Selection([
@@ -492,7 +457,7 @@ class HrAppraisalFeedbackObjectiveAppraiseeLine(models.Model):
     
     def compute_weightage_score(self):
         for rec in self:
-            rec.weightage_score_mngr = rec.weightage * (rec.rating_mngr / 100)
+            rec.weightage_score = rec.weightage * (rec.rating / 100)
     
     @api.onchange('rating')
     def limit_rating(self):
@@ -508,8 +473,8 @@ class HrAppraisalFeedbackValuesAppraiseeLine(models.Model):
     feedback_id = fields.Many2one('hr.appraisal.feedback')
     appraisal_period = fields.Selection(related='feedback_id.appraisal_period')
     concerned_person = fields.Selection(related='feedback_id.concerned_person')
-    remarks = fields.Char('Emp. Remarks')
-    remarks_mngr = fields.Char('Manager Remarks')
+    remarks = fields.Char('Remarks')
+    full_remarks = fields.Char('Remarks')
     core_values = fields.Char('Core Values')
     weightage = fields.Float('Weightage')
     priority = fields.Selection([
@@ -518,19 +483,15 @@ class HrAppraisalFeedbackValuesAppraiseeLine(models.Model):
         ('high', 'High'),
         ('very_high', 'Very High'),
     ], string='Priority', default='low')
+    rating = fields.Integer('Full Year Rating')
+    weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
     comments = fields.Char('Comments')
     conformance_level = fields.Selection([
         ('below', 'Below Average'),
         ('satisfactory', 'Satisfactory'),
         ('good', 'Good'),
         ('role_model', 'Role Model'),
-    ], string='Emp: Half Year Conformance', default='satisfactory')
-    conformance_level_mngr = fields.Selection([
-        ('below', 'Below Average'),
-        ('satisfactory', 'Satisfactory'),
-        ('good', 'Good'),
-        ('role_model', 'Role Model'),
-    ], string='Manager: Half Year Conformance', default='satisfactory')
+    ], string='Half Year Conformance Level', default='satisfactory')
     
     
     state = fields.Selection([
@@ -552,7 +513,7 @@ class HrAppraisalFeedbackValuesAppraiseeLine(models.Model):
     
     def compute_weightage_score(self):
         for rec in self:
-            rec.weightage_score_mngr = rec.weightage * (rec.rating_mngr / 100)
+            rec.weightage_score = rec.weightage * (rec.rating / 100)
     
     @api.onchange('rating')
     def limit_rating(self):

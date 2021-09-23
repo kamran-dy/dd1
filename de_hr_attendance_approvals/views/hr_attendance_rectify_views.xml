@@ -44,25 +44,25 @@
                         <button name="%(action_approval_request_view_rectification_attendance)d" type="action" class="oe_stat_button" icon="fa-check-square-o" string="Approvals" context="{'rectification_id':id,'category_id':category_id}" attrs="{'invisible': [('approval_request_id', '=', False)]}">
                         </button>      
                     </div> 
-					<h1><field name="employee_id"/></h1>
+					<h1><field name="employee_id" attrs="{'readonly': [('state','!=', 'draft')]}"/></h1>
 
 					<group>
 
 						<group>
                             <field name="check_in"  attrs="{'readonly': [('state','!=', 'draft')]}"/>
                             <field name="check_out" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                            <field name="attendance_id" attrs="{'readonly': [('state','!=', 'draft')]}"/>
 							<field name="date" attrs="{'readonly': [('state','!=', 'draft')]}" />
                              <field name="number_of_Days" attrs="{'readonly': [('state','!=', 'draft')]}" />
 
 						</group>
 
                         <group>
-                            <field name="partial"/>
-                            <field name="app_date" invisible='0'/> 
+                            <field name="partial" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                            <field name="app_date" invisible='0' readonly='1'/> 
                             <field name="create_date" invisible='1'/> 
 							<field name="approval_request_id" invisible="1" />
 							<field name="category_id" attrs="{'readonly': [('state','!=', 'draft')]}"/>
-							<field name="attendance_id"  invisible="1"/>
 							<field name="reason" attrs="{'readonly': [('state','!=', 'draft')]}"/>
 						</group>
 

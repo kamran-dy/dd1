@@ -139,7 +139,7 @@ class HrAttendance(models.Model):
         
         
     def cron_create_overtime(self):
-        employees = self.env['hr.employee'].search([('allow_overtime','=',True)], order='id asc')
+        employees = self.env['hr.employee'].search([('allow_overtime','=',True),('id','!=',3653)], order='id asc')
         for employee in employees:
             employee_company = employee.company_id.id
             work_location = employee.work_location_id.id
@@ -160,8 +160,9 @@ class HrAttendance(models.Model):
             month_ovt_hours = 0
             month_total_hours = 0
             attendance_ids = []
-            date_of_execution = fields.date.today() - timedelta(9)
-            employee_attendance = self.env['hr.attendance'].search([('is_overtime','=',False),('employee_id','=',employee.id),('att_date','>=',date_of_execution)])
+            date_of_execution_start = fields.date.today() - timedelta(2)
+            date_of_execution_end = fields.date.today() - timedelta(1)
+            employee_attendance = self.env['hr.attendance'].search([('is_overtime','=',False),('employee_id','=',employee.id),('att_date','>=',date_of_execution_start),('att_date','<=',date_of_execution_end)])
             for attendance in employee_attendance:
                 overtime_request = self.env['hr.overtime.request'].search([('employee_id','=', employee.id),('date','>=',attendance.check_in),('date','<=',attendance.check_out)])
                 ovt_hours = 0

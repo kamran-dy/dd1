@@ -3,15 +3,13 @@ from odoo.exceptions import UserError
 
 class HrAppraisalObjective(models.Model):
     _name = 'hr.appraisal.objective'
-    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-    _description='Appraisal Objective'
     _rec_name = 'employee_id'
     
     employee_id = fields.Many2one('hr.employee')
     description = fields.Char('Description')
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('waiting', "Sent for Manager's review"),
+        ('waiting', 'Waiting for Employee Review'),
         ('confirm', 'Confirmed'),
     ], string='State', index=True, copy=False, default='draft', track_visibility='onchange')
     
@@ -31,10 +29,9 @@ class HrAppraisalObjective(models.Model):
         ('make_editable', 'Editable')], compute = 'compute_readonly')
     
     def unlink(self):
-        for rec in self:
-            if rec.state in ['confirm']:
-                raise UserError(('Deletion is Not Allowed!'))
-            return super(HrAppraisalObjective, self).unlink()
+        if self.state in ['confirm']:
+            raise UserError(('Deletion is Not Allowed!'))
+        return super(HrAppraisalObjective, self).unlink()
     
      
     @api.onchange('employee_id')
