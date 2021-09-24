@@ -63,7 +63,7 @@ class HolidaysRequest(models.Model):
             delta_days = (self.request_date_to - self.request_date_from).days  
             days = delta_days - tot_rest_days - gazetted_days_count
             empshift = self.env['hr.employee'].search([('id','=',employee_id)], limit=1)
-            hours = days * empshift.shift_idhours_per_day if empshift.shift_id else 8
+            hours = days * empshift.shift_id.hours_per_day if empshift.shift_id else 8
             return {'days': days, 'hours': hours}
         else:
             today_hours = self.env.company.resource_calendar_id.get_work_hours_count(
