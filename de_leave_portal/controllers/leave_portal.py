@@ -148,16 +148,16 @@ class CreateTimeOff(http.Controller):
                         shift = request.env['resource.calendar'].sudo().search([('company_id','=',employee_schedule.company_id.id)], limit=1)
                     
                     for gazetted_day in shift.global_leave_ids:
-                        gazetted_date_from = gazetted_day.date_from +timedelta(1)
-                        gazetted_date_to = gazetted_day.date_to
+                        gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                        gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
                         if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                             
                             gazetted_days_count += 1 
                                                 
                     if shift_line.rest_day == True:
                         for gazetted_day in shift.global_leave_ids:
-                            gazetted_date_from = gazetted_day.date_from +timedelta(1)
-                            gazetted_date_to = gazetted_day.date_to
+                            gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                            gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
                             if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                                 
                                 tot_rest_days -= 1    
@@ -169,12 +169,7 @@ class CreateTimeOff(http.Controller):
                     record.update({
                     'number_of_days': 1
                     })
-                else:
-                    
-                    total_days = dddelta.days + 1 - tot_rest_days - gazetted_days_count
-                    record.update({
-                      'number_of_days': total_days
-                    })    
+                   
 
             
 
