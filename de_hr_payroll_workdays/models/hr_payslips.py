@@ -205,11 +205,20 @@ class HrPayslips(models.Model):
                             if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                                 rest_days_initial -= 1 
                         
-                                   
+            gazetted_day_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','Gazetted Days')], limit=1)
+            
+            if not gazetted_day_work_entry_type:
+                vals = {
+                    'name': 'Gazetted Days',
+                    'code': 'Gazetted Days',
+                    'round_days': 'NO',
+                }
+                work_entry = self.env['hr.work.entry.type'].sudo().create(vals)  
+            gazetted_day_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','Gazetted Days')], limit=1)                       
             work_day_line.append((0,0,{
-                   'work_entry_type_id' : 1,
-                   'name': 'Gazetted Holidays',
-                   'sequence': 2,
+                   'work_entry_type_id' : gazetted_day_work_entry_type.id,
+                   'name': gazetted_day_work_entry_type.name,
+                   'sequence': gazetted_day_work_entry_type.sequence,
                    'number_of_days' : gazetted_days_count,
                    'number_of_hours' : gazetted_days_count * employee.shift_id.hours_per_day ,
             }))   
