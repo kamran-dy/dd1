@@ -90,13 +90,13 @@ class HrPayslips(models.Model):
                             work_days += 1
                             work_hours += attendance.worked_hours 
                     previous_date = attendance.check_out.strftime('%y-%m-%d')
-            work_day_line.append({
+            work_day_line.append((0,0,{
                'work_entry_type_id' : work_entry_type.id ,
                'name': work_entry_type.name ,
                'sequence': work_entry_type.sequence ,
                'number_of_days' : work_days ,
                'number_of_hours' : work_hours ,
-            })
+            }))
                       
             """
               Employee Timoff by Timeoff type wise
@@ -130,13 +130,13 @@ class HrPayslips(models.Model):
                     work_entry = self.env['hr.work.entry.type'].sudo().create(vals)
                 timeoff_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=',timeoff_vals.name)], limit=1)
 
-                work_day_line.append({
+                work_day_line.append((0,0,{
                    'work_entry_type_id' : timeoff_work_entry_type.id,
                    'name': timeoff_work_entry_type.name,
                    'sequence': timeoff_work_entry_type.sequence,
                    'number_of_days' : leave_work_days,
                    'number_of_hours' : leave_work_days * employee.shift_id.hours_per_day ,
-                })               
+                }))               
                 
             """
               Employee Absent Days
@@ -206,13 +206,13 @@ class HrPayslips(models.Model):
                                 rest_days_initial -= 1 
                         
                                    
-            work_day_line.append({
+            work_day_line.append((0,0,{
                    'work_entry_type_id' : 1,
                    'name': 'Gazetted Holidays',
                    'sequence': 2,
                    'number_of_days' : gazetted_days_count,
                    'number_of_hours' : gazetted_days_count * employee.shift_id.hours_per_day ,
-            })   
+            }))   
             
             """
               Rest Day 
@@ -227,13 +227,13 @@ class HrPayslips(models.Model):
                 }
                 work_entry = self.env['hr.work.entry.type'].sudo().create(vals)  
             rest_day_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','Rest Day')], limit=1)    
-            work_day_line.append({
+            work_day_line.append((0,0,{
                'work_entry_type_id' : rest_day_work_entry_type.id,
                'name': rest_day_work_entry_type.name,
                'sequence': rest_day_work_entry_type.sequence,
                'number_of_days' : rest_days_initial ,
                'number_of_hours' : rest_days_initial * employee.shift_id.hours_per_day ,
-            })
+            }))
             absent_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','ABSENT100')], limit=1)
             if not absent_work_entry_type:
                 vals = {
@@ -250,13 +250,13 @@ class HrPayslips(models.Model):
             absent_work_days = absent_work_days_initial - (gazetted_days_count + rest_days_initial + total_leave_days + work_days)
             absent_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=','ABSENT100')], limit=1)
             
-            work_day_line.append({
+            work_day_line.append((0,0,{
                'work_entry_type_id' : absent_work_entry_type.id,
                'name': absent_work_entry_type.name,
                'sequence': absent_work_entry_type.sequence,
                'number_of_days' : absent_work_days if absent_work_days > 0.0 else 0,
                'number_of_hours' : (absent_work_days if absent_work_days > 0.0 else 0) * employee.shift_id.hours_per_day ,
-            })
+            }))
             
 
             if not payslip.worked_days_line_ids:
