@@ -366,7 +366,8 @@ class PurchaseAttendanceReport(models.AbstractModel):
                         if str(date_after_month.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(date_after_month.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                             remarks = str(gazetted_day.name)
                             gazetted_color = '1'
-
+                    if tot_hours < (current_shift.hours_per_day - 1.50):
+                        rectify_color = '1'
                     attendances.append({
                             'date': date_after_month.strftime('%d/%b/%Y'),
                             'day':  day1,
@@ -849,7 +850,8 @@ class PurchaseAttendanceReport(models.AbstractModel):
                         if str(date_after_month.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(date_after_month.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                             remarks = str(gazetted_day.name)
                             gazetted_color = '1'
-
+                    if tot_hours < (current_shift.hours_per_day - 1.50):
+                        rectify_color = '1'
                     attendances.append({
                             'date': date_after_month.strftime('%d/%b/%Y'),
                             'day':  day1,
