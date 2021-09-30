@@ -87,7 +87,10 @@ class PurchaseAttendanceReport(models.AbstractModel):
                     attendance_exist = self.env['hr.attendance'].sudo().search([('employee_id','=', employee.id),('att_date','>=', timeoff.request_date_from),('att_date','<=', timeoff.request_date_to)])
                     if not attendance_exist:
                         leave_work_days += timeoff.number_of_days
-                        total_leave_days += timeoff.number_of_days 
+                        total_leave_days += timeoff.number_of_days
+                    if timeoff.number_of_days < 1:
+                        leave_work_days += timeoff.number_of_days
+                        total_leave_days += timeoff.number_of_days    
                 timeoff_vals = self.env['hr.leave.type'].sudo().search([('id','=',timeoff_type)], limit=1) 
                 
                 timeoff_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=',timeoff_vals.name)], limit=1)
@@ -568,6 +571,9 @@ class PurchaseAttendanceReport(models.AbstractModel):
                     if not attendance_exist:
                         leave_work_days += timeoff.number_of_days
                         total_leave_days += timeoff.number_of_days 
+                    if timeoff.number_of_days < 1:
+                        leave_work_days += timeoff.number_of_days
+                        total_leave_days += timeoff.number_of_days
                 timeoff_vals = self.env['hr.leave.type'].sudo().search([('id','=',timeoff_type)], limit=1) 
                 
                 timeoff_work_entry_type = self.env['hr.work.entry.type'].sudo().search([('code','=',timeoff_vals.name)], limit=1)
@@ -861,16 +867,6 @@ class PurchaseAttendanceReport(models.AbstractModel):
                             'remarks': remarks,
                     })
                 else:
-                    emp_leaves = self.env['hr.leave'].search([('employee_id','=', employee.id),('request_date_from','<=', date_after_month.strftime('%Y-%m-%d')),('request_date_to','>=', date_after_month.strftime('%Y-%m-%d'),('state','in',('validate','confirm'))], limit=1)
-                    if emp_leaves:
-                        status = ' '
-                        if emp_leaves.state == 'confirm':
-                            status = 'To Approve'
-                        if  emp_leaves.state == 'validate': 
-                            status = 'Approved' 
-                        remarks = str(emp_leaves.holiday_status_id.name) +' '+ str(status)
-                    else:
-                        remarks = 'Absent.'
 
                     shift = self.env['resource.calendar'].search([], limit=1).name
                     shift = self.env['resource.calendar'].search([('company_id','=', employee.company_id.id)], limit=1).name
