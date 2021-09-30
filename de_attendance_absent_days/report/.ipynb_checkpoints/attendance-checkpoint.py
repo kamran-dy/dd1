@@ -14,8 +14,21 @@ class EmployeeReportXlS(models.AbstractModel):
         absent_list = []
         
         employees = self.env['hr.employee'].sudo().search([])
-        if  data['company']:
+        if  data.company and data.employee_ids:
+            emp_list = []
+            for selected_emp  in data.employee_ids:
+                emp_list.append(selected_emp.id) 
+            employees = self.env['hr.employee'].sudo().search([('company_id','in', data.company.ids),('id','in', emp_list)])
+            
+        elif  data.company:
             employees = self.env['hr.employee'].sudo().search([('company_id','in', data.company.ids)])
+        elif data.employee_ids:
+            aemp_list = []
+            for selected_emp  in data.employee_ids:
+                aemp_list.append(selected_emp.id)
+            employees = self.env['hr.employee'].sudo().search([('id','in', aemp_list)])
+            
+
         sr_no = 1
         for employee in employees:
             leave_status = ' '
@@ -49,7 +62,7 @@ class EmployeeReportXlS(models.AbstractModel):
         return absent_list
 
     def generate_xlsx_report(self, workbook, data, lines):
-        company = data['company']
+#         company = data['company']
         docs = self.env['attendance.model'].browse(self.env.context.get('active_id'))
         sheet = workbook.add_worksheet('purchase report')
         bold = workbook. add_format({'bold': True, 'align': 'center','bg_color': '#FFFF99','border': True})
@@ -78,7 +91,8 @@ class EmployeeReportXlS(models.AbstractModel):
         sheet.write(4,5 , 'Rectification status',header_row_style)
         absent_list = self.action_get_abset_days(docs)  
         row = 5
-        for line in absent_list:        
+        for line in absent_list: 
+            
             sheet.write(row, 0, line['sr_no'], format2)
             sheet.write(row, 1, line['employee'], format2)
             sheet.write(row, 2, line['emp_code'], format2)            
