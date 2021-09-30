@@ -35,6 +35,46 @@ class HolidaysRequest(models.Model):
     _inherit = 'hr.leave'
 
         
+    def _get_number_of_days(self, date_from, date_to, employee_id):
+        """ Returns a float equals to the timedelta between two dates given as string."""
+        if employee_id:
+            shift_schedule_line = self.env['hr.shift.schedule.line'].sudo().search([('employee_id','=',employee_id),('date','>=',str(date_from)),('date','<=',str(date_to))])            
+            tot_rest_days = 0
+            gazetted_days_count = 0
+            COUNT_1 = 0
+            for shift_line in shift_schedule_line:
+                shift = shift_line.first_shift_id
+                if not shift:
+                    shift = line.employee_id.shift_id
+                if not shift:
+                    shift = self.env['resource.calendar'].sudo().search([('shift_type','=','general'),('company_id','=',line.employee_id.company_id.id)], limit=1)
+                for gazetted_day in shift.global_leave_ids:
+                    gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                    gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
+                    if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
+                        gazetted_days_count += 1 
+                if shift_line.rest_day == True:
+                    for gazetted_day in shift.global_leave_ids:
+                        gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                        gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
+                        if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
+                            tot_rest_days -= 1    
+                    tot_rest_days += 1    
+            delta_days = (self.request_date_to - self.request_date_from).days  
+            days = delta_days - tot_rest_days - gazetted_days_count
+            empshift = self.env['hr.employee'].search([('id','=',employee_id)], limit=1)
+            hours = days * empshift.shift_id.hours_per_day if empshift.shift_id else 8
+            return {'days': days, 'hours': hours}
+        else:
+            today_hours = self.env.company.resource_calendar_id.get_work_hours_count(
+            datetime.combine(date_from.date(), time.min),
+            datetime.combine(date_from.date(), time.max),
+            False)
+
+            hours = self.env.company.resource_calendar_id.get_work_hours_count(date_from, date_to)
+            days = hours / (today_hours or HOURS_PER_DAY) if not self.request_unit_half else 0.5
+            return {'days': days, 'hours': hours}
+        
     def action_compute_days(self):
         for line in self:
             shift_schedule_line = self.env['hr.shift.schedule.line'].sudo().search([('employee_id','=',line.employee_id.id),('date','>=',str(line.request_date_from)),('date','<=',str(line.request_date_to))])
@@ -46,31 +86,33 @@ class HolidaysRequest(models.Model):
                 if not shift:
                     shift = line.employee_id.shift_id
                 if not shift:
-                    shift = self.env['resource.calendar'].sudo().search([('company_id','=',line.employee_id.company_id.id)], limit=1)
+                    shift = self.env['resource.calendar'].sudo().search([('shift_type','=','general'),('company_id','=',line.employee_id.company_id.id)], limit=1)
 
                 for gazetted_day in shift.global_leave_ids:
-                    gazetted_date_from = gazetted_day.date_from +timedelta(1)
-                    gazetted_date_to = gazetted_day.date_to
+                    gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                    gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
                     if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
 
                         gazetted_days_count += 1 
 
                 if shift_line.rest_day == True:
                     for gazetted_day in shift.global_leave_ids:
-                        gazetted_date_from = gazetted_day.date_from +timedelta(1)
-                        gazetted_date_to = gazetted_day.date_to
+                        gazetted_date_from = gazetted_day.date_from + relativedelta(hours=+5)
+                        gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
                         if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                             tot_rest_days -= 1    
 
                     tot_rest_days += 1    
 
-
-            total_days = line.number_of_days  - tot_rest_days - gazetted_days_count
+            delta_days = (self.request_date_to - self.request_date_from).days  
+            days = delta_days - tot_rest_days - gazetted_days_count
+            
+            total_days = tot_rest_days - gazetted_days_count
             delta_days = line.request_date_to - line.request_date_from
             qdelta_days = delta_days.days 
             line.update({
-                  'number_of_days': total_days
-                })    
+                  'number_of_days': days
+                })   
                 
     
     category_id = fields.Many2one('approval.category', related='holiday_status_id.category_id', string="Approval Category", default=lambda self: self.holiday_status_id.category_id.id, required=False, readonly=True)
@@ -111,7 +153,7 @@ class HolidaysRequest(models.Model):
         if not self.attachment_id:
             if self.holiday_status_id.attachment  == True:
                 diff = self.number_of_days
-                if diff >= self.holiday_status_id.attachment_validity:
+                if diff > self.holiday_status_id.attachment_validity:
                     raise ValidationError(_("Please Add Your Medical Certificate !"))
            
     
@@ -247,7 +289,7 @@ class HolidaysRequest(models.Model):
                     holiday_sudo.action_create_approval_request()
                 elif not self._context.get('import_file'):
                     holiday_sudo.activity_update()
-            holiday._get_date_from_to()  
+            #holiday._get_date_from_to()  
             holiday._get_duration_update_approval()  
             holiday.action_validate_leave_period()
             holiday.action_onchange_attachment()  
@@ -267,8 +309,8 @@ class HolidaysRequest(models.Model):
         restrict_date = '2021-07-16'
         for line in self:
             if str(line.request_date_from)  < restrict_date:
-                pass
-                #raise UserError('Not Allow to Enter Leave Request before 16 JULY 2021!')
+
+                raise UserError('Not Allow to Enter Leave Request before 16 JULY 2021!')
     
     def _get_duration_update_approval(self):
         for line in self:
@@ -345,7 +387,7 @@ class HolidaysRequest(models.Model):
             approval_request_id.action_date_confirm_update()
             line.approval_request_id = approval_request_id.id
             if line.holiday_status_id.is_ceo_approval == True:
-                if line.employee_id.company_id.manager_id.user_id:
+                if line.employee_id.company_id.manager_id.user_id.id != line.employee_id.user_id.id:
                     approver_vals = {
                         'user_id': line.employee_id.company_id.manager_id.user_id.id,
                         'request_id': approval_request_id.id,

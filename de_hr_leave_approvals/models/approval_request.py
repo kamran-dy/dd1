@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 
 class ApprovalRequest(models.Model):
@@ -26,7 +26,8 @@ class ApprovalRequest(models.Model):
                     
             if tot_refused_count ==  tot_approver_count: 
                 if self.leave_id:
-                    self.leave_id.sudo().action_refuse()        
+                    if self.leave_id.state!='refuse': 
+                        self.leave_id.sudo().action_refuse()        
                         
       
         return res
@@ -49,7 +50,8 @@ class ApprovalRequest(models.Model):
                     
             if tot_approver_count ==  tot_approved_count:
                 if self.leave_id:
-                    self.leave_id.sudo().action_validate()        
+                    if self.leave_id.state!='validate':
+                        self.leave_id.sudo().action_validate()        
                         
         return res
     
