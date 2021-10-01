@@ -103,7 +103,7 @@ class CustomerPortal(CustomerPortal):
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
         if 'hrtimesheet_count' in counters:
-            values['hrtimesheet_count'] = request.env['account.analytic.line'].search_count([('employee_id.user_id', '=', http.request.env.context.get('uid') )])
+            values['hrtimesheet_count'] = request.env['hr.timesheet.attendance'].search_count([('employee_id.user_id', '=', http.request.env.context.get('uid') )])
         return values
   
     def _hrtimesheet_get_page_view_values(self,hrtimesheet, next_id = 0,pre_id= 0, hrtimesheet_user_flag = 0, access_token = None, **kwargs):
@@ -143,7 +143,7 @@ class CustomerPortal(CustomerPortal):
             'none': {'input': 'none', 'label': _('None')},
         }
 
-        hrtimesheet_groups = request.env['account.analytic.line'].search([])
+        hrtimesheet_groups = request.env['hr.timesheet.attendance'].search([])
 
         # default sort by value
         if not sortby:
@@ -166,7 +166,7 @@ class CustomerPortal(CustomerPortal):
                 search_domain = OR([search_domain, [('id', 'ilike', search)]])
             domain += search_domain
         domain += [('employee_id.user_id', '=', http.request.env.context.get('uid'))] 
-        hrtimesheet_count = request.env['account.analytic.line'].search_count(domain)
+        hrtimesheet_count = request.env['hr.timesheet.attendance'].search_count(domain)
 
         # pager
         pager = portal_pager(
@@ -178,7 +178,7 @@ class CustomerPortal(CustomerPortal):
             step=self._items_per_page
         )
 
-        _hrtimesheet = request.env['account.analytic.line'].sudo().search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
+        _hrtimesheet = request.env['hr.timesheet.attendance'].sudo().search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
         request.session['my_hrtimesheet_history'] = _hrtimesheet.ids[:100]
 
         grouped_hrtimesheets = [_hrtimesheet]
@@ -209,7 +209,7 @@ class CustomerPortal(CustomerPortal):
     def portal_my_hrtimesheet(self, hrtimesheet_id, access_token=None, **kw):
 
         try:
-            hrtimesheet_sudo = self._document_check_access('account.analytic.line', hrtimesheet_id, access_token)
+            hrtimesheet_sudo = request.env['hr.timesheet.attendance'].sudo().search([('id','=',hrtimesheet_id)])
         except (AccessError, MissingError):
             return request.redirect('/my')
         next_id = 0
@@ -241,7 +241,7 @@ class CustomerPortal(CustomerPortal):
 
 
         values = self._hrtimesheet_get_page_view_values(hrtimesheet_sudo,next_id, pre_id,access_token, **kw) 
-        return request.render("de_leave_portal.portal_my_hrtimesheet", values)
+        return request.render("de_portal_hr_timesheet.portal_my_hrtimesheet", values)
 
     @http.route(['/hrtimesheet/next/<int:hrtimesheet_id>'], type='http', auth="user", website=True)
     def portal_my_next_hrtimesheet(self, hrtimesheet_id, access_token=None, **kw):
@@ -298,13 +298,13 @@ class CustomerPortal(CustomerPortal):
         active_user = http.request.env.context.get('uid')
         id = hrtimesheet_id
         try:
-            hrtimesheet_sudo = self._document_check_access('account.analytic.line', next_next_id, access_token)
+            hrtimesheet_sudo = request.env['hr.timesheet.attendance'].sudo().search([('id','=',hrtimesheet_id)])
         except (AccessError, MissingError):
             return request.redirect('/my')
         
 
         values = self._hrtimesheet_get_page_view_values(hrtimesheet_sudo,next_id, pre_id, access_token, **kw) 
-        return request.render("de_leave_portal.portal_my_hrtimesheet", values)
+        return request.render("de_portal_hr_timesheet.portal_my_hrtimesheet", values)
 
   
     @http.route(['/hrtimesheet/pre/<int:hrtimesheet_id>'], type='http', auth="user", website=True)
@@ -363,7 +363,7 @@ class CustomerPortal(CustomerPortal):
 
         id = pre_pre_id
         try:
-            hrtimesheet_sudo = self._document_check_access('account.analytic.line', pre_pre_id, access_token)
+            hrtimesheet_sudo = request.env['hr.timesheet.attendance'].sudo().search([('id','=',hrtimesheet_id)])
         except (AccessError, MissingError):
             return request.redirect('/my')
         
@@ -371,4 +371,4 @@ class CustomerPortal(CustomerPortal):
 
 
         values = self._hrtimesheet_get_page_view_values(hrtimesheet_sudo, next_id,pre_id, access_token, **kw) 
-        return request.render("de_leave_portal.portal_my_hrtimesheet", values)
+        return request.render("de_portal_hr_timesheet.portal_my_hrtimesheet", values)

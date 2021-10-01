@@ -11,9 +11,7 @@
                 <a t-if="hrtimesheet" t-attf-href="/hr/timesheets?{{ keep_query() }}">Timesheets</a>
                 <t t-else="">Timesheets</t>
             </li>
-            <li t-if="hrtimesheet" class="breadcrumb-item active text-truncate col-8 col-lg-10">
-                <t t-esc="hrtimesheet.name"/>
-            </li>
+            
         </xpath>
     </template>
 
@@ -47,12 +45,11 @@
                     <t t-foreach="grouped_hrtimesheets" t-as="all_hrtimesheets">
                         <thead>
                             <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
-                                <th class="text-left">Date</th>
                                 <th class="text-left">Employee</th>
-                                <th class="text-left">Project</th>
-                                <th class="text-left">Task</th>
-                                <th class="text-left">Description</th>
-                                <th class="text-left">Duration</th>
+                                 <th class="text-left">Employee No</th>
+                                <th class="text-left">Check In</th>
+                                <th class="text-left">Check Out</th>                               
+                                <th class="text-left">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,30 +58,40 @@
                                <t t-if="hrtimesheet.employee_id.user_id.id == uid">  
                                 <tr>
 
-                                    <td class="text-left">
-                                        <span t-esc="hrtimesheet.date" t-options='{"widget": "date"}'/>
-                                    </td>
+                                   
                                      <td>
-                                        <a t-attf-href="/my/timeoff/#{hrtimesheet.id}?{{ keep_query() }}"><span t-field="hrtimesheet.employee_id.name"/></a>
+                                        <a t-attf-href="/hr/timesheet/#{hrtimesheet.id}?{{ keep_query() }}"><span t-field="hrtimesheet.employee_id.name"/></a>
                                     </td>
                                     <td class="text-left">
-                                        <span t-esc="hrtimesheet.project_id.name" />
-                                    </td>
-                                    
-                                    <td class="text-left">
-                                       <t t-if="hrtimesheet.task_id"> 
-                                         <span t-esc="hrtimesheet.task_id.name"   />
-                                       </t>
-                                       </td>
-                                    <td class="text-left">
-                                        <t t-if="hrtimesheet.name"> 
-                                         <span t-esc="hrtimesheet.name" />
-                                       </t>
+                                         <span t-esc="hrtimesheet.employee_id.emp_number" />
                                         
                                     </td>
+                                     <td class="text-left">
+                                        <span t-esc="hrtimesheet.check_in" t-options='{"widget": "datetime"}'/>
+                                    </td>
+                                     <td class="text-left">
+                                        <span t-esc="hrtimesheet.check_out" t-options='{"widget": "datetime"}'/>
+                                    </td>
+                                   
+                                    
                                     <td class="text-left">
-                                        <span t-esc="hrtimesheet.unit_amount"/>
-                                    </td>                                      
+                                        <span t-esc="hrtimesheet.total_duration"/>
+                                    </td> 
+                                    <td class="text-left">                                       
+                                        <t t-if="hrtimesheet.state == 'draft'">
+                                            <i class="badge badge-pill badge-info" >Draft</i>
+                                        </t>
+                                      
+                                        <t t-if="hrtimesheet.state == 'submitted'">
+                                            <i class="badge badge-pill badge-warning" >To Approve</i>
+                                        </t>
+                                        <t t-if="hrtimesheet.state == 'refused'">
+                                            <i class="badge badge-pill badge-danger" >Refused</i>
+                                        </t>
+                                        <t t-if="hrtimesheet.state == 'approved'">
+                                            <i class="badge badge-pill badge-success" >Approved</i>
+                                        </t>                                                                               
+                                    </td> 
                                     
                                 </tr>
                                </t>     
@@ -117,7 +124,6 @@
                     <div class="row no-gutters">
                         <div class="col-12">
                             <h5 class="d-flex mb-1 mb-md-0 row">
-                                <span t-field="hrtimesheet.name" class="col-7 text-truncate"/>
                                 <small class="text-muted d-none d-md-inline"> (#<span t-field="hrtimesheet.id"/>)</small>
                                 <div class="col-md-3  text-right">
                                     <small class="text-right">Stage:</small>
@@ -133,7 +139,7 @@
 
                                         </t>
                                         <t t-if="next_id">
-                                            <a role="button" t-attf-href="/timehrtimesheetoff/next/#{hrtimesheet.id}?" ><i class="fa fa-chevron-right" role="img" aria-label="Next" title="Next"></i></a>
+                                            <a role="button" t-attf-href="/hrtimesheet/next/#{hrtimesheet.id}?" ><i class="fa fa-chevron-right" role="img" aria-label="Next" title="Next"></i></a>
                                         </t>
                                         <t t-else="">
                                             <a role="button"  t-att-class="disabled"  ><i style="color:#B8B7B0" class="fa fa-chevron-right" aria-label="Next" title="Next"></i></a>
@@ -157,47 +163,73 @@
                                 </div>
                             
                                  <div class="col-md-6"> 
-                                    <strong>Project: </strong>
+                                    <strong>Employee Code: </strong>
                                     <t t-if="hrtimesheet.id">
-                                        <span t-esc="hrtimesheet.project_id.name"/>
+                                        <span t-esc="hrtimesheet.employee_id.emp_number"/>
                                     </t>
                                 </div>  
                         </div>       
                     
-                        <br/><br/>
+                        <br/>
 
                       
                       <div class="row">
-                                <div class="col-md-6"> <strong>Task : </strong>
-                                    <t t-if="hrtimesheet.task_id">
-                                        <span t-esc="hrtimesheet.task_id.name"/>
+                                <div class="col-md-6"> <strong>Grade : </strong>
+                                    <t t-if="hrtimesheet.employee_id">
+                                        <span t-esc="hrtimesheet.employee_id.grade_type.name"/>
                                     </t>
                                 </div>
                             
                                  <div class="col-md-6"> 
-                                    <strong>Duration: </strong>
-                                    <t t-if="hrtimesheet.unit_aount">
-                                        <span t-esc="hrtimesheet.unit_aount"/>
+                                    <strong>Department: </strong>
+                                    <t t-if="hrtimesheet.department_id">
+                                        <span t-esc="hrtimesheet.employee_id.department_id.name"/>
+                                    </t>
+                                </div>  
+                        </div>       
+                        <br/>
+                        <div class="row">
+                                <div class="col-md-6"> <strong>Check In : </strong>
+                                    <t t-if="hrtimesheet.check_in">
+                                        <span t-esc="hrtimesheet.check_in"/>
+                                    </t>
+                                </div>
+                            
+                                 <div class="col-md-6"> 
+                                    <strong>Check Out: </strong>
+                                    <t t-if="hrtimesheet.check_out">
+                                        <span t-esc="hrtimesheet.check_out"/>
                                     </t>
                                 </div>  
                         </div>       
                        
                     
-                        <br/><br/>
+                        <br/>
+                          <div class="row">
+                              <table class="table table-sm table-striped table-bordered" >
+                                  <thead>
+                                      <th>Project</th>
+                                      <th>Task</th>
+                                      <th>Description</th>
+                                      <th>Duration(Hours)</th>
+                                  </thead>
+                                  <tbody>
+                                        <t t-foreach="hrtimesheet.timesheet_attendance_ids" t-as="sheetline">
+                                            <tr>
+                                                <td><span t-esc="sheetline.project_id.name"/></td>
+                                                <td><span t-esc="sheetline.task_id.name"/></td>
+                                                <td><span t-esc="sheetline.description"/></td>
+                                                <td><span t-esc="sheetline.duration"/></td>
+                                            </tr>
+                                            
+                                        </t>   
+                                     
+                                  </tbody>
+                              </table>
+                        </div>       
+                       
                    
-                   
-                    <div class="row"> 
-                        <div t-attf-class="col-12 col-lg-12  mb-md-0 ">
-                            <hr class="mb-1"/>
-                            <div class="d-flex my-2">
-                                <strong>Description</strong>
-                            </div>
-                            <t t-if="hrtimesheet.name">                                        
-                                <div class="py-1 px-2 bg-100 small" t-field="hrtimesheet.name"/>
-                            </t>
-                        </div> 
-                    </div>
-                         
+                    
                    
                  
                 </t> 
@@ -302,6 +334,18 @@
                                             </label>
                                             <div class="col-sm">
                                                   <input type="datetime-local" class="form-control s_website_form_input" name="check_in"  t-options='{"widget": "date"}' required='1'/>
+                                                
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Department</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                  <t t-esc="employee_name.department_id.name"    />
                                                 
                                             </div>
                                         </div>
