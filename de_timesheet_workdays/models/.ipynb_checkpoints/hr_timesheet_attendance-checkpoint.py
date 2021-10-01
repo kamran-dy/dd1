@@ -38,6 +38,23 @@ class HrTimesheetAttendance(models.Model):
     
     def action_approved(self):
         for line in self:
+            for sheet_line in line.timesheet_attendance_ids:
+                timesheet_vals = {
+                    'date': sheet_line.timesheet_att_id.check_in,
+                    'employee_id': sheet_line.timesheet_att_id.employee_id.id,
+                    'project_id':  sheet_line.project_id.id,
+                    'task_id': sheet_line.task_id.id,
+                    'name': sheet_line.description,
+                    'unit_amount': sheet_line.duration,
+                }
+                timesheet = self.env['account.analytic.line'].sudo().create(timesheet_vals)
+            attendance_vals = {
+                'employee_id': line.employee_id.id,
+                'check_in': line.check_in,
+                'check_out': line.check_out,
+                'att_date': line.check_out,
+            } 
+            attendance = self.env['hr.attendance'].sudo().create(attendance_vals)
             line.update({
                 'state': 'approved'
             })
@@ -64,9 +81,7 @@ class HrTimesheetAttendance(models.Model):
                 }) 
             
     def action_create_approval_request_attendance(self):
-        approver_ids  = []
-        
-        
+        approver_ids  = []       
         request_list = []
         for line in self:
             check_in = False

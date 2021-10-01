@@ -47,7 +47,7 @@ class ApprovalRequest(models.Model):
                     
             if tot_approver_count ==  tot_approved_count: 
                 if self.timesheet_att_id:
-                    self.timesheet_att_id.sudo().action_approve()       
+                    self.timesheet_att_id.sudo().action_approved()       
                         
         return res
     
