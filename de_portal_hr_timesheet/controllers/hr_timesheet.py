@@ -209,7 +209,7 @@ class CustomerPortal(CustomerPortal):
     def portal_my_hrtimesheet(self, hrtimesheet_id, access_token=None, **kw):
 
         try:
-            hrtimesheet_sudo = self._document_check_access('account.analytic.line', hrtimesheet_id, access_token)
+            hrtimesheet_sudo = request.env['account.analytic.line'].sudo().search([('id','=',hrtimesheet_id)])
         except (AccessError, MissingError):
             return request.redirect('/my')
         next_id = 0
@@ -241,7 +241,7 @@ class CustomerPortal(CustomerPortal):
 
 
         values = self._hrtimesheet_get_page_view_values(hrtimesheet_sudo,next_id, pre_id,access_token, **kw) 
-        return request.render("de_leave_portal.portal_my_hrtimesheet", values)
+        return request.render("de_portal_hr_timesheet.portal_my_hrtimesheet", values)
 
     @http.route(['/hrtimesheet/next/<int:hrtimesheet_id>'], type='http', auth="user", website=True)
     def portal_my_next_hrtimesheet(self, hrtimesheet_id, access_token=None, **kw):
@@ -298,13 +298,13 @@ class CustomerPortal(CustomerPortal):
         active_user = http.request.env.context.get('uid')
         id = hrtimesheet_id
         try:
-            hrtimesheet_sudo = self._document_check_access('account.analytic.line', next_next_id, access_token)
+            hrtimesheet_sudo = request.env['account.analytic.line'].sudo().search([('id','=',hrtimesheet_id)])
         except (AccessError, MissingError):
             return request.redirect('/my')
         
 
         values = self._hrtimesheet_get_page_view_values(hrtimesheet_sudo,next_id, pre_id, access_token, **kw) 
-        return request.render("de_leave_portal.portal_my_hrtimesheet", values)
+        return request.render("de_portal_hr_timesheet.portal_my_hrtimesheet", values)
 
   
     @http.route(['/hrtimesheet/pre/<int:hrtimesheet_id>'], type='http', auth="user", website=True)
@@ -363,7 +363,7 @@ class CustomerPortal(CustomerPortal):
 
         id = pre_pre_id
         try:
-            hrtimesheet_sudo = self._document_check_access('account.analytic.line', pre_pre_id, access_token)
+            hrtimesheet_sudo = request.env['account.analytic.line'].sudo().search([('id','=',hrtimesheet_id)])
         except (AccessError, MissingError):
             return request.redirect('/my')
         
@@ -371,4 +371,4 @@ class CustomerPortal(CustomerPortal):
 
 
         values = self._hrtimesheet_get_page_view_values(hrtimesheet_sudo, next_id,pre_id, access_token, **kw) 
-        return request.render("de_leave_portal.portal_my_hrtimesheet", values)
+        return request.render("de_portal_hr_timesheet.portal_my_hrtimesheet", values)
