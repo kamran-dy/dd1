@@ -248,7 +248,7 @@
                         <form id="saleForm"  action="/hr/timesheet/save"  method="post"  enctype="multipart/form-data">
                                   <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
                                         <div style="width: 200px;" class="s_website_form_label"></div>
-                                        <button type="submit" class="btn btn-primary pull-left">Submit</button>
+                                        <button id='timehseetsubmit' type="submit" class="btn btn-primary pull-left">Submit</button>
                                         <span id="s_website_form_result"></span>
                                     </div>
                                 <br/>
@@ -307,7 +307,7 @@
                                   
                                 </div>
                                 </div>
-                           
+                                 <input type="hidden" id="timehseet_vals" class="form-control s_website_form_input" name="timehseet_vals"  multiple="true" />  
                                 </form > 
                                    
                                     <table id='timesheetrecord' class="table table-sm table-striped table-bordered">
@@ -323,9 +323,12 @@
                                         <form onsubmit="event.preventDefault();onFormSubmit();">
                                                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
                                 <script type="text/javascript">
+                                    var timehseet_data_vals = []
                                     function onFormSubmit(){
                                        var formData = readFormData();
                                        insertFormRecord(formData);
+                                       onFormLineData(formData);
+                                       
                                     }
                                     function readFormData(){
                                       var formData = {};
@@ -337,21 +340,90 @@
                                     }
                                     function insertFormRecord(data){
                                        var tabletimesheet = document.getElementById('timesheetrecord');
-                                       var newRow = tabletimesheet.insertRow(tabletimesheet.length) 
+                                       var newRow = tabletimesheet.insertRow(tabletimesheet.length)
                                        cell1 = newRow.insertCell(0);
                                        cell1.innerHTML= data.project
+                                       cell1.classList.add("projectline");
                                        cell2 = newRow.insertCell(1);
                                        cell2.innerHTML= data.task
+                                       cell2.classList.add("taskline");
                                        cell3 = newRow.insertCell(2);
                                        cell3.innerHTML= data.description
+                                       cell3.classList.add("descriptionline");
                                        cell4 = newRow.insertCell(3);
                                        cell4.innerHTML= data.duration
+                                       cell4.classList.add("durationline");
+                                       cell5 = newRow.insertCell(4);
+                                       cell5.innerHTML= '<a onClick="onDelete(this)"><i class="fa fa-trash"></i></a>';
+                                     
+                                    }
+                                    function resetForm(){
+                                      document.getElementById('projectline').value="";
+                                      document.getElementById('taskline').value="";
+                                      document.getElementById('descriptionline').value="";
+                                      document.getElementById('durationline').value="";   
                                     }
                                     
+                                    function onDelete(td){
+                                          row = td.parentElement.parentElement;
+                                          document.getElementById("timesheetrecord").deleteRow(row.rowIndex);
+                                          resetForm();
+                                    }
+                                    
+                                    function onFormLineData(data){
+                                       var timehseetdata=[];
+                                       var obj={};
+                                       obj.col1=data.project;
+                                       obj.col2=data.task;
+                                       obj.col3=data.description;
+                                       obj.col4=data.duration;
+                                       timehseetdata.push(obj);
+                                       timehseetdictionary = JSON.stringify(timehseetdata); 
+                                       var lista = document.getElementById("timehseet_vals")
+                                       lista.append(timehseetdata)
+                                    }
+                                    
+                                    
+                                   
+                                     $(document).ready(function(){
+
+                                        $("#timehseetsubmit").on('click',function(){
+
+                                           var timehseetdata=[];
+                                           // loop over each table row (tr)
+                                           $("#timesheetrecord tbody tr").each(function(){
+                                                var currentRow=$(this);
+
+                                                var col1_value=currentRow.find("td:eq(0)").text();
+                                                var col2_value=currentRow.find("td:eq(1)").text();
+                                                var col3_value=currentRow.find("td:eq(2)").text();
+                                                var col4_value=currentRow.find("td:eq(3)").text();
+
+                                                var obj={};
+                                                obj.col1=col1_value;
+                                                obj.col2=col2_value;
+                                                obj.col3=col3_value;
+                                                obj.col4=col4_value;
+
+                                                timehseetdata.push(obj);
+
+                                           });
+                                         timehseetdictionary = JSON.stringify(timehseetdata); 
+                                         var lista = document.getElementById("timehseet_vals")
+                                         lista.value = timehseetdictionary 
+                                         console.log(timehseetdata);   
+                                         });
+
+                                       });
+                                    
+                                    
+                                    
+                           
                                 </script> 
                                             
+                                            
                                             <tr>
-                                                <td>
+                                                <td class='projectline'>
                                      <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                 
@@ -370,7 +442,7 @@
                                         </div>
                                             </div>
                                                 </td>
-                                                <td>
+                                                <td class='taskline'>
                                      <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             
@@ -389,7 +461,7 @@
                                         </div>
                                     </div>
                                                 </td>
-                                                <td>
+                                                <td class='descriptionline'>
                                      <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             
@@ -401,7 +473,7 @@
                                         </div>
                                     </div>
                                                 </td>
-                                    <td>
+                                    <td class='durationline'>
                                      <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                            

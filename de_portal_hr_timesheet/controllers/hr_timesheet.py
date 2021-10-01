@@ -21,7 +21,7 @@ from dateutil.relativedelta import relativedelta
 import base64
 import binascii
 import json
-
+import ast
 
 
 def timesheet_page_content(flag = 0):
@@ -69,15 +69,26 @@ class CreateTimesheet(http.Controller):
     
     @http.route('/hr/timesheet/save',type="http", website=True, auth='user')
     def timesheet_save_template(self, **kw):
+        check_in1 = kw.get('check_in').replace('T',' ')
+        check_in = datetime.strptime(str(check_in1) , '%Y-%m-%d %H:%M') - relativedelta(hours =+ 5)
         timesheet_vals = {
-            'date':  kw.get('date'),
             'employee_id': int(kw.get('employee_id')) if kw.get('employee_id') else False,
-            'project_id': int(kw.get('project_id')) if kw.get('project_id') else False,
-            'task_id': int(kw.get('task_id')) if kw.get('task_id') else False,
-            'name':  kw.get('name') if kw.get('name') else ' ',
-            'unit_amount':  kw.get('unit_amount') if kw.get('unit_amount') else 0,
+            'check_in':  check_in if check_in else False,
         }
-        request.env['account.analytic.line'].sudo().create(timesheet_vals)
+        hr_timesheet_header = request.env['hr.timesheet.attendance'].sudo().create(timesheet_vals)
+        timehseet_vals = ast.literal_eval(kw.get('timehseet_vals'))
+        obj_count = 0
+        for obj_line in timehseet_vals:
+            obj_count += 1
+            if obj_count > 1 :               
+                linevals = {
+                        'timesheet_att_id': hr_timesheet_header.id,
+                        'project_id': obj_line['col1'],
+                        'task_id': obj_line['col2'],
+                        'description':  obj_line['col3'],
+                        'duration': obj_line['col4'], 
+                }
+                request.env['hr.timesheet.attendance.line'].sudo().create(linevals)
         return request.render("de_portal_hr_timesheet.timesheet_submited", {}, timesheet_page_content())
     
     
