@@ -89,6 +89,7 @@ class CreateTimesheet(http.Controller):
                         'duration': obj_line['col4'], 
                 }
                 request.env['hr.timesheet.attendance.line'].sudo().create(linevals)
+        hr_timesheet_header.action_submit()        
         return request.render("de_portal_hr_timesheet.timesheet_submited", {}, timesheet_page_content())
     
     
