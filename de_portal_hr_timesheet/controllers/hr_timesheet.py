@@ -25,10 +25,9 @@ import ast
 
 
 def timesheet_page_content(flag = 0):
-    tasks = request.env['project.task'].sudo().search([])
     employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
-    projects = request.env['project.project'].sudo().search([])
-    
+    projects = request.env['project.project'].sudo().search([('company_id','=',employees.company_id.id)])
+    tasks = request.env['project.task'].sudo().search([('company_id','=',employees.company_id.id)])
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     managers = employees.line_manager
     employee_name = employees
@@ -80,11 +79,13 @@ class CreateTimesheet(http.Controller):
         obj_count = 0
         for obj_line in timehseet_vals:
             obj_count += 1
-            if obj_count > 1 :               
+            if obj_count > 1 :
+                lineproject = request.env['project.project'].sudo().search([('company_id','=',hr_timesheet_header.employee_id.company_id.id),('name','=',obj_line['col1'])])
+                linetask = request.env['project.task'].sudo().search([('company_id','=',hr_timesheet_header.employee_id.company_id.id),('name','=',obj_line['col2'])])
                 linevals = {
                         'timesheet_att_id': hr_timesheet_header.id,
-                        'project_id': obj_line['col1'],
-                        'task_id': obj_line['col2'],
+                        'project_id': lineproject.id,
+                        'task_id': linetask.id,
                         'description':  obj_line['col3'],
                         'duration': obj_line['col4'], 
                 }
