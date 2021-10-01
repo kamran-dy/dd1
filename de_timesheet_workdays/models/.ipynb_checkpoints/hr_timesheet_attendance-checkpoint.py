@@ -27,6 +27,9 @@ class HrTimesheetAttendance(models.Model):
         readonly=True, string='Status', default='draft')
     approval_request_id = fields.Many2one('approval.request', string="Approval")
     category_id = fields.Many2one(related='employee_id.category_id')
+    emp_number = fields.Char(related='employee_id.emp_number')
+    department_id = fields.Many2one(related='employee_id.department_id')
+    grade_type_id = fields.Many2one(related='employee_id.grade_type')
     timesheet_attendance_ids = fields.One2many('hr.timesheet.attendance.line', 'timesheet_att_id', string='Timesheet Attendace Line')
     
     def action_submit(self):

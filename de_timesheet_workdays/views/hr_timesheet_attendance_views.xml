@@ -26,6 +26,8 @@
                                 <group>
                                    <field name="employee_id"    attrs="{'readonly': [('state','!=','draft')]}"
 />
+                                <field name="emp_number"   readonly='1'/>
+                                   <field name="grade_type_id"    readonly='1'/>
                                   
                                 </group>
                                 <group>
@@ -36,6 +38,8 @@
                                 
                                 <field name="check_out"
                                         attrs="{'readonly': [('state','!=','draft')]}"/>
+                                    
+                                <field name="department_id"    readonly='1'/>   
                                   
                                   <field name="approval_request_id"
                                         invisible="1" />    
