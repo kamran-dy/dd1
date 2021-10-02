@@ -15,17 +15,17 @@ class HrAppraisalObjective(models.Model):
         ('confirm', 'Confirmed'),
     ], string='State', index=True, copy=False, default='draft', track_visibility='onchange')
     
-    objective_year = fields.Selection([('2020', '2020'), ('2021', '2021'), ('2022', '2022'), ('2023', '2023')
-                                   , ('2024', '2024'), ('2025', '2025'), ('2026', '2026'), ('2027', '2027')
-                                   , ('2028', '2028'), ('2029', '2029'), ('2030', '2031'), ('2032', '2032')
-                                   , ('2033', '2033'), ('2034', '2034'), ('2035', '2035'), ('2036', '2036')
-                                   , ('2037', '2037'), ('2038', '2038'), ('2039', '2039'), ('2040', '2040')],
-                               string="Objective Year", required = 'True')
+    objective_year = fields.Selection([('2020', 'FY 2020-21'), ('2021', 'FY 2021-22'), ('2022', 'FY 2022-23'), ('2023', 'FY 2023-24')
+                                   , ('2024', 'FY 2024-25'), ('2025', 'FY 2025-26'), ('2026', 'FY 2026-27'), ('2027', 'FY 2027-28')
+                                   , ('2028', 'FY 2028-29'), ('2029', 'FY 2029-30'), ('2030', 'FY 2030-31'), ('2032', 'FY 2032-33')
+                                   , ('2033', 'FY 2023-34'), ('2034', 'FY 2034-35'), ('2035', 'FY 2035-36'), ('2036', 'FY 2036-37')
+                                   , ('2037', 'FY 2037-38'), ('2038', 'FY 2038-39'), ('2039', 'FY 2039-40'), ('2040', 'FY 2040-41')],
+                               string="Objective Year", default='2021', required = 'True')
     
     objective_lines = fields.One2many('hr.appraisal.objective.line', 'objective_id')
-    
+    traing_need = fields.Boolean(string='Training Need')
     total_weightage = fields.Float("Total Weightage", compute = 'limit_weightage')
-    
+    note = fields.Text(string='Achivements')
     readonly_status = fields.Selection([
         ('make_readonly', 'Readonly'),
         ('make_editable', 'Editable')], compute = 'compute_readonly')
@@ -37,7 +37,7 @@ class HrAppraisalObjective(models.Model):
             return super(HrAppraisalObjective, self).unlink()
     
      
-    @api.onchange('employee_id')
+    @api.constrains('employee_id')
     def compute_readonly(self):
         for rec in self:
             if rec.state == 'confirm' and rec.env.user.has_group('de_appraisal_enhancement.group_allow_edit_objectives'):
@@ -47,11 +47,11 @@ class HrAppraisalObjective(models.Model):
             else:
                 rec.readonly_status = 'make_editable'
     
-    @api.onchange('objective_year')
+    @api.constrains('objective_year')
     def onchange_objective_year(self):
         if self.objective_year:
             if self.employee_id.id:
-                appraisal_exists = self.search([('employee_id','=',self.employee_id.id),('objective_year','=',self.objective_year)])
+                appraisal_exists = self.search([('employee_id','=',self.employee_id.id),('objective_year','=',self.objective_year),('state','!=','draft')])
                 if appraisal_exists:
                     raise UserError(('Objective Already exist for this year'))
             else:
@@ -61,7 +61,7 @@ class HrAppraisalObjective(models.Model):
     @api.model
     def create(self,vals):
         if vals['objective_year']:
-            appraisal_exists = self.search([('state', '!=', 'cancel'),('employee_id','=',vals['employee_id']),('objective_year','=',vals['objective_year'])])
+            appraisal_exists = self.search([('state', 'not in', ['cancel','draft']),('employee_id','=',vals['employee_id']),('objective_year','=',vals['objective_year'])])
             if appraisal_exists:
                 raise UserError(('Objective Already Exist for Selected Year'))
         result = super(HrAppraisalObjective, self).create(vals)
@@ -101,16 +101,31 @@ class HrAppraisalObjective(models.Model):
     
 class HrAppraisalObjectiveline(models.Model):
     _name = 'hr.appraisal.objective.line'
+    _description = 'Appraisal Objective Line'
     
     objective_id = fields.Many2one('hr.appraisal.objective')
     objective = fields.Char('Objective')
-    weightage = fields.Float('Weightage')
+    description = fields.Char('Description')
+    date_from = fields.Date(string='Date From')
+    date_to = fields.Date(string='Date To')
     priority = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
         ('high', 'High'),
         ('very_high', 'Very High'),
-    ], string='Priority', index=True, copy=False, default='low',required = True, track_visibility='onchange')
+    ], string='Priority', index=True, copy=False, default='low',required = True)
+    rating_level = fields.Selection([
+        ('Outstanding Performance', 'Outstanding Performance'),
+        ('Excellent Performance', 'Excellent Performance'),
+        ('Strong Performance', 'Strong Performance'),
+        ('Needs Improvement', 'Needs Improvement'),
+        ('Unsatisfactory', 'Unsatisfactory'),
+    ], string='Rating Level', index=True, copy=False)
+    rating_score = fields.Float(string='Rating Score')
+    weightage = fields.Float(string='Weightage')
+    category_id = fields.Many2one('hr.objective.category', string='Category')
+    status_id = fields.Many2one('hr.objective.status',  string='Status')
+        
     
     @api.onchange('weightage')
     def limit_weightage(self):
@@ -119,8 +134,17 @@ class HrAppraisalObjectiveline(models.Model):
                 if rec.weightage > 100 or rec.weightage <1:
                     raise UserError('Weightage Cannot be greater than 100 or less than 1')
                 
+        
     
+class ObjectiveCategories(models.Model):
+    _name = 'hr.objective.category'
+    _description= 'HR Objective Category'
     
+    name = fields.Char(string='Description', required=True)
     
-
+class ObjectiveStatus(models.Model):
+    _name = 'hr.objective.status'
+    _description= 'HR Objective Status'
+    
+    name = fields.Char(string='Description', required=True)    
     
