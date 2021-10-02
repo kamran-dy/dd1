@@ -21,12 +21,16 @@ halfyear_objective_list = []
 
 def appraisal_page_content(flag = 0):
     global appraisal_objective_list 
-    managers = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
-    employees = request.env['hr.employee'].search([('user_id','=',http.request.env.context.get('uid'))])
-    company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+    managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    categories = request.env['hr.objective.category'].search([])
+    status = request.env['hr.objective.status'].search([])
     return {
         'managers': managers,
         'employees' : employees,
+        'categories': categories,
+        'status': status,
         'appraisal_objective_list': appraisal_objective_list,
         'success_flag' : flag,
         'company_info': company_info,
