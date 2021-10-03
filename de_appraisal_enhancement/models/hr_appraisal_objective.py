@@ -7,7 +7,12 @@ class HrAppraisalObjective(models.Model):
     _description='Appraisal Objective'
     _rec_name = 'employee_id'
     
-    employee_id = fields.Many2one('hr.employee')
+    employee_id = fields.Many2one('hr.employee',string='Employee')
+    emploee_code = fields.Char(related='employee_id.emp_number')
+    emploee_type = fields.Selection(related='employee_id.emp_type')
+    grade_type_id = fields.Many2one(related='employee_id.grade_type')
+    department_id = fields.Many2one(related='employee_id.department_id')
+    job_id = fields.Many2one(related='employee_id.job_id')
     description = fields.Char('Description')
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -120,11 +125,39 @@ class HrAppraisalObjectiveline(models.Model):
         ('Strong Performance', 'Strong Performance'),
         ('Needs Improvement', 'Needs Improvement'),
         ('Unsatisfactory', 'Unsatisfactory'),
-    ], string='Rating Level', index=True, copy=False)
+    ], string='Rating Level', index=True, copy=False, compute='compute_rating_level')
     rating_score = fields.Float(string='Rating Score')
     weightage = fields.Float(string='Weightage')
     category_id = fields.Many2one('hr.objective.category', string='Category')
     status_id = fields.Many2one('hr.objective.status',  string='Status')
+    
+    @api.depends('rating_score')
+    def compute_rating_level(self):
+        for line in self:
+            if line.rating_score >= 1 and line.rating_score <= 1.4:
+                line.update({
+                    'rating_level': 'Unsatisfactory'
+                })
+            elif line.rating_score >= 1.5 and line.rating_score <= 2.4:
+                line.update({
+                    'rating_level': 'Needs Improvement'
+                })   
+            elif line.rating_score >= 2.5 and line.rating_score <= 3.4:
+                line.update({
+                    'rating_level': 'Strong Performance'
+                })   
+            elif line.rating_score >= 3.5 and line.rating_score <= 4.4:
+                line.update({
+                    'rating_level': 'Excellent Performance'
+                })
+            elif line.rating_score >= 4.5 and line.rating_score <= 5:
+                line.update({
+                    'rating_level': 'Outstanding Performance'
+                }) 
+            else:
+                line.update({
+                    'rating_level': False
+                }) 
         
     
     @api.onchange('weightage')
