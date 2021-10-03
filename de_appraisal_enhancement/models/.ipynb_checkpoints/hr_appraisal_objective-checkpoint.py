@@ -100,6 +100,9 @@ class HrAppraisalObjective(models.Model):
     def action_sent_review(self):
         self.state = 'waiting'
         
+    def action_reset(self):
+        self.state = 'draft'     
+        
     def action_submit(self):
         self.state = 'confirm'    
         

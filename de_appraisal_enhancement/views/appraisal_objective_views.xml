@@ -8,6 +8,8 @@
                 <header>
                     <button name='action_sent_review' string="Send for Review" type="object" states='draft'
 						class='oe_highlight' />
+                       <button name='action_reset' string="Send Back" type="object" states='waiting'
+						class='oe_highlight' />
                     <button name='action_submit' string="Submit" type="object" states='waiting'
 						class='oe_highlight' />
                     <field name="state" widget="statusbar"/>
