@@ -72,19 +72,27 @@ class CreateAppraisal(http.Controller):
         obj_count = 0
         for obj_line in objective_list:
             obj_count += 1
-            if obj_count > 1 :               
+            if obj_count > 1 : 
                 objective_line = request.env['hr.appraisal.objective.line'].search([('id', '=', obj_line['col1'])])
                 if objective_line:
-                    objective_line.update({
-                        'category_id': obj_line['col2'],
-                        'objective': obj_line['col3'],
-                        'description': obj_line['col4'],
-                        'date_from':  obj_line['col5'],
-                        'date_to': obj_line['col6'],
-                        'weightage': obj_line['col7'],
-                        'priority': obj_line['col8'],
-                        'status_id':  obj_line['col9'],
-                    })
+                    if objectiveline.employee_id.user_id.id==http.request.env.context.get('uid'):
+                        categoryid = request.env['hr.objective.category'].search([('name','=',obj_line['col2'])], limit=1)
+                        statusid = request.env['hr.objective.status'].search([('name','=',obj_line['col9'])], limit=1)
+                        objective_line.update({
+                            'category_id': categoryid.id,
+                            'objective': obj_line['col3'],
+                            'description': obj_line['col4'],
+                            'date_from':  obj_line['col5'],
+                            'date_to': obj_line['col6'],
+                            'weightage': obj_line['col7'],
+                            'priority': obj_line['col8'],
+                            'status_id': statusid.id,
+                        })
+                    elif objectiveline.employee_id.parent_id.user_id.id==http.request.env.context.get('uid'): 
+                        objective_line.update({
+                            'weightage': obj_line['col7'],
+                            'rating_score': obj_line['col10'],
+                        })    
         return request.redirect('/appraisal/objective/%s'%(objectiveline.id))        
     
     
@@ -550,6 +558,7 @@ class CustomerPortal(CustomerPortal):
             'categories': categories,
             'status': status,
             'edit_objective': False,
+            'manager_objective': False,
             'appraisal_user_flag': appraisal_user_flag,
             'next_id' : next_id,
             'company_info': company_info,
@@ -557,7 +566,7 @@ class CustomerPortal(CustomerPortal):
         }
         return self._get_page_view_values(appraisal, access_token, values, 'my_appraisal_history', False, **kwargs)
 
-    def _appraisal_edit_get_page_view_values(self,appraisal, edit_objective, next_id = 0,pre_id= 0, appraisal_user_flag = 0, access_token = None, **kwargs):
+    def _appraisal_edit_get_page_view_values(self,appraisal, edit_objective,manager_objective, next_id = 0,pre_id= 0, appraisal_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
         categories = request.env['hr.objective.category'].sudo().search([])
         status = request.env['hr.objective.status'].sudo().search([])
@@ -569,6 +578,7 @@ class CustomerPortal(CustomerPortal):
             'appraisal_user_flag': appraisal_user_flag,
             'next_id' : next_id,
              'edit_objective': edit_objective,
+            'manager_objective': manager_objective,
             'company_info': company_info,
             'pre_id' : pre_id,
         }
@@ -633,7 +643,7 @@ class CustomerPortal(CustomerPortal):
             domain += search_domain
         domain += ['|',('employee_id.user_id', '=', http.request.env.context.get('uid')),('employee_id.parent_id.user_id', '=', http.request.env.context.get('uid'))]    
  
-        appraisal_count = request.env['hr.appraisal.objective'].search_count(domain)
+        appraisal_count = request.env['hr.appraisal.objective'].sudo().search_count(domain)
 
         pager = portal_pager(
             url="/appraisal/objectives",
@@ -644,7 +654,7 @@ class CustomerPortal(CustomerPortal):
             step=self._items_per_page
         )
 
-        _appraisals = request.env['hr.appraisal.objective'].search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
+        _appraisals = request.env['hr.appraisal.objective'].sudo().search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
         request.session['my_appraisal_history'] = _appraisals.ids[:100]
 
         grouped_appraisals = [_appraisals]
@@ -750,9 +760,13 @@ class CustomerPortal(CustomerPortal):
         else:
             next_id = 0
             pre_id = 0
-            
-        edit_objective = True
-        values = self._appraisal_edit_get_page_view_values(appraisal_sudo, edit_objective,next_id, pre_id, appraisal_user_flag,access_token, **kw) 
+        edit_objective = False
+        manager_objective = False
+        if appraisal_sudo.employee_id.user_id.id == active_user:
+            edit_objective = True
+        if appraisal_sudo.employee_id.parent_id.user_id.id == active_user:
+            manager_objective = True
+        values = self._appraisal_edit_get_page_view_values(appraisal_sudo, edit_objective,manager_objective, next_id, pre_id, appraisal_user_flag,access_token, **kw) 
         return request.render("de_portal_appraisal.portal_appraisal_objective", values)
 
     

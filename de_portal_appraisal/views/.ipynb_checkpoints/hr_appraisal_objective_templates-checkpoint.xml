@@ -307,12 +307,19 @@
                 <t t-set="card_header">
                     <div id="optional_placeholder"></div>
                     <div class="container">
-                         <t t-if="appraisal.employee_id.user_id.id == uid">
+                          <t t-if="appraisal.employee_id.user_id.id == uid">
                              <t t-if="appraisal.state in ('waiting','draft')">
                                <t t-if="edit_objective==False">  
                                 <a t-attf-href="/appraisal/edit/objective/#{appraisal.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Edit</div> </a> 
-                            </t>
-                            </t>     
+                               </t>
+                             </t>     
+                            </t> 
+                          <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">
+                             <t t-if="appraisal.state =='waiting'">
+                               <t t-if="manager_objective==False">  
+                                <a t-attf-href="/appraisal/edit/objective/#{appraisal.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Edit</div> </a> 
+                               </t>
+                             </t>     
                             </t> 
                       <div class="card">
                             
@@ -383,7 +390,12 @@
                             <t t-if="appraisal.employee_id.user_id.id == uid">    
                              <button id="objectiveButton"  type="submit" class="btn btn-primary pull-left">Save</button>
                             </t>
-                            </t>    
+                            </t>
+                             <t t-if="manager_objective == True">
+                            <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">    
+                             <button id="objectiveButton"  type="submit" class="btn btn-primary pull-left">Save</button>
+                            </t>
+                            </t>
                                 <span id="s_website_form_result"></span>
                          </div> 
                        
@@ -611,7 +623,7 @@
                                     
                                      <td class="ratingscore">
                                           <t t-if="manager_objective==True">
-                                        <input type="number" class="form-control s_website_form_input" name="rating_score"  t-att-value="line.rating_score"  multiple="true"  min="1" max="5" />
+                                        <input type="float" class="form-control s_website_form_input" name="rating_score"  t-att-value="line.rating_score"  multiple="true"  min="1" max="5" />
       
                                       </t>    
                                       <t t-if="manager_objective==False">
@@ -676,7 +688,7 @@
                                 var col7_value=currentRow.find(".weightage input").val();
                                 var col8_value=currentRow.find(".priority select").val();
                                 var col9_value=currentRow.find(".status select").val();
-
+                                var col10_value=currentRow.find(".ratingscore input").val();
                                 var obj={};
                                 obj.col1=col1_value;
                                 obj.col2=col2_value;
@@ -686,6 +698,8 @@
                                 obj.col6=col6_value;
                                 obj.col7=col7_value;
                                 obj.col8=col8_value;
+                                obj.col9=col9_value;
+                                obj.col10=col10_value;
 
                                 objectivedata.push(obj);
                           
