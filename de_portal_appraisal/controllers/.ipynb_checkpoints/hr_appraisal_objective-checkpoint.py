@@ -446,6 +446,20 @@ class CustomerPortal(CustomerPortal):
         values = self._appraisal_get_page_view_values(obj_sudo, **kw) 
         return request.redirect('/appraisal/objective/%s'%(record.id))
     
+    @http.route(['/action/reset/objective/<int:confirm_id>'], type='http', auth="public", website=True)
+    def action_reset_objective(self,confirm_id , access_token=None, **kw):
+        id=confirm_id
+        record = request.env['hr.appraisal.objective'].sudo().browse(id)
+
+        record.action_reset()
+        try:
+            obj_sudo = self._document_check_access('hr.appraisal.objective', id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        values = self._appraisal_get_page_view_values(obj_sudo, **kw) 
+        return request.redirect('/appraisal/objective/%s'%(record.id))
+    
+    
     @http.route(['/action/sent/hr/review/<int:confirm_id>'], type='http', auth="public", website=True)
     def action_Sent_for_Employee_Review(self,confirm_id , access_token=None, **kw):
         id=confirm_id

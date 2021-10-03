@@ -371,16 +371,39 @@
                 </t>
                <t t-set="card_body">          
                     <div class="row mb-4">
-                       <t t-if="appraisal.state == 'waiting' ">
-                         <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">
-                                    <t class="col-lg-7 col-md-8" >
-                                       <t t-if="edit_objective == False"> 
-                                        <a t-attf-href="/action/confirm/objective/#{appraisal.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm</div> </a> 
-                                    </t>
-                                     </t>   
-                                 </t>  
-                            </t>  
+                        <div class="col-12 col-md-12 pb-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <t t-if="appraisal.state == 'waiting' ">
+                                     <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">
+                                                <t class="col-lg-7 col-md-8" >
+                                                   <t t-if="edit_objective == False"> 
+                                                    <a t-attf-href="/action/confirm/objective/#{appraisal.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm</div> </a> 
+                                                </t>
+                                                 </t>   
+                                             </t>  
+                                        </t>  
+                                </div>
+                                <div class="col-md-6"> 
+                                    <t t-if="appraisal.state == 'waiting' ">
+                                     <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">
+                                                <t class="col-lg-7 col-md-8" >
+                                                   <t t-if="edit_objective == False"> 
+                                                    <a t-attf-href="/action/reset/objective/#{appraisal.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Send Back</div> </a> 
+                                                </t>
+                                                 </t>   
+                                             </t>  
+                                        </t>  
+                                </div>
+                            </div>
+                          </div>
+                        </div> 
+                            
+                           <div> 
                        
+                       
+                               
+                               
                     </div>
                    <form id="objectiveForm" data-toggle="validator"   action="/objective/line/save"  method="post" enctype="multipart/form-data"> 
                    <div class="row mb-4">
