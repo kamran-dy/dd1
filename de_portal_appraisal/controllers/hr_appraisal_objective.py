@@ -76,9 +76,14 @@ class CreateAppraisal(http.Controller):
                 objective_line = request.env['hr.appraisal.objective.line'].search([('id', '=', obj_line['col1'])])
                 if objective_line:
                     objective_line.update({
-                        'objective': obj_line['col4'],
-                        'weightage': obj_line['col2'],
-                        'priority':  obj_line['col3'],
+                        'category_id': obj_line['col2'],
+                        'objective': obj_line['col3'],
+                        'description': obj_line['col4'],
+                        'date_from':  obj_line['col5'],
+                        'date_to': obj_line['col6'],
+                        'weightage': obj_line['col7'],
+                        'priority': obj_line['col8'],
+                        'status_id':  obj_line['col9'],
                     })
         return request.redirect('/appraisal/objective/%s'%(objectiveline.id))        
     
@@ -537,8 +542,8 @@ class CustomerPortal(CustomerPortal):
   
     def _appraisal_get_page_view_values(self,appraisal, next_id = 0,pre_id= 0, appraisal_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
-        categories = request.env['hr.objective.category'].search([])
-        status = request.env['hr.objective.status'].search([])
+        categories = request.env['hr.objective.category'].sudo().search([])
+        status = request.env['hr.objective.status'].sudo().search([])
         values = {
             'page_name' : 'appraisal',
             'appraisal' : appraisal,
@@ -554,10 +559,13 @@ class CustomerPortal(CustomerPortal):
 
     def _appraisal_edit_get_page_view_values(self,appraisal, edit_objective, next_id = 0,pre_id= 0, appraisal_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
-        
+        categories = request.env['hr.objective.category'].sudo().search([])
+        status = request.env['hr.objective.status'].sudo().search([])
         values = {
             'page_name' : 'appraisal',
             'appraisal' : appraisal,
+            'categories': categories,
+            'status': status,
             'appraisal_user_flag': appraisal_user_flag,
             'next_id' : next_id,
              'edit_objective': edit_objective,

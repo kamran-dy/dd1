@@ -327,11 +327,10 @@
                                 <div class="row">
                                     <div class="col-lg-11">
                                         <h5 class="d-flex mb-1 mb-md-0 row">
-                                            <small class="text-muted d-none d-md-inline"> (#<span t-field="appraisal.id"/>)</small>
-                                            <div class="col-3 col-md-3 text-left">
+                                            <div class="col-3 col-md-3 text-right">
                                               <small class="text-right">Status:</small>
 
-                                                    <span t-field="appraisal.state" class=" badge badge-pill badge-success" title="Current stage of this appraisal"/>
+                                                    <span t-field="appraisal.state" class=" badge badge-pill badge-success" title="Current stage of this appraisal"/>  
 
                                             </div>
                                         </h5>
@@ -341,6 +340,7 @@
                                     <t t-set="prev_record" t-value="1" /> 
                                     <t t-set="next_record" t-value="2" /> 
                                     <div style="float:right; text-align:right; width:0ox; margin-right:0px;" class=" btn-group col-lg-1" role="group">
+                                      
                                     <h5>  
                                         <t t-if="pre_id">
                                             <a role="button"  t-attf-href="/appraisal/pre/#{appraisal.id}?" ><i style="margin-right:10px; align:right" class="fa fa-chevron-left" role="img" aria-label="Previous" title="Previous"></i></a>
@@ -389,7 +389,7 @@
                        
                     </div>
                     <div class="row mb-4">
-                         <div class="col-12 col-md-6 pb-2">
+                         <div class="col-12 col-md-12 pb-2">
                             <div class="row">
                                 <div class="col-md-6"> <strong>Employee : </strong>
                                     <t t-if="appraisal.employee_id">
@@ -402,6 +402,7 @@
                                     </t>
                                 </div>
                             </div>
+                             <br/>
                            <div class="row">
                                 <div class="col-md-6"> <strong>Employee Type: </strong>
                                     <t t-if="appraisal.employee_id">
@@ -413,7 +414,8 @@
                                         <span t-esc="appraisal.employee_id.grade_type.name"/>
                                     </t>
                                 </div>
-                            </div>  
+                            </div> 
+                             <br/>
                             <div class="row">
                                 <div class="col-md-6"> <strong>Job Position: </strong>
                                     <t t-if="appraisal.employee_id">
@@ -425,7 +427,8 @@
                                         <span t-esc="appraisal.employee_id.date"/>
                                     </t>
                                 </div>
-                            </div>   
+                            </div>
+                             <br/>
                              <div class="row">
                                  <div class="col-md-6"> <strong>Department : </strong>
                                     <t t-if="appraisal.employee_id">
@@ -499,6 +502,7 @@
                                 </div>
                                   
                             </div>
+                             
                               </div>
 
                     </div> 
@@ -514,7 +518,7 @@
                                  <th class="text-left">Date To</th>
                                 <th class="text-left">Weightage</th>
                                 <th class="text-left">Priority</th>
-                                <th class="text-left">Rating Score</th>
+                                <th class="text-left">Rating Score(1-5)</th>
                                 <th class="text-left">Rating Level</th>
                                 <th class="text-left">Status</th>
                             </tr>
@@ -570,7 +574,27 @@
                                     </td>
                                     
                                     
-                                    <td class="priority">
+                                   
+                                     <td class="weightage">
+                                          <t t-if="edit_objective==True">
+                                        <input type="float" class="form-control s_website_form_input" name="weightage"  t-att-value="line.weightage"  multiple="true" />
+                                        <t t-set="total_weigtage" t-value="total_weigtage + line.weightage"/>
+      
+                                      </t>  
+                                       <t t-if="manager_objective==True">
+                                        <input type="float" class="form-control s_website_form_input" name="weightage"  t-att-value="line.weightage"  multiple="true" />
+                                        <t t-set="total_weigtage" t-value="total_weigtage + line.weightage"/>
+      
+                                      </t>     
+                                      <t t-if="edit_objective==False">
+                                      <t t-if="manager_objective==False">
+                                        <span t-esc="line.weightage" />
+                                        <t t-set="total_weigtage" t-value="total_weigtage + line.weightage"/>
+                                      </t>   
+                                     </t>
+                                         
+                                    </td>
+                                     <td class="priority">
                                          <t t-if="edit_objective==True">
                                         <select  id="priority" class="form-control  s_website_form_input" name="priority" >
                                                 <option value="low">Low</option>
@@ -584,41 +608,25 @@
                                       </t>   
                                     </td>
                                     
-                                     <td class="weightage">
-                                          <t t-if="edit_objective==True">
-                                        <input type="float" class="form-control s_website_form_input" name="weightage"  t-att-value="line.weightage"  multiple="true" />
-                                        <t t-set="total_weigtage" t-value="total_weigtage + line.weightage"/>
-      
-                                      </t>    
-                                      <t t-if="edit_objective==False">
-                                        <span t-esc="line.weightage" />
-                                        <t t-set="total_weigtage" t-value="total_weigtage + line.weightage"/>
-                                      </t>   
                                     
-                                    </td>
                                      <td class="ratingscore">
-                                          <t t-if="edit_objective==True">
-                                        <input type="float" class="form-control s_website_form_input" name="rating_score"  t-att-value="line.rating_score"  multiple="true" />
+                                          <t t-if="manager_objective==True">
+                                        <input type="number" class="form-control s_website_form_input" name="rating_score"  t-att-value="line.rating_score"  multiple="true"  min="1" max="5" />
       
                                       </t>    
-                                      <t t-if="edit_objective==False">
+                                      <t t-if="manager_objective==False">
                                         <span t-esc="line.rating_score" />
                                       </t>   
                                     
                                     </td>
                                       <td class="ratinglevel">
-                                          <t t-if="edit_objective==True">
-                                        <input type="float" class="form-control s_website_form_input" name="rating_level"  t-att-value="line.rating_level"  multiple="true" />
-      
-                                      </t>    
-                                      <t t-if="edit_objective==False">
+                                        
                                         <span t-esc="line.rating_level" />
-                                      </t>   
                                     
                                     </td>
                                      <td class="status">
                                           <t t-if="edit_objective==True">
-                                         <select  id="status" class="form-control  s_website_form_input" name="status" >
+                                         <select  id="status" class="form-control  s_website_form_input" name="status_id" >
                                            <t t-foreach="status" t-as="stat">
                                                 <option t-att-value="stat.name">
                                                         <t t-esc="stat.name"/>
@@ -628,7 +636,7 @@
       
                                       </t>    
                                       <t t-if="edit_objective==False">
-                                        <span t-esc="line.status" />
+                                         <span t-esc="line.status_id.name" />
                                       </t>   
                                     
                                     </td>
@@ -658,18 +666,26 @@
                            var objectivedata=[];
                            // loop over each table row (tr)
                            $("#objectiveTable tr").each(function(){
-                                var currentRow=$(this);
-                                
+                                var currentRow=$(this);                                
                                 var col1_value=currentRow.find(".lineids input").val();
-                                var col2_value=currentRow.find(".weightage input").val();
-                                var col3_value=currentRow.find(".priority select").val();
-                                var col4_value=currentRow.find(".objective input").val();
+                                var col2_value=currentRow.find(".category select").val();
+                                var col3_value=currentRow.find(".objective input").val();
+                                var col4_value=currentRow.find(".description input").val();
+                                var col5_value=currentRow.find(".datefrom input").val();
+                                var col6_value=currentRow.find(".dateto input").val();
+                                var col7_value=currentRow.find(".weightage input").val();
+                                var col8_value=currentRow.find(".priority select").val();
+                                var col9_value=currentRow.find(".status select").val();
 
                                 var obj={};
                                 obj.col1=col1_value;
                                 obj.col2=col2_value;
                                 obj.col3=col3_value;
                                 obj.col4=col4_value;
+                                obj.col5=col5_value;
+                                obj.col6=col6_value;
+                                obj.col7=col7_value;
+                                obj.col8=col8_value;
 
                                 objectivedata.push(obj);
                           
