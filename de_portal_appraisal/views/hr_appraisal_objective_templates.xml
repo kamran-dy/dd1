@@ -106,7 +106,69 @@
                                     
                                      
                                     <td class="text-left">
-                                        <span t-esc="appraisal.objective_year" />
+                                          <t t-if="appraisal.objective_year == '2020'">
+                                            <i class="badge badge-pill badge-info" >FY 2020-21</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2021'">
+                                            <i class="badge badge-pill badge-info" >FY 2021-22</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2022'">
+                                            <i class="badge badge-pill badge-info" >FY 2022-23</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2023'">
+                                            <i class="badge badge-pill badge-info" >FY 2023-24</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2024'">
+                                            <i class="badge badge-pill badge-info" >FY 2024-25</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2025'">
+                                            <i class="badge badge-pill badge-info" >FY 2025-26</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2026'">
+                                            <i class="badge badge-pill badge-info" >FY 2026-27</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2027'">
+                                            <i class="badge badge-pill badge-info" >FY 2027-28</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2028'">
+                                            <i class="badge badge-pill badge-info" >FY 2028-29</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2029'">
+                                            <i class="badge badge-pill badge-info" >FY 2029-30</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2030'">
+                                            <i class="badge badge-pill badge-info" >FY 2030-31</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2031'">
+                                            <i class="badge badge-pill badge-info" >FY 2031-32</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2032'">
+                                            <i class="badge badge-pill badge-info" >FY 2032-33</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2033'">
+                                            <i class="badge badge-pill badge-info" >FY 2033-34</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2034'">
+                                            <i class="badge badge-pill badge-info" >FY 2034-35</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2035'">
+                                            <i class="badge badge-pill badge-info" >FY 2035-36</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2036'">
+                                            <i class="badge badge-pill badge-info" >FY 2036-37</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2037'">
+                                            <i class="badge badge-pill badge-info" >FY 2037-38</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2038'">
+                                            <i class="badge badge-pill badge-info" >FY 2038-39</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2039'">
+                                            <i class="badge badge-pill badge-info" >FY 2039-39</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2040'">
+                                            <i class="badge badge-pill badge-info" >FY 2040-41</i>
+                                        </t>
                                     </td>
                                    
                                     <td class="text-left">
@@ -139,7 +201,69 @@
                                     
                                      
                                     <td class="text-left">
-                                        <span t-esc="appraisal.objective_year" />
+                                        <t t-if="appraisal.objective_year == '2020'">
+                                            <i class="badge badge-pill badge-info" >FY 2020-21</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2021'">
+                                            <i class="badge badge-pill badge-info" >FY 2021-22</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2022'">
+                                            <i class="badge badge-pill badge-info" >FY 2022-23</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2023'">
+                                            <i class="badge badge-pill badge-info" >FY 2023-24</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2024'">
+                                            <i class="badge badge-pill badge-info" >FY 2024-25</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2025'">
+                                            <i class="badge badge-pill badge-info" >FY 2025-26</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2026'">
+                                            <i class="badge badge-pill badge-info" >FY 2026-27</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2027'">
+                                            <i class="badge badge-pill badge-info" >FY 2027-28</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2028'">
+                                            <i class="badge badge-pill badge-info" >FY 2028-29</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2029'">
+                                            <i class="badge badge-pill badge-info" >FY 2029-30</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2030'">
+                                            <i class="badge badge-pill badge-info" >FY 2030-31</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2031'">
+                                            <i class="badge badge-pill badge-info" >FY 2031-32</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2032'">
+                                            <i class="badge badge-pill badge-info" >FY 2032-33</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2033'">
+                                            <i class="badge badge-pill badge-info" >FY 2033-34</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2034'">
+                                            <i class="badge badge-pill badge-info" >FY 2034-35</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2035'">
+                                            <i class="badge badge-pill badge-info" >FY 2035-36</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2036'">
+                                            <i class="badge badge-pill badge-info" >FY 2036-37</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2037'">
+                                            <i class="badge badge-pill badge-info" >FY 2037-38</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2038'">
+                                            <i class="badge badge-pill badge-info" >FY 2038-39</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2039'">
+                                            <i class="badge badge-pill badge-info" >FY 2039-39</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2040'">
+                                            <i class="badge badge-pill badge-info" >FY 2040-41</i>
+                                        </t>
                                     </td>
                                    
                                     <td class="text-left">
@@ -272,12 +396,106 @@
                                         <span t-esc="appraisal.employee_id.name"/>
                                     </t>
                                 </div>
-                            </div>
-                             <div class="row">            
-                                <div class="col-md-6"> <strong>Year : </strong>
-                                    <t t-if="appraisal.objective_year">
-                                        <span t-esc="appraisal.objective_year"/>
+                                <div class="col-md-6"> <strong>Employee Code : </strong>
+                                    <t t-if="appraisal.employee_id">
+                                        <span t-esc="appraisal.employee_id.emp_number"/>
                                     </t>
+                                </div>
+                            </div>
+                           <div class="row">
+                                <div class="col-md-6"> <strong>Employee Type: </strong>
+                                    <t t-if="appraisal.employee_id">
+                                        <span t-esc="appraisal.employee_id.emp_type"/>
+                                    </t>
+                                </div>
+                                <div class="col-md-6"> <strong>Grade Type : </strong>
+                                    <t t-if="appraisal.employee_id">
+                                        <span t-esc="appraisal.employee_id.grade_type.name"/>
+                                    </t>
+                                </div>
+                            </div>  
+                            <div class="row">
+                                <div class="col-md-6"> <strong>Job Position: </strong>
+                                    <t t-if="appraisal.employee_id">
+                                        <span t-esc="appraisal.employee_id.job_id.name"/>
+                                    </t>
+                                </div>
+                                <div class="col-md-6"> <strong>Date Of Joining : </strong>
+                                    <t t-if="appraisal.employee_id">
+                                        <span t-esc="appraisal.employee_id.date"/>
+                                    </t>
+                                </div>
+                            </div>   
+                             <div class="row">
+                                 <div class="col-md-6"> <strong>Department : </strong>
+                                    <t t-if="appraisal.employee_id">
+                                        <span t-esc="appraisal.employee_id.department_id.name"/>
+                                    </t>
+                                </div>
+                                <div class="col-md-6"> <strong>Year : </strong>
+                                      <t t-if="appraisal.objective_year == '2020'">
+                                            <i class="badge badge-pill badge-info" >FY 2020-21</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2021'">
+                                            <i class="badge badge-pill badge-info" >FY 2021-22</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2022'">
+                                            <i class="badge badge-pill badge-info" >FY 2022-23</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2023'">
+                                            <i class="badge badge-pill badge-info" >FY 2023-24</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2024'">
+                                            <i class="badge badge-pill badge-info" >FY 2024-25</i>
+                                        </t>
+                                         <t t-if="appraisal.objective_year == '2025'">
+                                            <i class="badge badge-pill badge-info" >FY 2025-26</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2026'">
+                                            <i class="badge badge-pill badge-info" >FY 2026-27</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2027'">
+                                            <i class="badge badge-pill badge-info" >FY 2027-28</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2028'">
+                                            <i class="badge badge-pill badge-info" >FY 2028-29</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2029'">
+                                            <i class="badge badge-pill badge-info" >FY 2029-30</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2030'">
+                                            <i class="badge badge-pill badge-info" >FY 2030-31</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2031'">
+                                            <i class="badge badge-pill badge-info" >FY 2031-32</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2032'">
+                                            <i class="badge badge-pill badge-info" >FY 2032-33</i>
+                                        </t>
+                                        <t t-if="appraisal.objective_year == '2033'">
+                                            <i class="badge badge-pill badge-info" >FY 2033-34</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2034'">
+                                            <i class="badge badge-pill badge-info" >FY 2034-35</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2035'">
+                                            <i class="badge badge-pill badge-info" >FY 2035-36</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2036'">
+                                            <i class="badge badge-pill badge-info" >FY 2036-37</i>
+                                        </t>
+                                     <t t-if="appraisal.objective_year == '2037'">
+                                            <i class="badge badge-pill badge-info" >FY 2037-38</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2038'">
+                                            <i class="badge badge-pill badge-info" >FY 2038-39</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2039'">
+                                            <i class="badge badge-pill badge-info" >FY 2039-39</i>
+                                        </t>
+                                    <t t-if="appraisal.objective_year == '2040'">
+                                            <i class="badge badge-pill badge-info" >FY 2040-41</i>
+                                        </t>
                                 </div>
                                   
                             </div>
@@ -289,23 +507,65 @@
                    
                       
                             <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
-                                
+                                <th class="text-left">Category</th>
                                 <th class="text-left">Objective</th>
                                  <th class="text-left">Description</th>
-                                <th class="text-left">Priority</th>
+                                 <th class="text-left">Date From</th>
+                                 <th class="text-left">Date To</th>
                                 <th class="text-left">Weightage</th>
+                                <th class="text-left">Priority</th>
+                                <th class="text-left">Rating Score</th>
+                                <th class="text-left">Rating Level</th>
+                                <th class="text-left">Status</th>
                             </tr>
                         <t t-set="total_weigtage" t-value="0"/>
                         <t t-foreach="appraisal.objective_lines" t-as="line">   
                                 
                                 <tr>
-                                     
+                                     <td class="category">
+                                      <t t-if="edit_objective==True">
+                                        <select  id="categline" class="form-control  s_website_form_input" name="category_id" >
+                                           <t t-foreach="categories" t-as="categ">
+                                                <option t-att-value="categ.name">
+                                                        <t t-esc="categ.name"/>
+                                                </option>
+                                                    </t>                                         
+                                        </select>
+                                      </t>    
+                                      <t t-if="edit_objective==False">
+                                        <span t-esc="line.category_id.name" />
+                                      </t>    
+                                    </td> 
                                      <td class="objective">
                                       <t t-if="edit_objective==True">
                                         <input type="float" class="form-control s_website_form_input" name="objective"  t-att-value="line.objective"  multiple="true" />
                                       </t>    
                                       <t t-if="edit_objective==False">
                                         <span t-esc="line.objective" />
+                                      </t>    
+                                    </td>
+                                    <td class="description">
+                                      <t t-if="edit_objective==True">
+                                        <input type="float" class="form-control s_website_form_input" name="description"  t-att-value="line.description"  multiple="true" />
+                                      </t>    
+                                      <t t-if="edit_objective==False">
+                                        <span t-esc="line.description" />
+                                      </t>    
+                                    </td>
+                                     <td class="datefrom">
+                                      <t t-if="edit_objective==True">
+                                        <input type="date" class="form-control s_website_form_input" name="date_from"  t-att-value="line.date_from"  multiple="true" />
+                                      </t>    
+                                      <t t-if="edit_objective==False">
+                                        <span t-esc="line.date_from" />
+                                      </t>    
+                                    </td>
+                                     <td class="dateto">
+                                      <t t-if="edit_objective==True">
+                                        <input type="date" class="form-control s_website_form_input" name="date_to"  t-att-value="line.date_to"  multiple="true" />
+                                      </t>    
+                                      <t t-if="edit_objective==False">
+                                        <span t-esc="line.date_to" />
                                       </t>    
                                     </td>
                                     
@@ -336,6 +596,44 @@
                                       </t>   
                                     
                                     </td>
+                                     <td class="ratingscore">
+                                          <t t-if="edit_objective==True">
+                                        <input type="float" class="form-control s_website_form_input" name="rating_score"  t-att-value="line.rating_score"  multiple="true" />
+      
+                                      </t>    
+                                      <t t-if="edit_objective==False">
+                                        <span t-esc="line.rating_score" />
+                                      </t>   
+                                    
+                                    </td>
+                                      <td class="ratinglevel">
+                                          <t t-if="edit_objective==True">
+                                        <input type="float" class="form-control s_website_form_input" name="rating_level"  t-att-value="line.rating_level"  multiple="true" />
+      
+                                      </t>    
+                                      <t t-if="edit_objective==False">
+                                        <span t-esc="line.rating_level" />
+                                      </t>   
+                                    
+                                    </td>
+                                     <td class="status">
+                                          <t t-if="edit_objective==True">
+                                         <select  id="status" class="form-control  s_website_form_input" name="status" >
+                                           <t t-foreach="status" t-as="stat">
+                                                <option t-att-value="stat.name">
+                                                        <t t-esc="stat.name"/>
+                                                </option>
+                                                    </t>                                         
+                                        </select>
+      
+                                      </t>    
+                                      <t t-if="edit_objective==False">
+                                        <span t-esc="line.status" />
+                                      </t>   
+                                    
+                                    </td>
+                                          
+                                    
                                     <td class="lineids">
                                         <input type="hidden" class="form-control s_website_form_input" name="lineid"  t-att-value="line.id"  multiple="true" />
                                        
@@ -420,7 +718,7 @@
     
     
     
-      <template id="create_appraisal_objective" name="objective Request">
+      <template id="submit_appraisal_objective" name="objective Request">
         <t t-call="portal.portal_layout">
                <div id="wrap">
                                          
@@ -550,15 +848,17 @@
                                      <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
-                                                <span class="s_website_form_label_content">Description</span>
+                                                <span class="s_website_form_label_content">Date Of Joining</span>
                                                 <span class="s_website_form_mark"> *</span>
                                             </label>
                                             <div class="col-sm">
-                                                  <input type="text" class="form-control s_website_form_input" name="description"  />
-                                                
+                                                  <t t-esc="employee_name.date"    />
                                             </div>
                                         </div>
                                     </div> 
+                                    
+                                    
+                                     
                                     <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
@@ -575,22 +875,23 @@
                                 </div>
                                 
                                  <div class="s_website_form_rows row s_col_no_bgcolor">
+                                    
                                      <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
-                                                <span class="s_website_form_label_content">Date Of Joining</span>
+                                                <span class="s_website_form_label_content">Description</span>
                                                 <span class="s_website_form_mark"> *</span>
                                             </label>
                                             <div class="col-sm">
-                                                  <t t-esc="employee_name.date"    />
+                                                  <input type="text" class="form-control s_website_form_input" name="description"  />
+                                                
                                             </div>
                                         </div>
                                     </div> 
-                                     
                                      <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
                                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
-                                                <span class="s_website_form_label_content">Date Of Joining</span>
+                                                <span class="s_website_form_label_content">Objective Year</span>
                                                 <span class="s_website_form_mark"> *</span>
                                             </label>
                                             <div class="col-sm">
@@ -610,11 +911,11 @@
                                                 <option value="2032">FY 2032-33</option>
                                                 <option value="2033">FY 2033-34</option>
                                                 <option value="2034">FY 2034-35</option>
-                                                <option value="2035">FY 2035-2036</option> 
-                                                <option value="2036">FY 2036-2037</option>
-                                                <option value="2037">FY 2037-2038</option>
-                                                <option value="2038">FY 2038-2039</option>
-                                                <option value="2039">FY 2039-2040</option>
+                                                <option value="2035">FY 2035-36</option> 
+                                                <option value="2036">FY 2036-37</option>
+                                                <option value="2037">FY 2037-38</option>
+                                                <option value="2038">FY 2038-39</option>
+                                                <option value="2039">FY 2039-40</option>
                                                 <option value="2040">FY 2040-41</option>     
                                          </select>
                                             </div>
@@ -635,14 +936,14 @@
                                     <table id='objectiverecord' class="table table-sm table-striped table-bordered">
                                         <thead>
                                         <tr >
-                                            <th>Category</th>
-                                            <th>Objective</th>
-                                            <th>Description</th>
-                                            <th>Date From</th>
-                                            <th>Date To</th>
-                                            <th>Weightage</th>
-                                            <th>Priority</th>
-                                            <th>Status</th>
+                                            <th style="background-color:red;">Category</th>
+                                            <th style="background-color:red;">Objective</th>
+                                            <th style="background-color:red;">Description</th>
+                                            <th style="background-color:red;">Date From</th>
+                                            <th style="background-color:red;">Date To</th>
+                                            <th style="background-color:red;">Weightage</th>
+                                            <th style="background-color:red;">Priority</th>
+                                            <th style="background-color:red;">Status</th>
                                             
                                         </tr>
                                        </thead>
@@ -781,10 +1082,7 @@
                                             
                                 <tr>
                                     <td class='categline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
                                 
-                                            <div class="col-sm">
                                                  <select  id="categline" class="form-control  s_website_form_input" name="category_id" >
                                                     <t t-foreach="categories" t-as="categ">
 
@@ -794,96 +1092,52 @@
                                                     </t>
                                                 </select>
                                                 
-                                               </div>
-                                           </div>
-                                       </div>
                                     </td>
                                                 
                                     <td class='objectiveline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
                                            
-                                            <div class="col-sm">
                                                   <input id='objectiveline' type="float" class="form-control s_website_form_input" name="objective"   required='1'/>
 
                                                 
-                                            </div>
-                                        </div>
-                                     </div>
                                    </td>
                                      
                                   <td class='descriptionline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
                                             
-                                            <div class="col-sm">
                                                   <input id='descriptionline' type="text" class="form-control s_website_form_input" name="description"  />
 
                                                 
-                                            </div>
-                                        </div>
-                                    </div>
                                  </td>
                                                 
                                 <td class='datefromline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
                                             
-                                            <div class="col-sm">
                                                   <input id='datefromline' type="date" class="form-control s_website_form_input" name="datefrom"  />
 
                                                 
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td>
                                <td class='datetoline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
                                             
-                                            <div class="col-sm">
                                                   <input id='datetoline' type="date" class="form-control s_website_form_input" name="dateto"  />
 
                                                 
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td> 
                                  <td class='weightageline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
                                             
-                                            <div class="col-sm">
-                                                  <input id='weightageline' type="float" class="form-control s_website_form_input" name="weightage"  />
-
+                                    <input id='weightageline' type="float" class="form-control s_website_form_input" name="weightage"  />
                                                 
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td>                  
                                <td class='priorityline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
                                             
-                                            <div class="col-sm">
                                               <select  id="priorityline" class="form-control  s_website_form_input" name="priority" >
                                                 <option value="low">Low</option>
                                                 <option value="medium">Medium</option>
                                                 <option value="high">High</option>
                                                 <option value="very_high">Very High</option>
                                          </select> 
-
                                                 
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td>  
                                     
-                                   <td class='statusline'>
-                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                     <td class='statusline'>
                                 
-                                            <div class="col-sm">
                                                  <select  id="statusline" class="form-control  s_website_form_input" name="status_id" >
                                                     <t t-foreach="status" t-as="stat">
 
@@ -893,10 +1147,7 @@
                                                     </t>
                                                 </select>
                                                 
-                                               </div>
-                                           </div>
-                                       </div>
-                                    </td>   
+                                      </td>   
                                     
                                          <td>
                                                  <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
@@ -906,19 +1157,14 @@
                                                 </div>
                                                 </td>
                                                 
-                                            </tr>
-                                           
-                                             
-                                           
+                                            </tr>                                           
                                             
                                         </form>
                                
                                     
                                      </tbody>
-                                    </table>
-                              
-
-                                    </div>
+                                    </table>                              
+                                   </div>
          
         </t>
     </template>

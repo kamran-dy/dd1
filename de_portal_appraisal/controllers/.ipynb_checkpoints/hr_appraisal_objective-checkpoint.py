@@ -29,6 +29,8 @@ def appraisal_page_content(flag = 0):
     return {
         'managers': managers,
         'employees' : employees,
+        'employee_name': employees,
+        'managers': employees.parent_id.name,
         'categories': categories,
         'status': status,
         'appraisal_objective_list': appraisal_objective_list,
@@ -53,7 +55,7 @@ class CreateAppraisal(http.Controller):
     def appraisal_objective_template(self, **kw):
         global appraisal_objective_list
         appraisal_objective_list = []
-        return request.render("de_portal_appraisal.create_appraisal_objective",appraisal_page_content()) 
+        return request.render("de_portal_appraisal.submit_appraisal_objective",appraisal_page_content()) 
     
     
     @http.route('/halfyear/feedback/objective/edit/',type="http", website=True, auth='user')
@@ -346,15 +348,26 @@ class CreateAppraisal(http.Controller):
     
     
     @http.route('/appraisal/objective/save', type="http", auth="public", website=True)
-    def edit_objective(self, **kw):
+    def submit_objective_setting(self, **kw):
         obj_line = []
-        global appraisal_objective_list
-        for worker in appraisal_objective_list:
-            obj_line.append((0,0,{
-                'objective':  worker['objective'],
-                'weightage':  worker['weightage'],
-                'priority': worker['priority'],
-                }))
+        objective_setting_list = ast.literal_eval(kw.get('objective_setting_vals'))
+        obj_count = 0
+        for worker in objective_setting_list:
+            obj_count += 1
+            if obj_count > 1 :
+                categoryid = request.env['hr.objective.category'].search([('name','=',worker['col1'])], limit=1)
+                statusid = request.env['hr.objective.status'].search([('name','=',worker['col8'])], limit=1)
+
+                obj_line.append((0,0,{
+                    'category_id':  categoryid.id,
+                    'objective':  worker['col2'],
+                    'date_from': worker['col4'],
+                    'date_to': worker['col5'],
+                    'weightage': worker['col6'],
+                    'description': worker['col3'],
+                    'priority': worker['col7'],
+                    'status_id': statusid.id,
+                    }))
         objective_val = {
             'description': kw.get('description'),
             'employee_id': int(kw.get('employee_id')),
@@ -374,9 +387,7 @@ class CreateAppraisal(http.Controller):
         appraisal_objective_list = []
         return request.render("de_portal_appraisal.portal_appraisal",appraisal_page_content()) 
     
- 
-    
-    
+   
     
     @http.route('/appraisal/objective/line/save', type="http", auth="public", website=True)
     def create_sheet_expense_line(self, **kw):
@@ -526,9 +537,13 @@ class CustomerPortal(CustomerPortal):
   
     def _appraisal_get_page_view_values(self,appraisal, next_id = 0,pre_id= 0, appraisal_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+        categories = request.env['hr.objective.category'].search([])
+        status = request.env['hr.objective.status'].search([])
         values = {
             'page_name' : 'appraisal',
             'appraisal' : appraisal,
+            'categories': categories,
+            'status': status,
             'edit_objective': False,
             'appraisal_user_flag': appraisal_user_flag,
             'next_id' : next_id,
