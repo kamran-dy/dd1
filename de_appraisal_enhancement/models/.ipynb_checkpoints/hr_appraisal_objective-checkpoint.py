@@ -30,11 +30,11 @@ class HrAppraisalObjective(models.Model):
         ('make_readonly', 'Readonly'),
         ('make_editable', 'Editable')], compute = 'compute_readonly')
     
-    def unlink(self):
-        for rec in self:
-            if rec.state in ['confirm']:
-                raise UserError(('Deletion is Not Allowed!'))
-            return super(HrAppraisalObjective, self).unlink()
+#     def unlink(self):
+#         for rec in self:
+#             if rec.state in ['confirm']:
+#                 raise UserError(('Deletion is Not Allowed!'))
+#             return super(HrAppraisalObjective, self).unlink()
     
      
     @api.constrains('employee_id')
