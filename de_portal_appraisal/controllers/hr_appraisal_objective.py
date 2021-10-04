@@ -75,10 +75,9 @@ class CreateAppraisal(http.Controller):
             if obj_count > 1 : 
                 objective_line = request.env['hr.appraisal.objective.line'].search([('id', '=', obj_line['col1'])])
                 if objective_line:
-                    if objectiveline.employee_id.user_id.id==http.request.env.context.get('uid'):
-                        categoryid = request.env['hr.objective.category'].search([('name','=',obj_line['col2'])], limit=1)
-                        statusid = request.env['hr.objective.status'].search([('name','=',obj_line['col9'])], limit=1)
-                        objective_line.update({
+                    categoryid = request.env['hr.objective.category'].search([('name','=',obj_line['col2'])], limit=1)
+                    statusid = request.env['hr.objective.status'].search([('name','=',obj_line['col9'])], limit=1)
+                    objective_line.update({
                             'category_id': categoryid.id,
                             'objective': obj_line['col3'],
                             'description': obj_line['col4'],
@@ -88,11 +87,7 @@ class CreateAppraisal(http.Controller):
                             'priority': obj_line['col8'],
                             'status_id': statusid.id,
                         })
-                    elif objectiveline.employee_id.parent_id.user_id.id==http.request.env.context.get('uid'): 
-                        objective_line.update({
-                            'weightage': obj_line['col7'],
-                            'rating_score': obj_line['col10'],
-                        })    
+                   
         return request.redirect('/appraisal/objective/%s'%(objectiveline.id))        
     
     
@@ -104,17 +99,23 @@ class CreateAppraisal(http.Controller):
             feedbackuser.update({
                 'reason_for_disagreement':  kw.get('reason_for_disagreement'),
                 'agreement': kw.get('agreement'),
+                 'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
             })
         elif feedbackuser.state == 'draft':
             feedbackuser.update({
                 'objective_comment': kw.get('objective_comment'),
                 'value_comment': kw.get('value_comment'),
+                'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
             })
             
         if feedbackuser.state == 'end_year_sent_emp_view' and  feedbackuser.name.user_id.id ==  http.request.env.context.get('uid'):
             feedbackuser.update({
                 'full_year_agreement':  kw.get('full_year_agreement'),
                 'full_reason_for_disagreement': kw.get('full_reason_for_disagreement'),
+                 'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
             })    
             
         if feedbackuser.state == 'draft':    
@@ -151,6 +152,8 @@ class CreateAppraisal(http.Controller):
                 feedbackmanger.update({
                     'full_year_value_comment': kw.get('full_year_value_comment'),
                     'full_year_objective_comment': kw.get('full_year_objective_comment'),
+                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
             manager_business_obj = ast.literal_eval(kw.get('listb'))
             manager_core_object = ast.literal_eval(kw.get('manager_core_vals_list'))
@@ -172,6 +175,7 @@ class CreateAppraisal(http.Controller):
                                 macore_objective.update({
                                     'conformance_level_mngr': mcore_line['col2'],
                                     'remarks_mngr': mcore_line['col3'],
+                                    'rating_score': mcore_line['col4'],
                                 })
                                 
             mcount = 0
@@ -183,6 +187,7 @@ class CreateAppraisal(http.Controller):
                         mappraisee_objective.update({
                             'remarks_mngr': mappraisee_line['col2'],
                             'percentage_score_mngr': mappraisee_line['col3'],
+                            'rating_score': mappraisee_line['col4'],
                         })
             
         elif feedbackuser.state == 'sent' and  feedbackuser.name.parent_id.user_id.id ==  http.request.env.context.get('uid'): 
@@ -191,6 +196,8 @@ class CreateAppraisal(http.Controller):
                 feedbackmanger.update({
                     'full_year_value_comment': kw.get('full_year_value_comment'),
                     'full_year_objective_comment': kw.get('full_year_objective_comment'),
+                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
             manager_business_obj = ast.literal_eval(kw.get('listb'))
             manager_core_object = ast.literal_eval(kw.get('manager_core_vals_list'))
@@ -212,6 +219,7 @@ class CreateAppraisal(http.Controller):
                                 macore_objective.update({
                                     'conformance_level_mngr': mcore_line['col2'],
                                     'remarks_mngr': mcore_line['col3'],
+                                    'rating_score': mcore_line['col4'],
                                 })
                                 
             mcount = 0
@@ -223,6 +231,7 @@ class CreateAppraisal(http.Controller):
                         mappraisee_objective.update({
                             'remarks_mngr': mappraisee_line['col2'],
                             'percentage_score_mngr': mappraisee_line['col3'],
+                            'rating_score': mappraisee_line['col4'],
                         })                    
                                 
         elif feedbackuser.state == 'end_year_appraisee_review': 
@@ -231,6 +240,8 @@ class CreateAppraisal(http.Controller):
                 fullfeedbackuser.update({
                     'half_year_appraiser_objective_comment': kw.get('half_year_appraiser_objective_comment'),
                     'half_year_appraiser_value_comment': kw.get('half_year_appraiser_value_comment'),
+                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
             fulluser_business_obj = ast.literal_eval(kw.get('listaa'))
             fulluser_core_object = ast.literal_eval(kw.get('full_user_core_vals_list'))
@@ -291,6 +302,8 @@ class CreateAppraisal(http.Controller):
                     'promotion_position': kw.get('promotion_position'),
                     'promotion_grade': kw.get('promotion_grade'),
                      'date_effective': kw.get('date_effective'),
+                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                     
                 })
             fullmanager_business_obj = ast.literal_eval(kw.get('listbb'))
@@ -308,6 +321,7 @@ class CreateAppraisal(http.Controller):
                         fullmacore_objective.update({
                             'rating_mngr': fullmcore_line['col3'],
                             'full_remarks_mngr': fullmcore_line['col2'],
+                            'rating_score': fullmcore_line['col4'],
                         })
                        
             fullmcount = 0
@@ -319,6 +333,7 @@ class CreateAppraisal(http.Controller):
                         fullmappraisee_objective.update({
                             'full_remarks_mngr': fullmappraisee_line['col2'],
                             'rating_mngr': fullmappraisee_line['col3'],
+                            'rating_score': fullmappraisee_line['col4'],
                         })  
                         
         elif feedbackuser.state == 'end_year_sent_emp_view' and feedbackuser.name.parent_id.user_id.id == http.request.env.context.get('uid'): 
@@ -327,6 +342,8 @@ class CreateAppraisal(http.Controller):
                 fullfeedbackmanger.update({
                     'full_year_appraiser_value_comment': kw.get('full_year_appraiser_value_comment'),
                     'full_year_appraiser_objective_comment': kw.get('full_year_appraiser_objective_comment'),
+                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                   'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
             fullmanager_business_obj = ast.literal_eval(kw.get('listbb'))
             fullmanager_core_object = ast.literal_eval(kw.get('full_manager_core_vals_list'))
@@ -343,6 +360,7 @@ class CreateAppraisal(http.Controller):
                         fullmacore_objective.update({
                             'rating_mngr': fullmcore_line['col3'],
                             'full_remarks_mngr': fullmcore_line['col2'],
+                            'rating_score': fullmcore_line['col4'],
                         })
                        
             fullmcount = 0
@@ -354,6 +372,7 @@ class CreateAppraisal(http.Controller):
                         fullmappraisee_objective.update({
                             'full_remarks_mngr': fullmappraisee_line['col2'],
                             'rating_mngr': fullmappraisee_line['col3'],
+                            'rating_score': fullmappraisee_line['col4'],
                         })                                  
         
         return request.redirect('/appraisal/feedback/%s'%(feedbackuser.id))
@@ -426,6 +445,19 @@ class CustomerPortal(CustomerPortal):
         record = request.env['hr.appraisal.feedback'].sudo().browse(id)
 
         record.action_confirm()
+        try:
+            approval_sudo = self._document_check_access('hr.appraisal.feedback', id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')
+        values = self._feedback_get_page_view_values(approval_sudo, **kw) 
+        return request.redirect('/appraisal/feedback/%s'%(record.id))
+    
+    @http.route(['/action/reset/hod/<int:confirm_id>'], type='http', auth="public", website=True)
+    def action_reset(self,confirm_id , access_token=None, **kw):
+        id=confirm_id
+        record = request.env['hr.appraisal.feedback'].sudo().browse(id)
+
+        record.action_refuse()
         try:
             approval_sudo = self._document_check_access('hr.appraisal.feedback', id, access_token)
         except (AccessError, MissingError):
@@ -774,10 +806,8 @@ class CustomerPortal(CustomerPortal):
         else:
             next_id = 0
             pre_id = 0
-        edit_objective = False
         manager_objective = False
-        if appraisal_sudo.employee_id.user_id.id == active_user:
-            edit_objective = True
+        edit_objective = True
         if appraisal_sudo.employee_id.parent_id.user_id.id == active_user:
             manager_objective = True
         values = self._appraisal_edit_get_page_view_values(appraisal_sudo, edit_objective,manager_objective, next_id, pre_id, appraisal_user_flag,access_token, **kw) 
