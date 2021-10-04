@@ -45,8 +45,6 @@
                             <field name="date_to" required = "True"/>
                             <field name="weightage" required = "True"  sum = "Total Weightage"/>
                             <field name="priority" required = "True"/>
-                            <field name="rating_score" />
-                            <field name="rating_level" readonly='1'/>
                             <field name="status_id" />
                         </tree>
                       </field>

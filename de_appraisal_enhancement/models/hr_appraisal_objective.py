@@ -28,18 +28,18 @@ class HrAppraisalObjective(models.Model):
                                string="Objective Year", default='2021', required = 'True')
     
     objective_lines = fields.One2many('hr.appraisal.objective.line', 'objective_id')
-    traing_need = fields.Boolean(string='Training Need')
+    traing_need = fields.Char(string='Training Need')
     total_weightage = fields.Float("Total Weightage", compute = 'limit_weightage')
     note = fields.Text(string='Achivements')
     readonly_status = fields.Selection([
         ('make_readonly', 'Readonly'),
         ('make_editable', 'Editable')], compute = 'compute_readonly')
     
-#     def unlink(self):
-#         for rec in self:
-#             if rec.state in ['confirm']:
-#                 raise UserError(('Deletion is Not Allowed!'))
-#             return super(HrAppraisalObjective, self).unlink()
+    def unlink(self):
+        for rec in self:
+            if rec.state in ['confirm','waiting']:
+                raise UserError(('Deletion is Not Allowed!'))
+        return super(HrAppraisalObjective, self).unlink()
     
      
     @api.constrains('employee_id')
@@ -122,45 +122,10 @@ class HrAppraisalObjectiveline(models.Model):
         ('high', 'High'),
         ('very_high', 'Very High'),
     ], string='Priority', index=True, copy=False, default='low',required = True)
-    rating_level = fields.Selection([
-        ('Outstanding Performance', 'Outstanding Performance'),
-        ('Excellent Performance', 'Excellent Performance'),
-        ('Strong Performance', 'Strong Performance'),
-        ('Needs Improvement', 'Needs Improvement'),
-        ('Unsatisfactory', 'Unsatisfactory'),
-    ], string='Rating Level', index=True, copy=False, compute='compute_rating_level')
-    rating_score = fields.Float(string='Rating Score')
+
     weightage = fields.Float(string='Weightage')
     category_id = fields.Many2one('hr.objective.category', string='Category')
     status_id = fields.Many2one('hr.objective.status',  string='Status')
-    
-    @api.depends('rating_score')
-    def compute_rating_level(self):
-        for line in self:
-            if line.rating_score >= 1 and line.rating_score <= 1.4:
-                line.update({
-                    'rating_level': 'Unsatisfactory'
-                })
-            elif line.rating_score >= 1.5 and line.rating_score <= 2.4:
-                line.update({
-                    'rating_level': 'Needs Improvement'
-                })   
-            elif line.rating_score >= 2.5 and line.rating_score <= 3.4:
-                line.update({
-                    'rating_level': 'Strong Performance'
-                })   
-            elif line.rating_score >= 3.5 and line.rating_score <= 4.4:
-                line.update({
-                    'rating_level': 'Excellent Performance'
-                })
-            elif line.rating_score >= 4.5 and line.rating_score <= 5:
-                line.update({
-                    'rating_level': 'Outstanding Performance'
-                }) 
-            else:
-                line.update({
-                    'rating_level': False
-                }) 
         
     
     @api.onchange('weightage')

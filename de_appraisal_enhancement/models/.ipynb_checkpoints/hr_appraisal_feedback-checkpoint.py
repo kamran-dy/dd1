@@ -42,7 +42,10 @@ class HrAppraisalFeedback(models.Model):
     full_year_appraiser_value_comment = fields.Text('Manager Full year Comments')
     
     employee_feedback = fields.Char('Employee Feedback')
+    future_aspiration = fields.Char('career aspirations in next 2 to 3 years')
+    feedback_to_manager = fields.Char('Feedback to line manager')
     
+ 
     
     def unlink(self):
     	for rec in self:
@@ -62,11 +65,11 @@ class HrAppraisalFeedback(models.Model):
                         Frequently exceeds job requirements. Makes contributions well
                         beyond job demands. Commendable performance.
                         
-                        3 = Met Expectations Ratings:  276 – 375
-                        person in this position. All objectives and standards are met. Has good
+                        3 = Meet Expectations Ratings:  276 – 375
+                        person in this position. All objectives and standards are meet. Has good
                         job knowledge and is able to perform with minimum supervision.
                         
-                        2 = Partially Met Expectations Ratings: 200 – 275
+                        2 = Partially Meet Expectations Ratings: 200 – 275
                         totally achieved. Person is capable of improving to an acceptable
                         standard.
                         
@@ -130,6 +133,17 @@ class HrAppraisalFeedback(models.Model):
         ('closed', 'Closed'),
         
     ], string='State', index=True, copy=False, default='draft', track_visibility='onchange', tracking=True)
+    
+    def action_refuse(self):
+        for line in self:
+            if line.state=='endorsed_employee':
+                line.update({
+                    'state': 'sent'
+                })
+            elif line.state=='end_year_endorsed_emp':
+                line.update({
+                    'state': 'end_year_sent_emp_view'
+                })    
     
     feedback_objective_lines = fields.One2many('hr.appraisal.feedback.objective.line', 'feedback_id', tracking=True, track_visibility='onchange')
     feedback_values_lines = fields.One2many('hr.appraisal.feedback.values.line', 'feedback_id', tracking=True, track_visibility='onchange')
@@ -220,9 +234,9 @@ class HrAppraisalFeedback(models.Model):
             self.objective_rating = 'Exceed Expectations'
         
         elif round(self.objective_score,0) in range(276,376):
-            self.objective_rating = 'Met Expectations'
+            self.objective_rating = 'Meet Expectations'
         elif round(self.objective_score,0) in range(200,276):
-            self.objective_rating = 'Partially Met Expectations'
+            self.objective_rating = 'Partially Meet Expectations'
         elif round(self.objective_score,0) in range(1,200):
             self.objective_rating = 'Unacceptable'
         else:
@@ -241,9 +255,9 @@ class HrAppraisalFeedback(models.Model):
         elif round(self.behavioral_score,0) in range(376,451):
             self.behavioral_rating = 'Exceed Expectations'
         elif round(self.behavioral_score,0) in range(276,376):
-            self.behavioral_rating = 'Met Expectations'
+            self.behavioral_rating = 'Meet Expectations'
         elif round(self.behavioral_score,0) in range(200,276):
-            self.behavioral_rating = 'Partially Met Expectations'
+            self.behavioral_rating = 'Partially Meet Expectations'
         elif round(self.behavioral_score,0) in range(1,200):
             self.behavioral_rating = 'Unacceptable'
         else:
@@ -309,13 +323,10 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
     ], string='Priority', index=True, copy=False, default='low', required = True, track_visibility='onchange')
     rating = fields.Integer('Emp. Full Year Rating', track_visibility='onchange')
 #     weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
-    comments = fields.Char('Comments')
-    
+    comments = fields.Char('Comments')   
     full_remarks_mngr = fields.Char('Manager Remarks')
     rating_mngr = fields.Integer('Manager Full Year Rating')
-    weightage_score_mngr = fields.Float('Weightage Score', compute='compute_weightage_score')
-    
-    
+    weightage_score_mngr = fields.Float('Weightage Score', compute='compute_weightage_score')   
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirm', 'Confirmed'),
@@ -332,6 +343,42 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
         ('closed', 'Closed'),
         
     ], string='State', related='feedback_id.state')
+    rating_level = fields.Selection([
+        ('Outstanding Performance', 'Outstanding Performance'),
+        ('Excellent Performance', 'Excellent Performance'),
+        ('Strong Performance', 'Strong Performance'),
+        ('Needs Improvement', 'Needs Improvement'),
+        ('Unsatisfactory', 'Unsatisfactory'),
+    ], string='Rating Level', index=True, copy=False, compute='compute_rating_level')
+    rating_score = fields.Float(string='Rating Score')
+    @api.depends('rating_score')
+    def compute_rating_level(self):
+        for line in self:
+            if line.rating_score >= 1 and line.rating_score <= 1.4:
+                line.update({
+                    'rating_level': 'Unsatisfactory'
+                })
+            elif line.rating_score >= 1.5 and line.rating_score <= 2.4:
+                line.update({
+                    'rating_level': 'Needs Improvement'
+                })   
+            elif line.rating_score >= 2.5 and line.rating_score <= 3.4:
+                line.update({
+                    'rating_level': 'Strong Performance'
+                })   
+            elif line.rating_score >= 3.5 and line.rating_score <= 4.4:
+                line.update({
+                    'rating_level': 'Excellent Performance'
+                })
+            elif line.rating_score >= 4.5 and line.rating_score <= 5:
+                line.update({
+                    'rating_level': 'Outstanding Performance'
+                }) 
+            else:
+                line.update({
+                    'rating_level': False
+                })     
+      
     
     def compute_weightage_score(self):
         for rec in self:
@@ -387,6 +434,44 @@ class HrAppraisalFeedbackValuesLine(models.Model):
         ('closed', 'Closed'),
         
     ], string='State', related='feedback_id.state')
+    rating_level = fields.Selection([
+        ('Outstanding Performance', 'Outstanding Performance'),
+        ('Excellent Performance', 'Excellent Performance'),
+        ('Strong Performance', 'Strong Performance'),
+        ('Needs Improvement', 'Needs Improvement'),
+        ('Unsatisfactory', 'Unsatisfactory'),
+    ], string='Rating Level', index=True, copy=False, compute='compute_rating_level')
+    rating_score = fields.Float(string='Rating Score')
+    
+    @api.depends('rating_score')
+    def compute_rating_level(self):
+        for line in self:
+            if line.rating_score >= 1 and line.rating_score <= 1.4:
+                line.update({
+                    'rating_level': 'Unsatisfactory'
+                })
+            elif line.rating_score >= 1.5 and line.rating_score <= 2.4:
+                line.update({
+                    'rating_level': 'Needs Improvement'
+                })   
+            elif line.rating_score >= 2.5 and line.rating_score <= 3.4:
+                line.update({
+                    'rating_level': 'Strong Performance'
+                })   
+            elif line.rating_score >= 3.5 and line.rating_score <= 4.4:
+                line.update({
+                    'rating_level': 'Excellent Performance'
+                })
+            elif line.rating_score >= 4.5 and line.rating_score <= 5:
+                line.update({
+                    'rating_level': 'Outstanding Performance'
+                }) 
+            else:
+                line.update({
+                    'rating_level': False
+                })     
+      
+    
     
     def compute_weightage_score(self):
         for rec in self:
@@ -489,6 +574,41 @@ class HrAppraisalFeedbackObjectiveAppraiseeLine(models.Model):
         ('closed', 'Closed'),
         
     ], string='State', related='feedback_id.state')
+    rating_level = fields.Selection([
+        ('Outstanding Performance', 'Outstanding Performance'),
+        ('Excellent Performance', 'Excellent Performance'),
+        ('Strong Performance', 'Strong Performance'),
+        ('Needs Improvement', 'Needs Improvement'),
+        ('Unsatisfactory', 'Unsatisfactory'),
+    ], string='Rating Level', index=True, copy=False, compute='compute_rating_level')
+    rating_score = fields.Float(string='Rating Score')
+    @api.depends('rating_score')
+    def compute_rating_level(self):
+        for line in self:
+            if line.rating_score >= 1 and line.rating_score <= 1.4:
+                line.update({
+                    'rating_level': 'Unsatisfactory'
+                })
+            elif line.rating_score >= 1.5 and line.rating_score <= 2.4:
+                line.update({
+                    'rating_level': 'Needs Improvement'
+                })   
+            elif line.rating_score >= 2.5 and line.rating_score <= 3.4:
+                line.update({
+                    'rating_level': 'Strong Performance'
+                })   
+            elif line.rating_score >= 3.5 and line.rating_score <= 4.4:
+                line.update({
+                    'rating_level': 'Excellent Performance'
+                })
+            elif line.rating_score >= 4.5 and line.rating_score <= 5:
+                line.update({
+                    'rating_level': 'Outstanding Performance'
+                }) 
+            else:
+                line.update({
+                    'rating_level': False
+                })     
     
     def compute_weightage_score(self):
         for rec in self:
@@ -549,6 +669,43 @@ class HrAppraisalFeedbackValuesAppraiseeLine(models.Model):
         ('closed', 'Closed'),
         
     ], string='State', related='feedback_id.state')
+    rating_level = fields.Selection([
+        ('Outstanding Performance', 'Outstanding Performance'),
+        ('Excellent Performance', 'Excellent Performance'),
+        ('Strong Performance', 'Strong Performance'),
+        ('Needs Improvement', 'Needs Improvement'),
+        ('Unsatisfactory', 'Unsatisfactory'),
+    ], string='Rating Level', index=True, copy=False, compute='compute_rating_level')
+    rating_score = fields.Float(string='Rating Score')
+    @api.depends('rating_score')
+    def compute_rating_level(self):
+        for line in self:
+            if line.rating_score >= 1 and line.rating_score <= 1.4:
+                line.update({
+                    'rating_level': 'Unsatisfactory'
+                })
+            elif line.rating_score >= 1.5 and line.rating_score <= 2.4:
+                line.update({
+                    'rating_level': 'Needs Improvement'
+                })   
+            elif line.rating_score >= 2.5 and line.rating_score <= 3.4:
+                line.update({
+                    'rating_level': 'Strong Performance'
+                })   
+            elif line.rating_score >= 3.5 and line.rating_score <= 4.4:
+                line.update({
+                    'rating_level': 'Excellent Performance'
+                })
+            elif line.rating_score >= 4.5 and line.rating_score <= 5:
+                line.update({
+                    'rating_level': 'Outstanding Performance'
+                }) 
+            else:
+                line.update({
+                    'rating_level': False
+                })     
+      
+    
     
     def compute_weightage_score(self):
         for rec in self:

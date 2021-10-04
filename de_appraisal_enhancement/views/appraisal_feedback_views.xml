@@ -24,6 +24,10 @@
 						class='oe_highlight'/>
                     <button name='action_endorsed_hod' string="Endorsed by HOD" type="object" states='endorsed_employee'
 						class='oe_highlight'/>
+                     <button name='action_refuse'
+                            string="Refuse"
+                            type="object" states='endorsed_employee'
+                            class='oe_highlight'/>
                     <button name='action_done' string="Done" type="object" states='endorsed_hod'
 						class='oe_highlight'/>
 <!--                     States After Done -->
@@ -56,6 +60,10 @@
                             string="Closed"
                             type="object" states='end_year_endorse_hod'
                             class='oe_highlight'/>
+                    <button name='action_refuse'
+                            string="Refuse"
+                            type="object" states='end_year_endorse_hod'
+                            class='oe_highlight'/>
                     
                     <field name="state" widget="statusbar" clickable="1" readonly="0"/>
                 </header>
@@ -75,10 +83,12 @@
                         <group>
                             <field name="mid_year_date" readonly="1"/>
                             <field name="date_mid_deadline" readonly="1"/>
+                            <field name="future_aspiration" attrs="{'readonly':[('state','!=','draft')]}"/>
                         </group>
                         <group>
                             <field name="end_year_date" readonly="1"/>
                             <field name="date_end_deadline" readonly="1"/>
+                            <field name="feedback_to_manager" attrs="{'readonly':[('state','!=','draft')]}"/>
                         </group>
 					</group>
                     <group>
@@ -130,6 +140,8 @@
                                     <field name='percentage_score' attrs="{'readonly':[('state','!=','draft')]}"/>
                                     <field name="remarks_mngr" attrs="{'readonly':[('state','!=','confirm')]}"/>
                                     <field name='percentage_score_mngr' attrs="{'readonly':[('state','!=','confirm')]}"/>
+                                    <field name="rating_score" />
+                                    <field name="rating_level" />
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -154,6 +166,8 @@
                                     <field name='conformance_level' attrs="{'readonly':[('state','!=','draft')]}"/>
                                     <field name="remarks_mngr" attrs="{'readonly':[('state','!=','confirm')]}"/>
                                     <field name='conformance_level_mngr' attrs="{'readonly':[('state','!=','confirm')]}"/>
+                                    <field name="rating_score" />
+                                    <field name="rating_level" />
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -182,6 +196,8 @@
                                     <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
                                     <field name="full_remarks_mngr" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
                                     <field name='weightage_score_mngr' readonly="1"/>
+                                     <field name="rating_score" />
+                                    <field name="rating_level" />
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -208,6 +224,8 @@
                                     <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
                                     <field name="full_remarks_mngr" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
                                     <field name='weightage_score_mngr' readonly="1"/>
+                                     <field name="rating_score" />
+                                    <field name="rating_level" />
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
