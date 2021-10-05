@@ -99,24 +99,42 @@ class CreateAppraisal(http.Controller):
             feedbackuser.update({
                 'reason_for_disagreement':  kw.get('reason_for_disagreement'),
                 'agreement': kw.get('agreement'),
-                 'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
             })
+            if kw.get('feedback_to_manager'):
+                feedbackuser.update({
+                 'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+            })
+            if kw.get('future_aspiration'):
+                feedbackuser.update({
+                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
+            })    
         elif feedbackuser.state == 'draft':
             feedbackuser.update({
                 'objective_comment': kw.get('objective_comment'),
                 'value_comment': kw.get('value_comment'),
-                'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
             })
+            if kw.get('feedback_to_manager'):
+                feedbackuser.update({
+                'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+            }) 
+            if kw.get('future_aspiration'):
+                feedbackuser.update({
+                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
+            })     
             
         if feedbackuser.state == 'end_year_sent_emp_view' and  feedbackuser.name.user_id.id ==  http.request.env.context.get('uid'):
             feedbackuser.update({
                 'full_year_agreement':  kw.get('full_year_agreement'),
                 'full_reason_for_disagreement': kw.get('full_reason_for_disagreement'),
+            })
+            if kw.get('feedback_to_manager'):
+                feedbackuser.update({
                  'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                })
+            if kw.get('future_aspiration'):
+                feedbackuser.update({
                 'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-            })    
+                })    
             
         if feedbackuser.state == 'draft':    
             user_business_obj = ast.literal_eval(kw.get('lista'))
@@ -152,9 +170,15 @@ class CreateAppraisal(http.Controller):
                 feedbackmanger.update({
                     'full_year_value_comment': kw.get('full_year_value_comment'),
                     'full_year_objective_comment': kw.get('full_year_objective_comment'),
-                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
+                if kw.get('feedback_to_manager'):
+                    feedbackmanger.update({
+                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                    })
+                if kw.get('future_aspiration'):
+                    feedbackmanger.update({
+                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
+                    })    
             manager_business_obj = ast.literal_eval(kw.get('listb'))
             manager_core_object = ast.literal_eval(kw.get('manager_core_vals_list'))
             mfinal_count = 0
@@ -196,9 +220,15 @@ class CreateAppraisal(http.Controller):
                 feedbackmanger.update({
                     'full_year_value_comment': kw.get('full_year_value_comment'),
                     'full_year_objective_comment': kw.get('full_year_objective_comment'),
-                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
+                if kw.get('feedback_to_manager'):
+                    feedbackmanger.update({
+                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                   })
+                if kw.get('future_aspiration'):
+                    feedbackmanger.update({
+                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
+                   })    
             manager_business_obj = ast.literal_eval(kw.get('listb'))
             manager_core_object = ast.literal_eval(kw.get('manager_core_vals_list'))
             mfinal_count = 0
@@ -243,6 +273,14 @@ class CreateAppraisal(http.Controller):
                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
                     'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
+                if kw.get('feedback_to_manager'):
+                    fullfeedbackuser.update({
+                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                })
+                if kw.get('future_aspiration'):
+                    fullfeedbackuser.update({
+                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
+                })    
             fulluser_business_obj = ast.literal_eval(kw.get('listaa'))
             fulluser_core_object = ast.literal_eval(kw.get('full_user_core_vals_list'))
             fullufinal_count = 0
@@ -301,11 +339,16 @@ class CreateAppraisal(http.Controller):
                     'recommend_promotion': kw.get('recommend_promotion'),
                     'promotion_position': kw.get('promotion_position'),
                     'promotion_grade': kw.get('promotion_grade'),
-                     'date_effective': kw.get('date_effective'),
-                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                    
+                     'date_effective': kw.get('date_effective'),                    
                 })
+                if kw.get('feedback_to_manager'):
+                    fullfeedbackmanger.update({
+                         'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                    })
+                if kw.get('future_aspiration'):
+                    fullfeedbackmanger.update({
+                         'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
+                    })    
             fullmanager_business_obj = ast.literal_eval(kw.get('listbb'))
             fullmanager_core_object = ast.literal_eval(kw.get('full_manager_core_vals_list'))
             fullmfinal_count = 0
@@ -342,9 +385,15 @@ class CreateAppraisal(http.Controller):
                 fullfeedbackmanger.update({
                     'full_year_appraiser_value_comment': kw.get('full_year_appraiser_value_comment'),
                     'full_year_appraiser_objective_comment': kw.get('full_year_appraiser_objective_comment'),
-                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                   'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
                 })
+                if kw.get('feedback_to_manager'):
+                    fullfeedbackmanger.update({
+                      'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
+                    })
+                if kw.get('future_aspiration'):
+                    fullfeedbackmanger.update({
+                     'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
+                    })    
             fullmanager_business_obj = ast.literal_eval(kw.get('listbb'))
             fullmanager_core_object = ast.literal_eval(kw.get('full_manager_core_vals_list'))
             fullmfinal_count = 0

@@ -336,7 +336,7 @@
                                       <t t-if="feedback.name.department_id.manager_id.user_id.id == uid">
                                         <a t-attf-href="/action/end/endoresd/hod/#{feedback.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Endorsed By HOD </div> </a>
                                          
-                                        <a t-attf-href="/action/reset/hod/#{feedback.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Refuse </div> </a>    
+                                        <a t-attf-href="/action/reset/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%;">Refuse </div> </a>    
                                           
                                     </t>
                                  </t> 
@@ -666,7 +666,7 @@
                        
                              <div class="col-md-6"> <strong>Business Objectives Accumulative Score </strong>
                             
-                                  <span t-esc="feedback.objective_score" />
+                                  <span t-esc="round(feedback.objective_score,2)" />
                                 
                                </div>  
                            
@@ -677,7 +677,7 @@
                                </div>  
                               <div class="col-md-6"> <strong>Behavioral Accumulative Score </strong>
                             
-                                  <span t-esc="feedback.behavioral_score" />
+                                  <span t-esc="round(feedback.behavioral_score,2)" />
                                 
                                </div>  
                            <div class="col-md-6"> <strong>Behavioral Accumulative Rating </strong>
@@ -890,6 +890,9 @@
                                           <span t-esc="full_core_line.rating_mngr" />
                                         </t>   
                                     </td>
+                                     <td class="text-left">                               
+                                         <span t-esc="round(full_core_line.weightage_score_mngr,2)" />                              
+                                       </td>
                                 <td class="ratingscore">
                                   <t t-if="full_manager_edit==True">
                                     <input type="float" class="form-control s_website_form_input" name="rating_score"  t-att-value="full_core_line.rating_score"  multiple="true" />
@@ -918,9 +921,7 @@
                                   </t> 
                                 </td>
                                     
-                                    <td class="text-left">                               
-                                         <span t-esc="round(full_core_line.weightage_score_mngr,2)" />                              
-                                       </td>
+                                   
                            
                                     
                                       <td class="fullusercoreid">                               
