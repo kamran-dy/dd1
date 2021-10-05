@@ -543,7 +543,7 @@ class CustomerPortal(CustomerPortal):
         searchbar_groupby = {
             'none': {'input': 'none', 'label': _('None')},
         }
-        date = fields.date.today() - timedelta(40)
+        date = fields.date.today() - timedelta(70)
         project_groups = request.env['hr.attendance'].search([('att_date','>=', date)])
 
         # default sort by value
