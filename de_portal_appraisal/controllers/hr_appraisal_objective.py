@@ -70,24 +70,46 @@ class CreateAppraisal(http.Controller):
         objectiveline = request.env['hr.appraisal.objective'].search([('id', '=', kw.get('objective_id'))])
         objective_list = ast.literal_eval(kw.get('objective_vals'))
         obj_count = 0
+        if objectiveline:
+            if kw.get('note'):
+               objectiveline.update({
+                   'note': kw.get('note')
+               })
+            if kw.get('traing_need'):
+               objectiveline.update({
+                   'traing_need': kw.get('traing_need')
+               })
         for obj_line in objective_list:
             obj_count += 1
-            if obj_count > 1 : 
-                objective_line = request.env['hr.appraisal.objective.line'].search([('id', '=', obj_line['col1'])])
-                if objective_line:
-                    categoryid = request.env['hr.objective.category'].search([('name','=',obj_line['col2'])], limit=1)
-                    statusid = request.env['hr.objective.status'].search([('name','=',obj_line['col9'])], limit=1)
-                    objective_line.update({
-                            'category_id': categoryid.id,
-                            'objective': obj_line['col3'],
-                            'description': obj_line['col4'],
-                            'date_from':  obj_line['col5'],
-                            'date_to': obj_line['col6'],
-                            'weightage': obj_line['col7'],
-                            'priority': obj_line['col8'],
-                            'status_id': statusid.id,
-                        })
-                   
+            if obj_count > 1 :
+                if obj_line['col1']:
+                    objective_line = request.env['hr.appraisal.objective.line'].search([('id', '=', obj_line['col1'])])
+                    if objective_line:
+                        categoryid = request.env['hr.objective.category'].search([('name','=',obj_line['col2'])], limit=1)
+                        statusid = request.env['hr.objective.status'].search([('name','=',obj_line['col9'])], limit=1)
+                        objective_line.update({
+                                'category_id': categoryid.id,
+                                'objective': obj_line['col3'],
+                                'description': obj_line['col4'],
+                                'date_from':  obj_line['col5'],
+                                'date_to': obj_line['col6'],
+                                'weightage': obj_line['col7'],
+                                'priority': obj_line['col8'],
+                                'status_id': statusid.id,
+                            })
+                else:
+                    line_vals = {
+                        'category_id': categoryid.id,
+                        'objective_id': objectiveline.id,
+#                         'objective': obj_line['col3'],
+                        'description': obj_line['col4'],
+                        'date_from':  obj_line['col5'],
+                        'date_to': obj_line['col6'],
+                        'weightage': obj_line['col7'],
+                        'priority': obj_line['col8'],
+                        'status_id': statusid.id,
+                    }
+                    line_obj = request.env['hr.appraisal.objective.line'].sudo().create(line_vals)
         return request.redirect('/appraisal/objective/%s'%(objectiveline.id))        
     
     

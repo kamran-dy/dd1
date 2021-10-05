@@ -448,7 +448,7 @@
                             </div>  
                              <br/>
                              <div class="row">            
-                                <div class="col-md-6"> <strong>career aspirations in next 2 to 3 years : </strong>
+                                <div class="col-md-6"> <strong>Career Aspirations in next 2 to 3 years : </strong>
                                     <t t-if="full_edit_flag==False">
                                         <span t-esc="feedback.future_aspiration" />
                                     </t>

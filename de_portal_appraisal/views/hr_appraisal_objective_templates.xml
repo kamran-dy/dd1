@@ -537,11 +537,87 @@
                                 </div>
                                   
                             </div>
+                             <br/>
+                            <div class="row">
+                                <div class="col-md-6"> <strong>Traing Need: </strong>
+                                    <t t-if="edit_objective==False">
+                                        <span t-esc="appraisal.traing_need"/>
+                                    </t>
+                                    <t t-if="edit_objective==True">
+                                      <input type="text" class="form-control s_website_form_input" name="traing_need"  t-att-value="appraisal.traing_need"  multiple="true" />
+                                    </t>     
+                                </div>
+                                <div class="col-md-6"> <strong>Achivements : </strong>
+                                    <t t-if="edit_objective==False">
+                                        <span t-esc="appraisal.note"/>
+                                    </t>
+                                    <t t-if="edit_objective==True">
+                                     <input type="float" class="form-control s_website_form_input" name="note"  t-att-value="appraisal.note"  multiple="true" />
+                                   </t>     
+                                </div>
+                            </div>
+                             <br/>
+                             
+                           <div class="row">
+                                <div class="col-md-6"> <strong>Manager: </strong>
+                                    <span t-esc="appraisal.employee_id.parent_id.name"/> 
+                                </div>
+                                <div class="col-md-6"> 
+                                       
+                                </div>
+                            </div>  
                              
                               </div>
 
                     </div> 
-                   
+                     <input type="hidden" id="objective_vals" class="form-control s_website_form_input" name="objective_vals"  multiple="true" />  
+                       <input type="hidden" id="objective_id" class="form-control s_website_form_input" name="objective_id" t-att-value="appraisal.id"  multiple="true" />  
+                         
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+                      <script type="text/javascript">
+                          
+                        $(document).ready(function(){
+
+                        $("#objectiveButton").on('click',function(){
+                          
+                           var objectivedata=[];
+                           // loop over each table row (tr)
+                           $("#objectiveTable tr").each(function(){
+                                var currentRow=$(this);                                
+                                var col1_value=currentRow.find(".lineids input").val();
+                                var col2_value=currentRow.find(".category select").val();
+                                var col3_value=currentRow.find(".objective input").val();
+                                var col4_value=currentRow.find(".description input").val();
+                                var col5_value=currentRow.find(".datefrom input").val();
+                                var col6_value=currentRow.find(".dateto input").val();
+                                var col7_value=currentRow.find(".weightage input").val();
+                                var col8_value=currentRow.find(".priority select").val();
+                                var col9_value=currentRow.find(".status select").val();
+                                var obj={};
+                                obj.col1=col1_value;
+                                obj.col2=col2_value;
+                                obj.col3=col3_value;
+                                obj.col4=col4_value;
+                                obj.col5=col5_value;
+                                obj.col6=col6_value;
+                                obj.col7=col7_value;
+                                obj.col8=col8_value;
+                                obj.col9=col9_value;
+
+                                objectivedata.push(obj);
+                          
+                           });
+                         objectivedictionary = JSON.stringify(objectivedata); 
+                         var lista = document.getElementById("objective_vals")
+                         lista.value = objectivedictionary 
+                         console.log(objectivedata);   
+                         });
+
+                       });
+                      </script> 
+                       
+                  </form>
                     <table class="table table-sm table-striped table-bordered" id="objectiveTable">
                    
                       
@@ -556,6 +632,8 @@
                                 <th class="text-left">Status</th>
                             </tr>
                         <t t-set="total_weigtage" t-value="0"/>
+                        <tbody>
+                        
                         <t t-foreach="appraisal.objective_lines" t-as="line">   
                                 
                                 <tr>
@@ -652,7 +730,12 @@
                                       </t>   
                                     
                                     </td>
-                                          
+                                    <td class="deleteline">
+                                      <t t-if="edit_objective==True">
+                                        <a onClick="onDelete(this)"><i class="fa fa-trash"></i></a>
+                                      </t>   
+                                    
+                                    </td>      
                                     
                                     <td class="lineids">
                                         <input type="hidden" class="form-control s_website_form_input" name="lineid"  t-att-value="line.id"  multiple="true" />
@@ -662,56 +745,10 @@
                             
                                 </tr>
                             </t>
+                            </tbody>
                        
                     </table>
-                      <input type="hidden" id="objective_vals" class="form-control s_website_form_input" name="objective_vals"  multiple="true" />  
-                       <input type="hidden" id="objective_id" class="form-control s_website_form_input" name="objective_id" t-att-value="appraisal.id"  multiple="true" />  
-                         
-                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-                      <script type="text/javascript">
-                          
-                        $(document).ready(function(){
-
-                        $("#objectiveButton").on('click',function(){
-                          
-                           var objectivedata=[];
-                           // loop over each table row (tr)
-                           $("#objectiveTable tr").each(function(){
-                                var currentRow=$(this);                                
-                                var col1_value=currentRow.find(".lineids input").val();
-                                var col2_value=currentRow.find(".category select").val();
-                                var col3_value=currentRow.find(".objective input").val();
-                                var col4_value=currentRow.find(".description input").val();
-                                var col5_value=currentRow.find(".datefrom input").val();
-                                var col6_value=currentRow.find(".dateto input").val();
-                                var col7_value=currentRow.find(".weightage input").val();
-                                var col8_value=currentRow.find(".priority select").val();
-                                var col9_value=currentRow.find(".status select").val();
-                                var obj={};
-                                obj.col1=col1_value;
-                                obj.col2=col2_value;
-                                obj.col3=col3_value;
-                                obj.col4=col4_value;
-                                obj.col5=col5_value;
-                                obj.col6=col6_value;
-                                obj.col7=col7_value;
-                                obj.col8=col8_value;
-                                obj.col9=col9_value;
-
-                                objectivedata.push(obj);
-                          
-                           });
-                         objectivedictionary = JSON.stringify(objectivedata); 
-                         var lista = document.getElementById("objective_vals")
-                         lista.value = objectivedictionary 
-                         console.log(objectivedata);   
-                         });
-
-                       });
-                      </script> 
-                       
-                  </form>
+                      
                      <div class="row">                             
                            <br/>
                        
