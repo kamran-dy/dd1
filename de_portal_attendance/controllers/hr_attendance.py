@@ -243,7 +243,7 @@ class CreateAttendance(http.Controller):
                     'employee_id': int(kw.get('employee_id')),
                     'check_in':  check_out,
                     'check_out': checkin_date_in - relativedelta(hours =+ 5),
-                    'partial': 'IN/OUT Missing',
+                    'partial': 'Out Time Missing',
                     'date':  check_out,
                     'attendance_id':  int(kw.get('id')),
                 }
@@ -273,7 +273,7 @@ class CreateAttendance(http.Controller):
                     'check_in':  checkout_date_in - relativedelta(hours =+ 5),
                     'check_out': check_in,
                     'date':  check_in,
-                    'partial': 'IN/OUT Missing', 
+                    'partial': 'Check In Time Missing', 
                     'attendance_id':  int(kw.get('id')),
                 }
                 record = request.env['hr.attendance.rectification'].sudo().create(rectify_val)
