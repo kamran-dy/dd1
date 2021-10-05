@@ -327,7 +327,7 @@
                                 <t t-if="feedback.state == 'end_year_sent_emp_view'">
                                    
                                       <t t-if="feedback.name.user_id.id == uid">
-                                        <a t-attf-href="/action/end/endoresd/review/#{feedback.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Endorsed By Employee </div> </a> 
+                                        <a t-attf-href="/action/end/endoresd/review/#{feedback.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm </div> </a> 
                                     </t>
                                  </t>  
                                
