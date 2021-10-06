@@ -11,7 +11,7 @@
     "author": "Dynexcel",
     "website": "http://www.dynexcel.co",
     "version": '14.1.0.0',
-    "depends": ['base', 'hr', 'report_xlsx','account'],
+    "depends": ['base', 'hr', 'report_xlsx','account','de_base_oracle_connector','de_employee_enhancement','hr_payroll','de_employee_benefits',],
     "data": [
         'reports/payslip_salary_report.xml',
     ],
