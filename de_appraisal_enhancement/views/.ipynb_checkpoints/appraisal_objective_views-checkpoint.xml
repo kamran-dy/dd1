@@ -38,13 +38,14 @@
                     <page string='Lines'>  
                       <field name='objective_lines'  attrs="{'readonly': [('readonly_status','=','make_readonly')]}">
                         <tree editable="bottom">
-                            <field name="category_id" required = "True"/>
-                            <field name="objective" required = "True"/>
-                            <field name="description" required = "True"/>
-                            <field name="date_from" required = "True"/>
-                            <field name="date_to" required = "True"/>
-                            <field name="weightage" required = "True"  sum = "Total Weightage"/>
-                            <field name="priority" required = "True"/>
+                            <field name="category_id" />
+                            <field name="objective" />
+                            <field name="description" />
+                            <field name="date_from" />
+                            <field name="date_to" />
+                            <field name="measuring_indicator" />
+                            <field name="weightage"   sum = "Total Weightage"/>
+                            <field name="priority" />
                             <field name="status_id" />
                         </tree>
                       </field>

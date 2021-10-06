@@ -78,21 +78,26 @@ class HrAppraisalObjective(models.Model):
     def limit_weightage(self):
         for rec in self:
             count = 0
+            line_count = 0
             for line in rec.objective_lines:
                 count = count + line.weightage
-         
+                line_count += 1
+#             if line_count < 3:
+#                 raise UserError('At least 3 objective require to Submit Objective Setting (minimum=3, Maximum=8)')
+#             if line_count > 8:
+#                     raise UserError('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)')    
             rec.total_weightage = count
 
     @api.model
     def create(self,vals):
         res = super(HrAppraisalObjective, self).create(vals)
-        if res.total_weightage != 100:
+        if res.total_weightage > 100:
             raise UserError('Total Weightage must be equal 100')
         return res
     
     def write(self, vals):
         res = super(HrAppraisalObjective, self).write(vals)
-        if self.total_weightage != 100:
+        if self.total_weightage > 100:
             raise UserError('Total Weightage must be equal 100')
         return res
     
@@ -112,21 +117,21 @@ class HrAppraisalObjectiveline(models.Model):
     _description = 'Appraisal Objective Line'
     
     objective_id = fields.Many2one('hr.appraisal.objective')
-    objective = fields.Char('Objective')
-    description = fields.Char('Description')
-    date_from = fields.Date(string='Date From')
-    date_to = fields.Date(string='Date To')
+    objective = fields.Char('Objective', required=True)
+    description = fields.Char('Description', required=True)
+    date_from = fields.Date(string='Date From', required=True)
+    date_to = fields.Date(string='Date To', required=True)
     priority = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
         ('high', 'High'),
         ('very_high', 'Very High'),
-    ], string='Priority', index=True, copy=False, default='low',required = True)
+    ], string='Priority', index=True, copy=False)
 
-    weightage = fields.Float(string='Weightage')
-    category_id = fields.Many2one('hr.objective.category', string='Category')
+    weightage = fields.Float(string='Weightage' , required=True)
+    category_id = fields.Many2one('hr.objective.category', string='Category', required=True)
     status_id = fields.Many2one('hr.objective.status',  string='Status')
-        
+    measuring_indicator = fields.Char('Measuring Indicator')
     
     @api.onchange('weightage')
     def limit_weightage(self):
