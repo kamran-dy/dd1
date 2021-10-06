@@ -38,6 +38,26 @@ def appraisal_page_content(flag = 0):
         'company_info': company_info,
     }
 
+def appraisal_page_content_edit(editid):
+    global appraisal_objective_list 
+    managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    categories = request.env['hr.objective.category'].search([])
+    status = request.env['hr.objective.status'].search([])
+    exist_line_obj = request.env['hr.appraisal.objective.line'].sudo().search([('id','=',editid)])
+    return {
+        'managers': managers,
+        'employees' : employees,
+        'exist_line_obj': exist_line_obj,
+        'employee_name': employees,
+        'managers': employees.parent_id.name,
+        'categories': categories,
+        'status': status,
+        'appraisal_objective_list': appraisal_objective_list,
+        'company_info': company_info,
+    }
+
 def paging(data, flag1 = 0, flag2 = 0):        
     if flag1 == 1:
         return config.list12
@@ -56,6 +76,62 @@ class CreateAppraisal(http.Controller):
         global appraisal_objective_list
         appraisal_objective_list = []
         return request.render("de_portal_appraisal.submit_appraisal_objective",appraisal_page_content()) 
+    
+    @http.route('/add/obj/line/save',type="http", website=True, auth='user')
+    def edit_existing_objective_template(self, **kw):
+        line_id = kw.get('line_id')
+        exist_line_obj = request.env['hr.appraisal.objective.line'].search([('id','=',line_id)])
+        exist_line_obj.update({
+            'category_id': kw.get('category_id'),
+            'objective': kw.get('objective'),
+            'description': kw.get('description'),
+            'weightage': kw.get('weightage'),
+            'date_from': kw.get('date_from'),
+            'date_to': kw.get('date_to'),
+        })
+        if kw.get('status_id'):
+            exist_line_obj.update({
+                'status_id': kw.get('status_id'),
+            })
+        if kw.get('measuring_indicator'):
+            exist_line_obj.update({
+                'measuring_indicator': kw.get('measuring_indicator'),
+            })
+        if kw.get('priority') :
+            if kw.get('priority') != 'blank':
+                exist_line_obj.update({
+                    'priority': kw.get('priority'),
+                })    
+        return request.redirect('/appraisal/objective/%s'%(exist_line_obj.objective_id.id))
+    
+    @http.route('/add/objective/line/save',type="http", website=True, auth='user')
+    def add_appraisal_objective_template_submit(self, **kw):
+        objecitve_id = kw.get('rec_id')
+        exist_obj = request.env['hr.appraisal.objective'].search([('id','=',objecitve_id)])
+        line_vals = {
+            'objective_id': exist_obj.id,
+            'category_id': kw.get('category_id'),
+            'objective': kw.get('objective'),
+            'description': kw.get('description'),
+            'weightage': kw.get('weightage'),
+            'date_from': kw.get('date_from'),
+            'date_to': kw.get('date_to'),
+        }
+        obj_line=request.env['hr.appraisal.objective.line'].sudo().create(line_vals)
+        if kw.get('measuring_indicator'):
+            obj_line.update({
+                'measuring_indicator': kw.get('measuring_indicator'),
+            })
+        if kw.get('priority'):
+            if kw.get('priority') != 'blank':
+                obj_line.update({
+                    'priority': kw.get('priority'),
+                }) 
+        if kw.get('status_id'):
+            obj_line.update({
+            'status_id': kw.get('status_id'),
+            })     
+        return request.redirect('/appraisal/objective/%s'%(exist_obj.id))
     
     
     @http.route('/halfyear/feedback/objective/edit/',type="http", website=True, auth='user')
@@ -452,35 +528,15 @@ class CreateAppraisal(http.Controller):
     
     @http.route('/appraisal/objective/save', type="http", auth="public", website=True)
     def submit_objective_setting(self, **kw):
-        obj_line = []
-        objective_setting_list = ast.literal_eval(kw.get('objective_setting_vals'))
-        obj_count = 0
-        for worker in objective_setting_list:
-            obj_count += 1
-            if obj_count > 1 :
-                categoryid = request.env['hr.objective.category'].search([('name','=',worker['col1'])], limit=1)
-                statusid = request.env['hr.objective.status'].search([('name','=',worker['col8'])], limit=1)
-
-                obj_line.append((0,0,{
-                    'category_id':  categoryid.id,
-                    'objective':  worker['col2'],
-                    'date_from': worker['col4'],
-                    'date_to': worker['col5'],
-                    'weightage': worker['col6'],
-                    'description': worker['col3'],
-                    'priority': worker['col7'],
-                    'status_id': statusid.id,
-                    }))
         objective_val = {
             'description': kw.get('description'),
             'employee_id': int(kw.get('employee_id')),
             'objective_year': kw.get('objective_year'),
-            'objective_lines': obj_line,
         }
         record = request.env['hr.appraisal.objective'].sudo().create(objective_val)
         record.action_sent_review()
-        appraisal_objective_list = []
-        return request.render("de_portal_appraisal.appraisal_submited", {})
+        return request.redirect('/edit/add/objective/line/%s'%(record.id))
+
     
     
     
@@ -498,16 +554,90 @@ class CreateAppraisal(http.Controller):
         appraisal_val = {
             'objective': kw.get('objective'),
             'weightage':  kw.get('weightage'),
-            'priority': kw.get('priority'),
-           
+            'priority': kw.get('priority'),          
         }
         appraisal_objective_list.append(appraisal_val)
         return request.render("de_portal_appraisal.create_appraisal_objective",appraisal_page_content())
     
-    
-  
-
+   
 class CustomerPortal(CustomerPortal):
+    
+    
+    @http.route(['/edit/objective/line/<int:line_id>'], type='http', auth="user", website=True)
+    def edit_objective_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.objective.line'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.objective.line'].sudo().search([('id','=', line_id)])
+        return request.render("de_portal_appraisal.edit_object_appraisal_objective", appraisal_page_content_edit(line_id))
+    
+    @http.route(['/delete/objective/line/<int:line_id>'], type='http', auth="user", website=True)
+    def delete_objective_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.objective.line'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.objective.line'].sudo().search([('id','=', line_id)])
+        recid = obj_line_sudo.objective_id
+        obj_line_sudo.unlink()
+        return request.redirect('/appraisal/objective/%s'%(recid.id))
+
+    
+    
+    @http.route(['/edit/add/objective/line/<int:appraisal_id>'], type='http', auth="user", website=True)
+    def get_appraisal_edit_objective_line_template(self, appraisal_id, access_token=None, **kw):
+        values = []
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = appraisal_id
+        try:
+            appraisal_sudo = self._document_check_access('hr.appraisal.objective', appraisal_id, access_token)
+        except (AccessError, MissingError):
+            return request.redirect('/my')        
+
+        appraisal_user_flag = 0
+                
+        appraisal_id_list = paging(0,1,0)
+        next_id = 0
+        pre_id = 0
+        next_next_id = 0
+        appraisal_id_list.sort()
+        length_list = len(appraisal_id_list)
+        length_list = length_list - 1
+        if length_list != 0:
+            if appraisal_id in appraisal_id_list:
+                appraisal_id_loc = appraisal_id_list.index(appraisal_id)
+                if appraisal_id_loc == 0:
+                    next_id = 1
+                    pre_id = 0
+                elif appraisal_id_loc == length_list:
+                    next_id = 0
+                    pre_id = 1
+                else:
+                    next_id = 1
+                    pre_id = 1
+        else:
+            next_id = 0
+            pre_id = 0
+        manager_objective = False
+        edit_objective = True
+        if appraisal_sudo.employee_id.parent_id.user_id.id == active_user:
+            manager_objective = True
+        values = self._appraisal_edit_get_page_view_values(appraisal_sudo, edit_objective,manager_objective, next_id, pre_id, appraisal_user_flag,access_token, **kw)
+        exist_obj = request.env['hr.appraisal.objective'].sudo().search([('id','=',appraisal_id)])
+        values.update({
+            'exist_obj': appraisal_sudo,
+        })
+        return request.render("de_portal_appraisal.add_object_appraisal_objective", values)
     
     
     @http.route(['/action/confirm/<int:confirm_id>'], type='http', auth="public", website=True)
@@ -668,11 +798,16 @@ class CustomerPortal(CustomerPortal):
     def _appraisal_get_page_view_values(self,appraisal, next_id = 0,pre_id= 0, appraisal_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
         categories = request.env['hr.objective.category'].sudo().search([])
+        employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
         status = request.env['hr.objective.status'].sudo().search([])
+        exist_obj = request.env['hr.appraisal.objective'].sudo().search([('id','=',appraisal.id)])
         values = {
             'page_name' : 'appraisal',
             'appraisal' : appraisal,
             'categories': categories,
+            'employee_name': employees,
+            'exist_obj': exist_obj,
+            'managers': employees.parent_id.name,
             'status': status,
             'edit_objective': False,
             'manager_objective': False,
@@ -686,11 +821,14 @@ class CustomerPortal(CustomerPortal):
     def _appraisal_edit_get_page_view_values(self,appraisal, edit_objective,manager_objective, next_id = 0,pre_id= 0, appraisal_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
         categories = request.env['hr.objective.category'].sudo().search([])
+        employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
         status = request.env['hr.objective.status'].sudo().search([])
         values = {
             'page_name' : 'appraisal',
             'appraisal' : appraisal,
             'categories': categories,
+            'employee_name': employees,
+            'managers': employees.parent_id.name,
             'status': status,
             'appraisal_user_flag': appraisal_user_flag,
             'next_id' : next_id,
