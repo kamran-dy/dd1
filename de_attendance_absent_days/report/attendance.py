@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from  odoo import models
 from odoo.exceptions import UserError
+from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
 
@@ -40,25 +41,41 @@ class EmployeeReportXlS(models.AbstractModel):
                     leave_exist = self.env['hr.leave'].sudo().search([('employee_id','=', employee.id),('request_date_from','<=', shift_line.date),('request_date_to','>=',  shift_line.date),('state','in',('validate','confirm'))], limit=1)
                     if leave_exist:
                         if leave_exist.state=='validate':                            
-                            leave_status = 'Approved'
+                            leave_status != 'Approved'
                         elif leave_exist.state=='confirm':                            
                             leave_status = 'To Approved'    
                     elif not leave_exist:
                         daily_rectify = self.env['hr.attendance.rectification'].sudo().search([('employee_id','=', employee.id),('state','in', ('approved','submitted')),('date','=',shift_line.date)], limit=1)
                         if daily_rectify.state=='approved':                            
-                            rectification_status = 'Approved'
+                            rectification_status != 'Approved'
                         elif daily_rectify.state=='submitted':                            
                             rectification_status = 'To Approved'
-                            
-                    absent_list.append({
-                         'sr_no':  sr_no,
-                         'employee': employee.name,
-                         'emp_code': employee.emp_number,
-                         'absent_on': shift_line.date, 
-                         'leave_status': leave_status,
-                         'rectification_status': rectification_status,
-                    })
-                    sr_no += 1
+                    if shift_line.rest_day == False:
+                        is_gazetted_day = '0'
+                        current_shift = shift_line.first_shift_id
+                        if not current_shift:
+                            current_shift = employee.shift_id
+                        
+                        if not current_shift:
+                            current_shift = self.env['resource.calendar'].sudo().search([('company_id','=', employee.company_id.id)], limit=1)
+                        if not current_shift:
+                            current_shift = self.env['resource.calendar'].sudo().search([], limit=1)
+
+                        for gazetted_day in current_shift.global_leave_ids:
+                            gazetted_date_from = gazetted_day.date_from +relativedelta(hours=+5)
+                            gazetted_date_to = gazetted_day.date_to +relativedelta(hours=+5)
+                            if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
+                                is_gazetted_day = '1'
+                        if   is_gazetted_day == '0':      
+                            absent_list.append({
+                                 'sr_no':  sr_no,
+                                 'employee': employee.name,
+                                 'emp_code': employee.emp_number,
+                                 'absent_on': shift_line.date, 
+                                 'leave_status': leave_status,
+                                 'rectification_status': rectification_status,
+                            })
+                            sr_no += 1
         return absent_list
 
     def generate_xlsx_report(self, workbook, data, lines):
