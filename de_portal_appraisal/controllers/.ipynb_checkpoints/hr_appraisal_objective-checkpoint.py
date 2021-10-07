@@ -58,6 +58,44 @@ def appraisal_page_content_edit(editid):
         'company_info': company_info,
     }
 
+def appraisal_feedback_page_content_edit(editid,manager_edit, user_edit):
+    global appraisal_objective_list 
+    managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    exist_line_obj = request.env['hr.appraisal.feedback.objective.appraisee.line'].sudo().search([('id','=',editid)])
+    return {
+        'managers': managers,
+        'employees' : employees,
+        'exist_line_obj': exist_line_obj,
+        'employee_name': employees,
+        'manager_edit': manager_edit,
+        'user_edit': user_edit,
+        'managers': employees.parent_id.name,
+        'appraisal_objective_list': appraisal_objective_list,
+        'company_info': company_info,
+    }
+
+def appraisal_feedback_values_page_content_edit(editid,manager_edit, user_edit):
+    global appraisal_objective_list 
+    managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    exist_line_obj = request.env['hr.appraisal.feedback.values.appraisee.line'].sudo().search([('id','=',editid)])
+    return {
+        'managers': managers,
+        'employees' : employees,
+        'exist_line_obj': exist_line_obj,
+        'employee_name': employees,
+        'manager_edit': manager_edit,
+        'user_edit': user_edit,
+        'managers': employees.parent_id.name,
+        'appraisal_objective_list': appraisal_objective_list,
+        'company_info': company_info,
+    }
+
+
+
 def paging(data, flag1 = 0, flag2 = 0):        
     if flag1 == 1:
         return config.list12
@@ -70,6 +108,72 @@ def paging(data, flag1 = 0, flag2 = 0):
                 config.list12.append(ids.id)        
         
 class CreateAppraisal(http.Controller):
+    
+    
+    @http.route('/update/obj/feedback/line/save',type="http", website=True, auth='user')
+    def update_appraisal_objective_template(self, **kw):
+        half_year_objectvieline = request.env['hr.appraisal.feedback.objective.appraisee.line'].sudo().search([('id','=',int(kw.get('line_id')))])
+        if half_year_objectvieline.feedback_id.name.parent_id.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('manager_rating_level'):
+                half_year_objectvieline.update({
+                    'manager_rating_level': kw.get('manager_rating_level')
+                })
+            if kw.get('remarks_mngr'):
+                half_year_objectvieline.update({
+                    'remarks_mngr': kw.get('remarks_mngr')
+                })
+            if kw.get('full_year_objective_comment'):
+                half_year_objectvieline.feedback_id.update({
+                    'full_year_objective_comment': kw.get('full_year_objective_comment')
+                })   
+        if half_year_objectvieline.feedback_id.name.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('employee_rating_level'):
+                half_year_objectvieline.update({
+                    'employee_rating_level': kw.get('employee_rating_level')
+                })
+            if kw.get('remarks'):
+                half_year_objectvieline.update({
+                    'remarks': kw.get('remarks')
+                })
+            if kw.get('objective_comment'):
+                half_year_objectvieline.feedback_id.update({
+                    'objective_comment': kw.get('objective_comment')
+                })           
+        return request.redirect('/appraisal/feedback/%s'%(half_year_objectvieline.feedback_id.id))
+    
+    
+    
+    @http.route('/update/obj/values/line/save',type="http", website=True, auth='user')
+    def update_values_appraisal_objective_template(self, **kw):
+        half_year_objectvieline = request.env['hr.appraisal.feedback.values.appraisee.line'].sudo().search([('id','=',int(kw.get('line_id')))])
+        if half_year_objectvieline.feedback_id.name.parent_id.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('manager_rating_level'):
+                half_year_objectvieline.update({
+                    'manager_rating_level': kw.get('manager_rating_level')
+                })
+            if kw.get('remarks_mngr'):
+                half_year_objectvieline.update({
+                    'remarks_mngr': kw.get('remarks_mngr')
+                })
+            if kw.get('full_year_value_comment'):
+                half_year_objectvieline.feedback_id.update({
+                    'full_year_value_comment': kw.get('full_year_value_comment')
+                })   
+        if half_year_objectvieline.feedback_id.name.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('employee_rating_level'):
+                half_year_objectvieline.update({
+                    'employee_rating_level': kw.get('employee_rating_level')
+                })
+            if kw.get('remarks'):
+                half_year_objectvieline.update({
+                    'remarks': kw.get('remarks')
+                })
+            if kw.get('value_comment'):
+                half_year_objectvieline.feedback_id.update({
+                    'value_comment': kw.get('value_comment')
+                })           
+        return request.redirect('/appraisal/feedback/%s'%(half_year_objectvieline.feedback_id.id))
+    
     
     @http.route('/appraisal/objective/create/',type="http", website=True, auth='user')
     def appraisal_objective_template(self, **kw):
@@ -132,6 +236,21 @@ class CreateAppraisal(http.Controller):
             'status_id': kw.get('status_id'),
             })     
         return request.redirect('/appraisal/objective/%s'%(exist_obj.id))
+    
+    @http.route('/update/appraisal/feedback/save',type="http", website=True, auth='user')
+    def update_appraisal_feedback_template_submit(self, **kw):
+        feedback_id = int(kw.get('ffeedback_id'))
+        exist_obj = request.env['hr.appraisal.feedback'].search([('id','=',feedback_id)])
+        if exist_obj.name.user_id.id ==  http.request.env.context.get('uid'):
+            exist_obj.update({
+                'future_aspiration': kw.get('future_aspiration'),
+                'training_need': kw.get('training_need'),
+                'feedback_to_manager': kw.get('feedback_to_manager'),
+            })
+       
+        return request.render("de_portal_appraisal.appraisal_submited", {})
+    
+    
     
     
     @http.route('/halfyear/feedback/objective/edit/',type="http", website=True, auth='user')
@@ -489,12 +608,14 @@ class CreateAppraisal(http.Controller):
         for line in record.objective_lines:
             line_count += 1
         if line_count < 3:
-            raise UserError(('At least 3 objective require to Submit Objective Setting (minimum=3, Maximum=8)'))
+            raise UserError(('At least 3 objectives require to Submit Objective Setting (Minimum=3, Maximum=8)'))
         if line_count > 8:
-            raise UserError(_('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)')) 
+            raise UserError(_('Maximum 8 objectives require to Submit Objective Setting (Minimum=3, Maximum=8)')) 
         if record.total_weightage != 100:
             raise UserError('Total Weightage must be equal 100')  
-        record.action_sent_review()        
+        record.action_sent_review() 
+        return request.render("de_portal_appraisal.appraisal_submited", {})
+    
         return request.redirect('/appraisal/objective/%s'%(record.id))
 
     @http.route('/new/objective/save', type="http", auth="public", website=True)
@@ -534,6 +655,8 @@ class CustomerPortal(CustomerPortal):
             return request.redirect('/my')   
         obj_line_sudo = request.env['hr.appraisal.objective.line'].sudo().search([('id','=', line_id)])
         return request.render("de_portal_appraisal.edit_object_appraisal_objective", appraisal_page_content_edit(line_id))
+    
+    
     
     @http.route(['/delete/objective/line/<int:line_id>'], type='http', auth="user", website=True)
     def delete_objective_line_template(self, line_id, access_token=None, **kw):
@@ -765,7 +888,7 @@ class CustomerPortal(CustomerPortal):
             'appraisal' : appraisal,
             'categories': categories,
             'employee_name': appraisal.employee_id,
-            'managers': appraisal.employee_id.name,
+            'managers': appraisal.employee_id.parent_id.name,
             'exist_obj': exist_obj,
             'status': status,
             'edit_objective': False,
@@ -787,7 +910,7 @@ class CustomerPortal(CustomerPortal):
             'appraisal' : appraisal,
             'categories': categories,
             'employee_name': appraisal.employee_id,
-            'managers': appraisal.employee_id.name,
+            'managers': appraisal.employee_id.parent_id.name,
             'status': status,
             'appraisal_user_flag': appraisal_user_flag,
             'next_id' : next_id,
@@ -987,6 +1110,46 @@ class CustomerPortal(CustomerPortal):
 ################################################################
 #         Appraisal FeedBack
 ################################################################
+
+    @http.route(['/edit/feedback/objective/line/<int:line_id>'], type='http', auth="user", website=True)
+    def edit_feedback_objective_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.feedback.objective.appraisee.line'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.feedback.objective.appraisee.line'].sudo().search([('id','=', line_id)])
+        manager_edit = False
+        user_edit = False
+        if obj_line_sudo.feedback_id.name.parent_id.user_id.id == http.request.env.context.get('uid'):
+            manager_edit = True
+        if obj_line_sudo.feedback_id.name.user_id.id == http.request.env.context.get('uid'):
+            user_edit = True    
+        return request.render("de_portal_appraisal.edit_feedback_bussiness_objective_line", appraisal_feedback_page_content_edit(line_id, manager_edit, user_edit))
+    
+    
+    @http.route(['/edit/feedback/values/line/<int:line_id>'], type='http', auth="user", website=True)
+    def edit_feedback_values_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.feedback.values.appraisee.line'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.feedback.values.appraisee.line'].sudo().search([('id','=', line_id)])
+        manager_edit = False
+        user_edit = False
+        if obj_line_sudo.feedback_id.name.parent_id.user_id.id == http.request.env.context.get('uid'):
+            manager_edit = True
+        if obj_line_sudo.feedback_id.name.user_id.id == http.request.env.context.get('uid'):
+            user_edit = True    
+        return request.render("de_portal_appraisal.edit_feedback_values_objective_line", appraisal_feedback_values_page_content_edit(line_id, manager_edit, user_edit))
+    
     
     
     def _prepare_home_portal_values(self, counters):
@@ -1005,8 +1168,8 @@ class CustomerPortal(CustomerPortal):
             'page_name' : 'feedback',
             'feedback' : feedback,
             'review_flag': review_flag,
-            'employee_name': feedback.employee_id,
-            'managers': feedback.employee_id.name,
+            'employee_name': feedback.name,
+            'managers': feedback.name.parent_id.name,
             'manager_edit': manager_edit,
             'edit_flag': edit_flag,
             'full_review_flag': False,
@@ -1026,8 +1189,8 @@ class CustomerPortal(CustomerPortal):
             'page_name' : 'feedback',
             'feedback' : feedback,
             'review_flag': review_flag,
-            'employee_name': feedback.employee_id,
-            'managers': feedback.employee_id.name,
+            'employee_name': feedback.name,
+            'managers': feedback.name.parent_id.name,
             'manager_edit': manager_edit,
             'edit_flag': edit_flag,
             'full_review_flag': full_review_flag,
