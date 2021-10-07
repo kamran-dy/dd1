@@ -1,5 +1,4 @@
-# # -*- coding: utf-8 -*-
-
+# -*- coding: utf-8 -*-
 from . import config
 from . import update
 from collections import defaultdict
@@ -76,12 +75,49 @@ def appraisal_feedback_page_content_edit(editid,manager_edit, user_edit):
         'company_info': company_info,
     }
 
+
+def appraisal_full_year_obj_page_content_edit(editid,manager_edit, user_edit):
+    managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    exist_line_obj = request.env['hr.appraisal.feedback.objective.line'].sudo().search([('id','=',editid)])
+    return {
+        'managers': managers,
+        'employees' : employees,
+        'exist_line_obj': exist_line_obj,
+        'employee_name': employees,
+        'manager_edit': manager_edit,
+        'user_edit': user_edit,
+        'managers': employees.parent_id.name,
+        'company_info': company_info,
+    }
+
+
 def appraisal_feedback_values_page_content_edit(editid,manager_edit, user_edit):
     global appraisal_objective_list 
     managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
     company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
     exist_line_obj = request.env['hr.appraisal.feedback.values.appraisee.line'].sudo().search([('id','=',editid)])
+    return {
+        'managers': managers,
+        'employees' : employees,
+        'exist_line_obj': exist_line_obj,
+        'employee_name': employees,
+        'manager_edit': manager_edit,
+        'user_edit': user_edit,
+        'managers': employees.parent_id.name,
+        'appraisal_objective_list': appraisal_objective_list,
+        'company_info': company_info,
+    }
+
+
+def appraisal_full_year_values_page_content_edit(editid,manager_edit, user_edit):
+    global appraisal_objective_list 
+    managers = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].sudo().search([('id','=',http.request.env.context.get('uid'))])
+    exist_line_obj = request.env['hr.appraisal.feedback.values.line'].sudo().search([('id','=',editid)])
     return {
         'managers': managers,
         'employees' : employees,
@@ -142,6 +178,71 @@ class CreateAppraisal(http.Controller):
         return request.redirect('/appraisal/feedback/%s'%(half_year_objectvieline.feedback_id.id))
     
     
+        
+    @http.route('/update/fullyear/values/line/save',type="http", website=True, auth='user')
+    def update_fullyear_values_template(self, **kw):
+        full_year_coreline = request.env['hr.appraisal.feedback.values.line'].sudo().search([('id','=',int(kw.get('line_id')))])
+        if full_year_coreline.feedback_id.name.parent_id.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('manager_rating_level'):
+                full_year_coreline.update({
+                    'manager_rating_level': kw.get('manager_rating_level')
+                })
+            if kw.get('full_remarks_mngr'):
+                full_year_coreline.update({
+                    'full_remarks_mngr': kw.get('full_remarks_mngr')
+                })
+            if kw.get('full_year_appraiser_value_comment'):
+                full_year_coreline.feedback_id.update({
+                    'full_year_appraiser_value_comment': kw.get('full_year_appraiser_value_comment')
+                })   
+        if full_year_coreline.feedback_id.name.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('employee_rating_level'):
+                full_year_coreline.update({
+                    'employee_rating_level': kw.get('employee_rating_level')
+                })
+            if kw.get('full_remarks'):
+                full_year_coreline.update({
+                    'full_remarks': kw.get('full_remarks')
+                })
+            if kw.get('half_year_appraiser_value_comment'):
+                full_year_coreline.feedback_id.update({
+                    'half_year_appraiser_value_comment': kw.get('half_year_appraiser_value_comment')
+                })           
+        return request.redirect('/appraisal/feedback/%s'%(full_year_coreline.feedback_id.id)) 
+    
+    
+    @http.route('/update/values/feedback/line/save',type="http", website=True, auth='user')
+    def update_appraisal_values_template(self, **kw):
+        full_year_objectvieline = request.env['hr.appraisal.feedback.objective.line'].sudo().search([('id','=',int(kw.get('line_id')))])
+        if full_year_objectvieline.feedback_id.name.parent_id.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('manager_rating_level'):
+                full_year_objectvieline.update({
+                    'manager_rating_level': kw.get('manager_rating_level')
+                })
+            if kw.get('full_remarks_mngr'):
+                full_year_objectvieline.update({
+                    'full_remarks_mngr': kw.get('full_remarks_mngr')
+                })
+            if kw.get('full_year_appraiser_objective_comment'):
+                full_year_objectvieline.feedback_id.update({
+                    'full_year_appraiser_objective_comment': kw.get('full_year_appraiser_objective_comment')
+                })   
+        if full_year_objectvieline.feedback_id.name.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('employee_rating_level'):
+                full_year_objectvieline.update({
+                    'employee_rating_level': kw.get('employee_rating_level')
+                })
+            if kw.get('full_remarks'):
+                full_year_objectvieline.update({
+                    'full_remarks': kw.get('full_remarks')
+                })
+            if kw.get('half_year_appraiser_objective_comment'):
+                full_year_objectvieline.feedback_id.update({
+                    'half_year_appraiser_objective_comment': kw.get('half_year_appraiser_objective_comment')
+                })           
+        return request.redirect('/appraisal/feedback/%s'%(full_year_objectvieline.feedback_id.id))
+    
+    
     
     @http.route('/update/obj/values/line/save',type="http", website=True, auth='user')
     def update_values_appraisal_objective_template(self, **kw):
@@ -172,8 +273,7 @@ class CreateAppraisal(http.Controller):
                 half_year_objectvieline.feedback_id.update({
                     'value_comment': kw.get('value_comment')
                 })           
-        return request.redirect('/appraisal/feedback/%s'%(half_year_objectvieline.feedback_id.id))
-    
+        return request.redirect('/appraisal/feedback/%s'%(half_year_objectvieline.feedback_id.id))    
     
     @http.route('/appraisal/objective/create/',type="http", website=True, auth='user')
     def appraisal_objective_template(self, **kw):
@@ -258,342 +358,6 @@ class CreateAppraisal(http.Controller):
         global halfyear_objective_list
         halfyear_objective_list = []
         return request.render("de_portal_appraisal.edit_feedback_objective",appraisal_page_content()) 
-    
-    
-  
-    @http.route('/feedback/line/save', type="http", auth="public", website=True)
-    def feedback_line(self, **kw):
-        feedbackuser = request.env['hr.appraisal.feedback'].search([('id', '=', kw.get('docuid'))])
-        if feedbackuser.state == 'sent' and  feedbackuser.name.user_id.id ==  http.request.env.context.get('uid'):
-            feedbackuser.update({
-                'reason_for_disagreement':  kw.get('reason_for_disagreement'),
-                'agreement': kw.get('agreement'),
-            })
-            if kw.get('feedback_to_manager'):
-                feedbackuser.update({
-                 'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-            })
-            if kw.get('future_aspiration'):
-                feedbackuser.update({
-                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-            })    
-        elif feedbackuser.state == 'draft':
-            feedbackuser.update({
-                'objective_comment': kw.get('objective_comment'),
-                'value_comment': kw.get('value_comment'),
-            })
-            if kw.get('feedback_to_manager'):
-                feedbackuser.update({
-                'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-            }) 
-            if kw.get('future_aspiration'):
-                feedbackuser.update({
-                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-            })     
-            
-        if feedbackuser.state == 'end_year_sent_emp_view' and  feedbackuser.name.user_id.id ==  http.request.env.context.get('uid'):
-            feedbackuser.update({
-                'full_year_agreement':  kw.get('full_year_agreement'),
-                'full_reason_for_disagreement': kw.get('full_reason_for_disagreement'),
-            })
-            if kw.get('feedback_to_manager'):
-                feedbackuser.update({
-                 'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                })
-            if kw.get('future_aspiration'):
-                feedbackuser.update({
-                'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                })    
-            
-        if feedbackuser.state == 'draft':    
-            user_business_obj = ast.literal_eval(kw.get('lista'))
-            user_core_object = ast.literal_eval(kw.get('user_core_vals_list'))
-            final_count = 0
-            for appraisee_line in user_business_obj:
-                final_count += 1
-
-            core_count = 0
-            for core_line in user_core_object:
-                core_count = core_count + 1
-                if core_count > 1 :               
-                    acore_objective = request.env['hr.appraisal.feedback.values.appraisee.line'].search([('id', '=', core_line['col1'])])
-                    if acore_objective:
-                        acore_objective.update({
-                            'conformance_level': core_line['col2'],
-                            'remarks': core_line['col3'],
-                        })
-            count = 0
-            for appraisee_line in user_business_obj:
-                count = count + 1
-                if count > 1 and count <= (final_count):               
-                    appraisee_objective = request.env['hr.appraisal.feedback.objective.appraisee.line'].search([('id', '=', appraisee_line['col1'])])
-                    if appraisee_objective:
-                        appraisee_objective.update({
-                            'remarks': appraisee_line['col2'],
-                            'percentage_score': appraisee_line['col3'],
-                        })
-                        
-        elif feedbackuser.state == 'confirm': 
-            feedbackmanger = request.env['hr.appraisal.feedback'].search([('id', '=', kw.get('docuid'))])
-            if feedbackmanger:
-                feedbackmanger.update({
-                    'full_year_value_comment': kw.get('full_year_value_comment'),
-                    'full_year_objective_comment': kw.get('full_year_objective_comment'),
-                })
-                if kw.get('feedback_to_manager'):
-                    feedbackmanger.update({
-                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                    })
-                if kw.get('future_aspiration'):
-                    feedbackmanger.update({
-                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                    })    
-            manager_business_obj = ast.literal_eval(kw.get('listb'))
-            manager_core_object = ast.literal_eval(kw.get('manager_core_vals_list'))
-            mfinal_count = 0
-            for eappraisee_line in manager_business_obj:
-                mfinal_count += 1
-
-            cmore_count = 0
-            if manager_core_object:
-                for mcore_line in manager_core_object:
-                    cmore_count = cmore_count + 1
-                    if cmore_count > 1 :               
-                        macore_objective = request.env['hr.appraisal.feedback.values.appraisee.line'].search([('id', '=', mcore_line['col1'])])
-                        if macore_objective:
-                            macore_objective.update({
-                                'remarks_mngr': mcore_line['col3'],
-                            })
-                            if  mcore_line['col2'] != '0':
-                                macore_objective.update({
-                                    'conformance_level_mngr': mcore_line['col2'],
-                                    'remarks_mngr': mcore_line['col3'],
-                                    'rating_score': mcore_line['col4'],
-                                })
-                                
-            mcount = 0
-            for mappraisee_line in manager_business_obj:
-                mcount = mcount + 1
-                if mcount > 1:               
-                    mappraisee_objective = request.env['hr.appraisal.feedback.objective.appraisee.line'].search([('id', '=', mappraisee_line['col1'])])
-                    if mappraisee_objective:
-                        mappraisee_objective.update({
-                            'remarks_mngr': mappraisee_line['col2'],
-                            'percentage_score_mngr': mappraisee_line['col3'],
-                            'rating_score': mappraisee_line['col4'],
-                        })
-            
-        elif feedbackuser.state == 'sent' and  feedbackuser.name.parent_id.user_id.id ==  http.request.env.context.get('uid'): 
-            feedbackmanger = request.env['hr.appraisal.feedback'].search([('id', '=', kw.get('docuid'))])
-            if feedbackmanger:
-                feedbackmanger.update({
-                    'full_year_value_comment': kw.get('full_year_value_comment'),
-                    'full_year_objective_comment': kw.get('full_year_objective_comment'),
-                })
-                if kw.get('feedback_to_manager'):
-                    feedbackmanger.update({
-                     'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                   })
-                if kw.get('future_aspiration'):
-                    feedbackmanger.update({
-                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                   })    
-            manager_business_obj = ast.literal_eval(kw.get('listb'))
-            manager_core_object = ast.literal_eval(kw.get('manager_core_vals_list'))
-            mfinal_count = 0
-            for eappraisee_line in manager_business_obj:
-                mfinal_count += 1
-
-            cmore_count = 0
-            if manager_core_object:
-                for mcore_line in manager_core_object:
-                    cmore_count = cmore_count + 1
-                    if cmore_count > 1 :               
-                        macore_objective = request.env['hr.appraisal.feedback.values.appraisee.line'].search([('id', '=', mcore_line['col1'])])
-                        if macore_objective:
-                            macore_objective.update({
-                                'remarks_mngr': mcore_line['col3'],
-                            })
-                            if  mcore_line['col2'] != '0':
-                                macore_objective.update({
-                                    'conformance_level_mngr': mcore_line['col2'],
-                                    'remarks_mngr': mcore_line['col3'],
-                                    'rating_score': mcore_line['col4'],
-                                })
-                                
-            mcount = 0
-            for mappraisee_line in manager_business_obj:
-                mcount = mcount + 1
-                if mcount > 1:               
-                    mappraisee_objective = request.env['hr.appraisal.feedback.objective.appraisee.line'].search([('id', '=', mappraisee_line['col1'])])
-                    if mappraisee_objective:
-                        mappraisee_objective.update({
-                            'remarks_mngr': mappraisee_line['col2'],
-                            'percentage_score_mngr': mappraisee_line['col3'],
-                            'rating_score': mappraisee_line['col4'],
-                        })                    
-                                
-        elif feedbackuser.state == 'end_year_appraisee_review': 
-            fullfeedbackuser = request.env['hr.appraisal.feedback'].search([('id', '=', kw.get('docuid'))])
-            if fullfeedbackuser:
-                fullfeedbackuser.update({
-                    'half_year_appraiser_objective_comment': kw.get('half_year_appraiser_objective_comment'),
-                    'half_year_appraiser_value_comment': kw.get('half_year_appraiser_value_comment'),
-                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                })
-                if kw.get('feedback_to_manager'):
-                    fullfeedbackuser.update({
-                    'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                })
-                if kw.get('future_aspiration'):
-                    fullfeedbackuser.update({
-                    'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                })    
-            fulluser_business_obj = ast.literal_eval(kw.get('listaa'))
-            fulluser_core_object = ast.literal_eval(kw.get('full_user_core_vals_list'))
-            fullufinal_count = 0
-            for fulluappraisee_line in fulluser_business_obj:
-                fullufinal_count += 1
-
-            ucmore_count = 0
-            for fullucore_line in fulluser_core_object:
-                ucmore_count = ucmore_count + 1
-                if ucmore_count > 1 :               
-                    fulluacore_objective = request.env['hr.appraisal.feedback.values.line'].search([('id', '=', fullucore_line['col1'])])
-                    if fulluacore_objective:
-                        fulluacore_objective.update({
-                            'rating': fullucore_line['col2'],
-                            'full_remarks': fullucore_line['col3'],
-                        })
-                       
-            fullucount = 0
-            for fulluappraisee_line in fulluser_business_obj:
-                fullucount = fullucount + 1
-                if fullucount > 1:               
-                    fulluappraisee_objective = request.env['hr.appraisal.feedback.objective.line'].search([('id', '=', fulluappraisee_line['col1'])])
-                    if fulluappraisee_objective:
-                        fulluappraisee_objective.update({
-                            'full_remarks': fulluappraisee_line['col2'],
-                            'rating': fulluappraisee_line['col3'],
-                        })  
-                        
-                        
-        elif feedbackuser.state == 'end_year_appraiser_review': 
-            fullfeedbackmanger = request.env['hr.appraisal.feedback'].search([('id', '=', kw.get('docuid'))])
-            if fullfeedbackmanger:
-                fullfeedbackmanger.update({
-                    'full_year_appraiser_value_comment': kw.get('full_year_appraiser_value_comment'),
-                    'full_year_appraiser_objective_comment': kw.get('full_year_appraiser_objective_comment'),
-                    'strength_1': kw.get('strength_1'),
-                    'strength_2': kw.get('strength_2'),
-                    'strength_3': kw.get('strength_3'),
-                    'strength_4': kw.get('strength_4'),
-                    'strength_5': kw.get('strength_5'),
-                    'improvements_1': kw.get('improvements_1'),
-                    'improvements_2': kw.get('improvements_2'),
-                    'improvements_3': kw.get('improvements_3'),
-                    'improvements_4': kw.get('improvements_4'),
-                    'improvements_5': kw.get('improvements_5'),
-                    'training_1': kw.get('training_1'),
-                    'training_2': kw.get('training_2'),
-                    'training_3': kw.get('training_3'),
-                    'training_4': kw.get('training_4'),
-                    'training_5': kw.get('training_5'),
-                    'reason_1': kw.get('reason_1'),
-                    'reason_2': kw.get('reason_2'),
-                    'reason_3': kw.get('reason_3'),
-                    'reason_4': kw.get('reason_4'),
-                    'reason_5': kw.get('reason_5'),
-                    'recommend_promotion': kw.get('recommend_promotion'),
-                    'promotion_position': kw.get('promotion_position'),
-                    'promotion_grade': kw.get('promotion_grade'),
-                     'date_effective': kw.get('date_effective'),                    
-                })
-                if kw.get('feedback_to_manager'):
-                    fullfeedbackmanger.update({
-                         'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                    })
-                if kw.get('future_aspiration'):
-                    fullfeedbackmanger.update({
-                         'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                    })    
-            fullmanager_business_obj = ast.literal_eval(kw.get('listbb'))
-            fullmanager_core_object = ast.literal_eval(kw.get('full_manager_core_vals_list'))
-            fullmfinal_count = 0
-            for fullappraisee_line in fullmanager_business_obj:
-                fullmfinal_count += 1
-
-            fullyearm_count = 0
-            for fullmcore_line in fullmanager_core_object:
-                fullyearm_count +=  + 1
-                if fullyearm_count > 1 :               
-                    fullmacore_objective = request.env['hr.appraisal.feedback.values.line'].search([('id', '=', fullmcore_line['col1'])])
-                    if fullmacore_objective:
-                        fullmacore_objective.update({
-                            'rating_mngr': fullmcore_line['col3'],
-                            'full_remarks_mngr': fullmcore_line['col2'],
-                            'rating_score': fullmcore_line['col4'],
-                        })
-                       
-            fullmcount = 0
-            for fullmappraisee_line in fullmanager_business_obj:
-                fullmcount = fullmcount + 1
-                if fullmcount > 1:               
-                    fullmappraisee_objective = request.env['hr.appraisal.feedback.objective.line'].search([('id', '=', fullmappraisee_line['col1'])])
-                    if fullmappraisee_objective:
-                        fullmappraisee_objective.update({
-                            'full_remarks_mngr': fullmappraisee_line['col2'],
-                            'rating_mngr': fullmappraisee_line['col3'],
-                            'rating_score': fullmappraisee_line['col4'],
-                        })  
-                        
-        elif feedbackuser.state == 'end_year_sent_emp_view' and feedbackuser.name.parent_id.user_id.id == http.request.env.context.get('uid'): 
-            fullfeedbackmanger = request.env['hr.appraisal.feedback'].search([('id', '=', kw.get('docuid'))])
-            if fullfeedbackmanger:
-                fullfeedbackmanger.update({
-                    'full_year_appraiser_value_comment': kw.get('full_year_appraiser_value_comment'),
-                    'full_year_appraiser_objective_comment': kw.get('full_year_appraiser_objective_comment'),
-                })
-                if kw.get('feedback_to_manager'):
-                    fullfeedbackmanger.update({
-                      'feedback_to_manager': kw.get('feedback_to_manager') if kw.get('feedback_to_manager') else ' ',
-                    })
-                if kw.get('future_aspiration'):
-                    fullfeedbackmanger.update({
-                     'future_aspiration': kw.get('future_aspiration') if kw.get('future_aspiration') else ' ',
-                    })    
-            fullmanager_business_obj = ast.literal_eval(kw.get('listbb'))
-            fullmanager_core_object = ast.literal_eval(kw.get('full_manager_core_vals_list'))
-            fullmfinal_count = 0
-            for fullappraisee_line in fullmanager_business_obj:
-                fullmfinal_count += 1
-
-            fullyearm_count = 0
-            for fullmcore_line in fullmanager_core_object:
-                fullyearm_count +=  + 1
-                if fullyearm_count > 1 :               
-                    fullmacore_objective = request.env['hr.appraisal.feedback.values.line'].search([('id', '=', fullmcore_line['col1'])])
-                    if fullmacore_objective:
-                        fullmacore_objective.update({
-                            'rating_mngr': fullmcore_line['col3'],
-                            'full_remarks_mngr': fullmcore_line['col2'],
-                            'rating_score': fullmcore_line['col4'],
-                        })
-                       
-            fullmcount = 0
-            for fullmappraisee_line in fullmanager_business_obj:
-                fullmcount = fullmcount + 1
-                if fullmcount > 1:               
-                    fullmappraisee_objective = request.env['hr.appraisal.feedback.objective.line'].search([('id', '=', fullmappraisee_line['col1'])])
-                    if fullmappraisee_objective:
-                        fullmappraisee_objective.update({
-                            'full_remarks_mngr': fullmappraisee_line['col2'],
-                            'rating_mngr': fullmappraisee_line['col3'],
-                            'rating_score': fullmappraisee_line['col4'],
-                        })                                  
-        
-        return request.redirect('/appraisal/feedback/%s'%(feedbackuser.id))
     
     
     
@@ -1110,6 +874,46 @@ class CustomerPortal(CustomerPortal):
 ################################################################
 #         Appraisal FeedBack
 ################################################################
+
+    @http.route(['/edit/feedback/full/year/line/<int:line_id>'], type='http', auth="user", website=True)
+    def edit_feedback_fullyear_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.feedback.objective.line'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.feedback.objective.line'].sudo().search([('id','=', line_id)])
+        manager_edit = False
+        user_edit = False
+        if obj_line_sudo.feedback_id.name.parent_id.user_id.id == http.request.env.context.get('uid'):
+            manager_edit = True
+        if obj_line_sudo.feedback_id.name.user_id.id == http.request.env.context.get('uid'):
+            user_edit = True    
+        return request.render("de_portal_appraisal.edit_full_year_objective_line", appraisal_full_year_obj_page_content_edit(line_id, manager_edit, user_edit))
+    
+    
+    @http.route(['/edit/fullyear/values/line/<int:line_id>'], type='http', auth="user", website=True)
+    def edit_fullyear_values_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.feedback.values.line'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.feedback.values.line'].sudo().search([('id','=', line_id)])
+        manager_edit = False
+        user_edit = False
+        if obj_line_sudo.feedback_id.name.parent_id.user_id.id == http.request.env.context.get('uid'):
+            manager_edit = True
+        if obj_line_sudo.feedback_id.name.user_id.id == http.request.env.context.get('uid'):
+            user_edit = True    
+        return request.render("de_portal_appraisal.edit_full_year_value_line", appraisal_full_year_values_page_content_edit(line_id, manager_edit, user_edit))
+    
 
     @http.route(['/edit/feedback/objective/line/<int:line_id>'], type='http', auth="user", website=True)
     def edit_feedback_objective_line_template(self, line_id, access_token=None, **kw):

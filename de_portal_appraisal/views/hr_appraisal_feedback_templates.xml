@@ -97,16 +97,11 @@
                                     </td>
                                     <td class="text-left">
                                         <span t-esc="feedback.performance_period" />
-                                    </td>
-
-                            
+                                    </td>                           
                                 </tr>
                             </t>
-                                    </t>
-                                
-                            </t>    
-
-                           
+                             </t>                                
+                            </t>                               
                         </tbody>
                     </t>
                 </t>
@@ -412,6 +407,122 @@
                 <input id='recordid' type="hidden" class="form-control s_website_form_input" name="record_id"   t-att-value="feedback.id"/>
                 
                 </form> 
+                <h3><p style='color:red;'>Full Year Review</p></h3>
+                <h5><p style='color:blue;'>Bussiness Objective</p></h5>                     
+                 <div >                 
+                  <t t-set='sr_count' t-value='0'/>   
+                  <t t-foreach="feedback.feedback_objective_lines" t-as="line"> 
+                    <section class="s_text_image pt32 pb32 o_colored_level"  style='box-shadow:3px;' data-snippet="s_image_text" data-name="Image - Text">
+                  <t t-set='sr_count' t-value='sr_count + 1'/>   
+                    <div class="container" style='box-shadow:3px;'>                      
+                      <div class="row align-items-center">
+                        <div class="col-lg-12 pt16 pb16 o_colored_level col-lg-12 border rounded shadow">
+                            <div data-snippet="s_share"  data-name="Share">
+                                <i class="pull-left">Objective# <t t-esc='sr_count'/></i>
+                                <i class="badge badge-pill badge-info pull-right" ><t t-esc='line.priority'/></i>            
+                            </div>  
+                            <br/>
+                             <h2><t t-esc='line.objective'/></h2><br/>
+                              <p class="o_default_snippet_text"><t t-esc='line.full_remarks'/></p>
+                              <i class="badge badge-pill badge-info" ><t t-esc='line.employee_rating_level'/> </i> <br/>                                                <p class="o_default_snippet_text"><t t-esc='line.full_remarks_mngr'/></p>
+                            <i class="badge badge-pill badge-info" ><t t-esc='line.manager_rating_level'/> </i>  
+                            
+                              <div>                                  
+                                 <div data-snippet="s_share"  data-name="Share">
+                                     <i class="badge badge-pill badge-success pull-left" ><t t-esc='line.weightage'/> %</i>                                   
+                                     <a t-attf-href="/edit/feedback/full/year/line/#{line.id}?" class="fa fa-pencil-square-o pull-right" style="font-size:20px;color:green"></a>
+                                </div>
+                                </div>      
+                        </div>
+                      </div>
+                    </div>
+                  </section> 
+                 </t>     
+                </div> 
+                    <div class="s_website_form_rows row s_col_no_bgcolor">
+                    <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_full_remarks">
+                                <span class="s_website_form_label_content">Employee Comments:</span>
+                            </label>
+                        <div class="col-sm">                        
+                            <t t-esc="feedback.half_year_appraiser_objective_comment" />                                
+                                </div>
+                            </div>
+                        </div>
+                                    
+                   <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                     <div class="row s_col_no_resize s_col_no_bgcolor">
+                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_full_manager_remarks">
+                                <span class="s_website_form_label_content">Manager Comments:</span>
+                            </label>
+                        <div class="col-sm">                        
+                            <t t-esc="feedback.full_year_appraiser_objective_comment" />                                
+                                </div>
+                     </div>
+                   </div>
+               </div>
+                
+                     <h5 ><p style='color:blue;'>Core Values</p></h5>
+                 <div>
+                 
+                  <t t-set='sr_count' t-value='0'/>   
+                  <t t-foreach="feedback.feedback_values_lines" t-as="line"> 
+                    <section class="s_text_image pt32 pb32 o_colored_level"  style='box-shadow:3px;' data-snippet="s_image_text" data-name="Image - Text">
+                  <t t-set='sr_count' t-value='sr_count + 1'/>   
+                    <div class="container" style='box-shadow:3px;'>                      
+                      <div class="row align-items-center">
+                        <div class="col-lg-12 pt16 pb16 o_colored_level col-lg-12 border rounded shadow">
+                            <div data-snippet="s_share"  data-name="Share">
+                                <i class="pull-left">Core Value# <t t-esc='sr_count'/></i>
+                                <i class="badge badge-pill badge-info pull-right" ><t t-esc='line.priority'/></i>            
+                            </div>  
+                            <br/>
+                             <h2><t t-esc='line.core_values'/></h2><br/>
+                              <p class="o_default_snippet_text"><t t-esc='line.full_remarks'/></p><br/>
+                              <i class="badge badge-pill badge-info" ><t t-esc='line.employee_rating_level'/></i> 
+                              <p class="o_default_snippet_text"><t t-esc='line.full_remarks_mngr'/></p>  
+                              <i class="badge badge-pill badge-info" ><t t-esc='line.manager_rating_level'/></i>     
+                            
+                              <div>                                  
+                                 <div data-snippet="s_share"  data-name="Share">
+                                     <i class="badge badge-pill badge-success pull-left" ><t t-esc='line.weightage'/> %</i>           
+                                                      
+                                     <a t-attf-href="/edit/fullyear/values/line/#{line.id}?" class="fa fa-pencil-square-o pull-right" style="font-size:20px;color:green"></a>
+                                </div>
+                                </div>      
+                        </div>
+                      </div>
+                    </div>
+                  </section> 
+                 </t>     
+                </div>
+                
+                    <div class="s_website_form_rows row s_col_no_bgcolor">
+                    <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_objective">
+                                <span class="s_website_form_label_content">Employee Comments:</span>
+                            </label>
+                        <div class="col-sm">                        
+                            <t t-esc="feedback.half_year_appraiser_value_comment" />                                
+                                </div>
+                            </div>
+                        </div>
+                                    
+                   <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                     <div class="row s_col_no_resize s_col_no_bgcolor">
+                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_objective">
+                                <span class="s_website_form_label_content">Manager Comments:</span>
+                            </label>
+                        <div class="col-sm">                        
+                            <t t-esc="feedback.full_year_appraiser_value_comment" />                                
+                                </div>
+                     </div>
+                   </div>
+               </div>
+                
+                
                 <h3><p style='color:red;'>Half Year Review</p></h3>
                 <h5><p style='color:blue;'>Bussiness Objective</p></h5>
                      
@@ -487,7 +598,9 @@
                             <br/>
                              <h2><t t-esc='line.core_values'/></h2><br/>
                               <p class="o_default_snippet_text"><t t-esc='line.remarks'/></p><br/>
-                              <p class="o_default_snippet_text"><t t-esc='line.remarks_mngr'/></p>                  
+                              <i class="badge badge-pill badge-info" ><t t-esc='line.employee_rating_level'/></i> 
+                              <p class="o_default_snippet_text"><t t-esc='line.remarks_mngr'/></p>  
+                              <i class="badge badge-pill badge-info" ><t t-esc='line.manager_rating_level'/></i>     
                             
                               <div>                                  
                                  <div data-snippet="s_share"  data-name="Share">
@@ -537,7 +650,193 @@
             </div>
                 </div>    
         </t>    
-    </template> 
+    </template>   
+    
+    
+      <!--  Edit Objective Line  -->   
+    
+        <template id="edit_full_year_objective_line" name="edit full obj line Request">
+        <t t-call="portal.portal_layout">
+               <div id="wrap">                                         
+                    <div class="oe_structure" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[1]">
+                                <section class="s_title parallax s_parallax_is_fixed bg-white-100 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+                                    <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_banner_default_image'); background-position: 50% 0;"></span>
+                                    <div class="o_we_bg_filter bg-white-50"></div>
+                                    
+                                    <div class="container">
+                                        <h1 style="margin-left:10px">Feedback</h1>
+                                    </div>
+                                </section>
+                            </div>
+                            <form id="saleForm"  action="/update/values/feedback/line/save"  method="post"  enctype="multipart/form-data">                            
+                                <div class="container mt-4 mb-5">
+                                 <div class="row">
+                                    <div class="col-lg-7 col-xl-6 mr-lg-auto">
+                                    </div>  
+                                    </div>  
+                                 </div>  
+                                        
+                        <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
+                        </section>
+                                
+                        <div class="container">
+                        </div>    
+                              <div class="s_website_form_rows row s_col_no_bgcolor">
+                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Objective</span>
+                                                <span class="s_website_form_mark"> </span>
+
+                                            </label>
+                                            <div class="col-sm">
+                                                <span t-esc='exist_line_obj.objective'/>
+                                              
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <br/>       
+                               
+                              <t t-if='exist_line_obj.feedback_id.name.user_id.id==uid'>
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                     <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Rating Level</span>
+                                                <span class="s_website_form_mark"> *</span>
+
+                                            </label>
+                                            <div class="col-sm">
+                                            <select  id="empratinglevelline" class="form-control  s_website_form_input" name="employee_rating_level" t-att-value="exist_line_obj.employee_rating_level" required='1'>
+                                                <option value="blank"> </option>
+                                                <option value="Outstanding Performance">Outstanding Performance</option>
+                                                <option value="Excellent Performance">Excellent Performance</option>
+                                                <option value="Strong Performance">Strong Performance</option>
+                                                <option value="Needs Improvement">Needs Improvement</option>
+                                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                            </select> 
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <br/>
+                              
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Objective Remarks</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='full_remarks' type="text" class="form-control s_website_form_input" name="full_remarks"    t-att-value="exist_line_obj.full_remarks"/>
+                                               
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <br/>
+                                  <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Comments</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='half_year_appraiser_objective_comment' type="text" class="form-control s_website_form_input" name="half_year_appraiser_objective_comment"     t-att-value="exist_line_obj.feedback_id.half_year_appraiser_objective_comment"/>
+                                               
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <br/>
+                                </t>
+                                
+                                <t t-if='exist_line_obj.feedback_id.name.parent_id.user_id.id==uid'>
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                     <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Rating Level</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                            <select  id="manager_rating_level" class="form-control  s_website_form_input" name="manager_rating_level" t-att-value="exist_line_obj.manager_rating_level" required='1'>
+                                                <option value="blank"> </option>
+                                                <option value="Outstanding Performance">Outstanding Performance</option>
+                                                <option value="Excellent Performance">Excellent Performance</option>
+                                                <option value="Strong Performance">Strong Performance</option>
+                                                <option value="Needs Improvement">Needs Improvement</option>
+                                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                            </select> 
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <br/>
+                              
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Objective Remarks</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='full_remarks_mngr' type="text" class="form-control s_website_form_input" name="full_remarks_mngr"     t-att-value="exist_line_obj.full_remarks_mngr"/>
+                                               
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <br/>
+                                  <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Comments</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='full_year_appraiser_objective_comment' type="text" class="form-control s_website_form_input" name="full_year_appraiser_objective_comment"     t-att-value="exist_line_obj.feedback_id.full_year_appraiser_objective_comment"/>
+                                               
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <br/>
+                                </t>
+                                <input id='id' type="hidden" class="form-control s_website_form_input" name="line_id"  t-att-value="exist_line_obj.id"/>
+
+                                
+                               
+                                                                                                  
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
+                                    
+                                 <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
+                                        <div style="width: 200px;" class="s_website_form_label"></div>
+                                        <button id='objectivesubmit' type="submit" class="btn btn-primary pull-left">Update</button>
+                                        <span id="s_website_form_result"></span>
+                                    </div>
+                                <br/>                                    
+                                </form>                                                             
+                            </div>
+         
+        </t>
+    </template>
+    
+    
+    
     
     
     
@@ -569,7 +868,22 @@
                                 
                         <div class="container">
                         </div>    
-                             
+                              <div class="s_website_form_rows row s_col_no_bgcolor">
+                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Objective</span>
+                                                <span class="s_website_form_mark"> *</span>
+
+                                            </label>
+                                            <div class="col-sm">
+                                                  <span t-esc='exist_line_obj.objective'/>
+                                             
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <br/>        
                                
                               <t t-if='exist_line_obj.feedback_id.name.user_id.id==uid'>
                                 <div class="s_website_form_rows row s_col_no_bgcolor">
@@ -707,6 +1021,179 @@
          
         </t>
     </template>
+    
+    
+    
+    
+     <!--  Edit Objective Line  -->   
+    
+        <template id="edit_full_year_value_line" name="edit full year values line Request">
+        <t t-call="portal.portal_layout">
+               <div id="wrap">                                         
+                    <div class="oe_structure" data-oe-model="ir.ui.view" data-oe-id="2052" data-oe-field="arch" data-oe-xpath="/t[1]/t[1]/div[1]/div[1]">
+                                <section class="s_title parallax s_parallax_is_fixed bg-white-100 pt24 pb24" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+                                    <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_banner_default_image'); background-position: 50% 0;"></span>
+                                    <div class="o_we_bg_filter bg-white-50"></div>
+                                    
+                                    <div class="container">
+                                        <h1 style="margin-left:10px">Feedback</h1>
+                                    </div>
+                                </section>
+                            </div>
+                            <form id="saleForm"  action="/update/fullyear/values/line/save"  method="post"  enctype="multipart/form-data">                            
+                                <div class="container mt-4 mb-5">
+                                 <div class="row">
+                                    <div class="col-lg-7 col-xl-6 mr-lg-auto">
+                                    </div>  
+                                    </div>  
+                                 </div>  
+                                        
+                        <section class="s_website_form" data-vcss="001" data-snippet="s_website_form">
+                        </section>
+                                
+                        <div class="container">
+                        </div>           
+                              <div class="s_website_form_rows row s_col_no_bgcolor">
+                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Core Values</span>
+                                                <span class="s_website_form_mark"> *</span>
+
+                                            </label>
+                                            <div class="col-sm">
+                                                <span t-esc='exist_line_obj.core_values' />
+                                               
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <br/>        
+                                    
+                              <t t-if='exist_line_obj.feedback_id.name.user_id.id==uid'>
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                     <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Rating Level</span>
+                                                <span class="s_website_form_mark"> *</span>
+
+                                            </label>
+                                            <div class="col-sm">
+                                            <select  id="empratinglevelline" class="form-control  s_website_form_input" name="employee_rating_level" t-att-value="exist_line_obj.employee_rating_level" required='1'>
+                                                <option value="blank"> </option>
+                                                <option value="Outstanding Performance">Outstanding Performance</option>
+                                                <option value="Excellent Performance">Excellent Performance</option>
+                                                <option value="Strong Performance">Strong Performance</option>
+                                                <option value="Needs Improvement">Needs Improvement</option>
+                                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                            </select> 
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <br/>                              
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Objective Remarks</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='full_remarks' type="text" class="form-control s_website_form_input" name="full_remarks"    t-att-value="exist_line_obj.full_remarks"/>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <br/>
+                                  
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Comments</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='half_year_appraiser_value_comment' type="text" class="form-control s_website_form_input" name="half_year_appraiser_value_comment"     t-att-value="exist_line_obj.feedback_id.half_year_appraiser_value_comment"/>                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <br/>
+                                </t>
+                                
+                                <t t-if='exist_line_obj.feedback_id.name.parent_id.user_id.id==uid'>
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                     <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="date">
+                                                <span class="s_website_form_label_content">Rating Level</span>
+                                                <span class="s_website_form_mark"> *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                            <select  id="manager_rating_level" class="form-control  s_website_form_input" name="manager_rating_level" t-att-value="exist_line_obj.manager_rating_level" required='1'>
+                                                <option value="blank"> </option>
+                                                <option value="Outstanding Performance">Outstanding Performance</option>
+                                                <option value="Excellent Performance">Excellent Performance</option>
+                                                <option value="Strong Performance">Strong Performance</option>
+                                                <option value="Needs Improvement">Needs Improvement</option>
+                                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                            </select> 
+                                            </div>
+                                        </div>
+                                    </div>                                       
+                                </div>
+                                <br/>
+                              
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Objective Remarks</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='full_remarks_mngr' type="text" class="form-control s_website_form_input" name="full_remarks_mngr"     t-att-value="exist_line_obj.full_remarks_mngr"/>
+                                               
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <br/>
+                                  <div class="s_website_form_rows row s_col_no_bgcolor">
+                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="objective">
+                                               <span class="s_website_form_label_content">Comments</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <input id='full_year_appraiser_value_comment' type="text" class="form-control s_website_form_input" name="full_year_appraiser_value_comment"     t-att-value="exist_line_obj.feedback_id.full_year_appraiser_value_comment"/>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                                <br/>
+                                </t>
+                                <input id='id' type="hidden" class="form-control s_website_form_input" name="line_id"  t-att-value="exist_line_obj.id"/>                               
+                                                                                                  
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
+                                    
+                                 <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
+                                        <div style="width: 200px;" class="s_website_form_label"></div>
+                                        <button id='objectivesubmit' type="submit" class="btn btn-primary pull-left">Update</button>
+                                        <span id="s_website_form_result"></span>
+                                    </div>
+                                <br/>                                    
+                               </form> 
+                            </div>         
+                        </t>
+              </template>
     
     
     
