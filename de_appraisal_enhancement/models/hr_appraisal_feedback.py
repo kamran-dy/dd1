@@ -385,36 +385,36 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
                 }) 
             else:
                 line.update({
-                    'manager_rating_score': False
+                    'manager_rating_score': 0
                 })   
                 
                 
-    @api.depends('employee_rating_score')
+    @api.depends('employee_rating_level')
     def compute_employee_rating_score(self):
         for line in self:
-            if line.employee_rating_score == 'Unsatisfactory':
+            if line.employee_rating_level == 'Unsatisfactory':
                 line.update({
                     'employee_rating_score': 1
                 })
-            elif line.employee_rating_score == 'Needs Improvement':
+            elif line.employee_rating_level == 'Needs Improvement':
                 line.update({
                     'employee_rating_score': 2
                 })   
-            elif line.employee_rating_score == 'Strong Performance':
+            elif line.employee_rating_level == 'Strong Performance':
                 line.update({
                     'employee_rating_score': 3
                 })   
-            elif line.employee_rating_score == 'Excellent Performance':
+            elif line.employee_rating_level == 'Excellent Performance':
                 line.update({
                     'employee_rating_score': 4
                 })
-            elif line.employee_rating_score == 'Outstanding Performance':
+            elif line.employee_rating_level == 'Outstanding Performance':
                 line.update({
                     'employee_rating_score': 5
                 }) 
             else:
                 line.update({
-                    'employee_rating_score': False
+                    'employee_rating_score': 0
                 })               
                 
       
@@ -515,36 +515,36 @@ class HrAppraisalFeedbackValuesLine(models.Model):
                 }) 
             else:
                 line.update({
-                    'manager_rating_score': False
+                    'manager_rating_score': 0
                 })   
                 
                 
-    @api.depends('employee_rating_score')
+    @api.depends('employee_rating_level')
     def compute_employee_rating_score(self):
         for line in self:
-            if line.employee_rating_score == 'Unsatisfactory':
+            if line.employee_rating_level == 'Unsatisfactory':
                 line.update({
                     'employee_rating_score': 1
                 })
-            elif line.employee_rating_score == 'Needs Improvement':
+            elif line.employee_rating_level == 'Needs Improvement':
                 line.update({
                     'employee_rating_score': 2
                 })   
-            elif line.employee_rating_score == 'Strong Performance':
+            elif line.employee_rating_level == 'Strong Performance':
                 line.update({
                     'employee_rating_score': 3
                 })   
-            elif line.employee_rating_score == 'Excellent Performance':
+            elif line.employee_rating_level == 'Excellent Performance':
                 line.update({
                     'employee_rating_score': 4
                 })
-            elif line.employee_rating_score == 'Outstanding Performance':
+            elif line.employee_rating_level == 'Outstanding Performance':
                 line.update({
                     'employee_rating_score': 5
                 }) 
             else:
                 line.update({
-                    'employee_rating_score': False
+                    'employee_rating_score': 0
                 })               
                 
  
@@ -694,36 +694,36 @@ class HrAppraisalFeedbackObjectiveAppraiseeLine(models.Model):
                 }) 
             else:
                 line.update({
-                    'manager_rating_score': False
+                    'manager_rating_score': 0
                 })   
                 
                 
-    @api.depends('employee_rating_score')
+    @api.depends('employee_rating_level')
     def compute_employee_rating_score(self):
         for line in self:
-            if line.employee_rating_score == 'Unsatisfactory':
+            if line.employee_rating_level == 'Unsatisfactory':
                 line.update({
                     'employee_rating_score': 1
                 })
-            elif line.employee_rating_score == 'Needs Improvement':
+            elif line.employee_rating_level == 'Needs Improvement':
                 line.update({
                     'employee_rating_score': 2
                 })   
-            elif line.employee_rating_score == 'Strong Performance':
+            elif line.employee_rating_level == 'Strong Performance':
                 line.update({
                     'employee_rating_score': 3
                 })   
-            elif line.employee_rating_score == 'Excellent Performance':
+            elif line.employee_rating_level == 'Excellent Performance':
                 line.update({
                     'employee_rating_score': 4
                 })
-            elif line.employee_rating_score == 'Outstanding Performance':
+            elif line.employee_rating_level == 'Outstanding Performance':
                 line.update({
                     'employee_rating_score': 5
                 }) 
             else:
                 line.update({
-                    'employee_rating_score': False
+                    'employee_rating_score': 0
                 })               
                 
  
@@ -826,36 +826,36 @@ class HrAppraisalFeedbackValuesAppraiseeLine(models.Model):
                 }) 
             else:
                 line.update({
-                    'manager_rating_score': False
+                    'manager_rating_score': 0
                 })   
                 
                 
-    @api.depends('employee_rating_score')
+    @api.depends('employee_rating_level')
     def compute_employee_rating_score(self):
         for line in self:
-            if line.employee_rating_score == 'Unsatisfactory':
+            if line.employee_rating_level == 'Unsatisfactory':
                 line.update({
                     'employee_rating_score': 1
                 })
-            elif line.employee_rating_score == 'Needs Improvement':
+            elif line.employee_rating_level == 'Needs Improvement':
                 line.update({
                     'employee_rating_score': 2
                 })   
-            elif line.employee_rating_score == 'Strong Performance':
+            elif line.employee_rating_level == 'Strong Performance':
                 line.update({
                     'employee_rating_score': 3
                 })   
-            elif line.employee_rating_score == 'Excellent Performance':
+            elif line.employee_rating_level == 'Excellent Performance':
                 line.update({
                     'employee_rating_score': 4
                 })
-            elif line.employee_rating_score == 'Outstanding Performance':
+            elif line.employee_rating_level == 'Outstanding Performance':
                 line.update({
                     'employee_rating_score': 5
                 }) 
             else:
                 line.update({
-                    'employee_rating_score': False
+                    'employee_rating_score': 0
                 })               
                          
     
