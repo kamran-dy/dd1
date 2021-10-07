@@ -481,6 +481,10 @@ class CreateAppraisal(http.Controller):
     @http.route('/appraisal/objective/save', type="http", auth="public", website=True)
     def submit_objective_setting(self, **kw):
         record = request.env['hr.appraisal.objective'].sudo().search([('id','=',int(kw.get('record_id')))])
+        if kw.get('traing_need'):
+            record.update({
+                'traing_need': kw.get('traing_need')
+            })    
         line_count = 0
         for line in record.objective_lines:
             line_count += 1
@@ -490,8 +494,8 @@ class CreateAppraisal(http.Controller):
             raise UserError(_('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)')) 
         if record.total_weightage != 100:
             raise UserError('Total Weightage must be equal 100')  
-#         record.action_sent_review()        
-        return request.redirect('/edit/add/objective/line/%s'%(record.id))
+        record.action_sent_review()        
+        return request.redirect('/appraisal/objective/%s'%(record.id))
 
     
     
