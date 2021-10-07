@@ -21,13 +21,10 @@ class HrPayslip(models.Model):
         for payslip in self:
             res = super(HrPayslip, payslip).compute_sheet()
             for rule in payslip.line_ids:
-    #                 rule_code = 'COST1'
                 cost_amount = 0
                 contract = self.env['hr.contract'].search([('employee_id','=',payslip.employee_id.id),('state','=','open')],limit=1)
                 for cost_line in contract.cost_center_information_line:
-                    if cost_line.cost_center_id.id == rule.salary_rule_id.analytic_account_id.id:
-    #                     rule_code =  cost_line.cost_center_id.code 
-    #                     for inner_rule in self.line_ids:
+                    if cost_line.cost_center.id == rule.salary_rule_id.analytic_account_id.id:
                         if rule.category_id.name in ['Basic','Allowance','Contribution Exp']:
                             cost_amount = (cost_line.percentage_charged / 100) * rule.amount
                             rule.update({
@@ -39,7 +36,7 @@ class HrPayslip(models.Model):
                     contract = self.env['hr.contract'].search([('employee_id','=',payslip.employee_id.id),('state','=','open')],limit=1)
                     for cost_line in contract.cost_center_information_line:
 
-                        if cost_line.cost_center_id.id != rule.salary_rule_id.analytic_account_id.id:
+                        if cost_line.cost_center.id != rule.salary_rule_id.analytic_account_id.id:
                             if rule.category_id.name in ['Basic','Allowance','Contribution Exp']:
                                 rule.update({
                                     'amount': 0
