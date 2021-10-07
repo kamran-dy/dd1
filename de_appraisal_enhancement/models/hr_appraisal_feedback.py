@@ -349,16 +349,16 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
         ('Strong Performance', 'Strong Performance'),
         ('Needs Improvement', 'Needs Improvement'),
         ('Unsatisfactory', 'Unsatisfactory'),
-    ], string='Manager Rating Level', index=True, copy=False, compute='compute_manager_rating_level')
+    ], string='Manager Rating Level', index=True, copy=False)
     employee_rating_level = fields.Selection([
         ('Outstanding Performance', 'Outstanding Performance'),
         ('Excellent Performance', 'Excellent Performance'),
         ('Strong Performance', 'Strong Performance'),
         ('Needs Improvement', 'Needs Improvement'),
         ('Unsatisfactory', 'Unsatisfactory'),
-    ], string='Employee Rating Level', index=True, copy=False, compute='compute_employee_rating_score')
-    manager_rating_score = fields.Float(string='Mnanager Rating Score')
-    employee_rating_score = fields.Float(string='Employee Rating Score')
+    ], string='Employee Rating Level', index=True, copy=False)
+    manager_rating_score = fields.Float(string='Mnanager Rating Score', compute='compute_manager_rating_level')
+    employee_rating_score = fields.Float(string='Employee Rating Score', compute='compute_employee_rating_score')
     
     @api.depends('manager_rating_level')
     def compute_manager_rating_level(self):
@@ -479,16 +479,16 @@ class HrAppraisalFeedbackValuesLine(models.Model):
         ('Strong Performance', 'Strong Performance'),
         ('Needs Improvement', 'Needs Improvement'),
         ('Unsatisfactory', 'Unsatisfactory'),
-    ], string='Manager Rating Level', index=True, copy=False, compute='compute_manager_rating_level')
+    ], string='Manager Rating Level', index=True, copy=False)
     employee_rating_level = fields.Selection([
         ('Outstanding Performance', 'Outstanding Performance'),
         ('Excellent Performance', 'Excellent Performance'),
         ('Strong Performance', 'Strong Performance'),
         ('Needs Improvement', 'Needs Improvement'),
         ('Unsatisfactory', 'Unsatisfactory'),
-    ], string='Employee Rating Level', index=True, copy=False, compute='compute_employee_rating_score')
-    manager_rating_score = fields.Float(string='Mnanager Rating Score')
-    employee_rating_score = fields.Float(string='Employee Rating Score')
+    ], string='Employee Rating Level', index=True, copy=False)
+    manager_rating_score = fields.Float(string='Mnanager Rating Score', compute='compute_manager_rating_level')
+    employee_rating_score = fields.Float(string='Employee Rating Score', compute='compute_employee_rating_score')
     
     @api.depends('manager_rating_level')
     def compute_manager_rating_level(self):
