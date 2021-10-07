@@ -8,8 +8,10 @@ class GenerateXLSXReport(models.Model):
     _inherit = 'report.report_xlsx.abstract'
 
     def generate_xlsx_report(self, workbook, data, lines):
-        format1 = workbook.add_format({'font_size': '12', 'align': 'vcenter', 'bold': True})
+        data = self.env['hr.payslip.run'].browse(self.env.context.get('active_id'))
+        format1 = workbook.add_format({'font_size': '12', 'align': 'center', 'bold': True})
         sheet = workbook.add_worksheet('Salary Details Report')
+        bold = workbook. add_format({'bold': True, 'align': 'center','border': True})
         sr_no = 1
         sheet.write(3, 0, 'Sr.#', format1)
         sheet.write(3, 1, 'Company Name', format1)
@@ -18,7 +20,7 @@ class GenerateXLSXReport(models.Model):
         sheet.write(3, 4, 'Ccd', format1)
         sheet.write(3, 5, 'Dept Name', format1)
         sheet.write(3, 6, 'Period', format1)
-        sheet.write(3, 7, 'Emp code', format1)
+        sheet.write(3, 7, 'Emp Code', format1)
         sheet.write(3, 8, 'Name', format1)
         sheet.write(3, 9, 'Doj', format1)
         sheet.write(3, 10, 'Dob', format1)
@@ -26,15 +28,15 @@ class GenerateXLSXReport(models.Model):
         sheet.write(3, 12, 'Desig Name', format1)
         sheet.write(3, 13, 'Grade', format1)
         sheet.write(3, 14, 'Grade Type', format1)
-        sheet.write(3, 15, 'Emp type', format1)
+        sheet.write(3, 15, 'Emp Type', format1)
         sheet.write(3, 16, 'Nic No.', format1)
         sheet.write(3, 17, 'Ipl Variable Cost', format1)
         sheet.write(3, 18, 'Act Gross', format1)
         sheet.write(3, 19, 'Bank Name', format1)
         sheet.write(3, 20, 'Bank Account', format1)
         sheet.write(3, 21, 'Days', format1)
-        sheet.write(3, 22, 'Ot hours', format1)
-        sheet.write(3, 23, 'Basic salry', format1)
+        sheet.write(3, 22, 'Ot Hours', format1)
+        sheet.write(3, 23, 'Basic Salry', format1)
         sheet.write(3, 24, 'Hr', format1)
         sheet.write(3, 25, 'conv', format1)
         sheet.write(3, 26, 'Util', format1)
@@ -57,12 +59,12 @@ class GenerateXLSXReport(models.Model):
         sheet.write(3, 43, 'Variable Pay Adj', format1)
         sheet.write(3, 44, 'Shutdown_Allowance', format1)
         sheet.write(3, 45, 'Other', format1)
-        sheet.write(3, 46, 'Gross payable', format1)
+        sheet.write(3, 46, 'Gross Payable', format1)
         sheet.write(3, 47, 'Total', format1)
         sheet.write(3, 48, 'PF', format1)
         sheet.write(3, 49, 'EOBI', format1)
-        sheet.write(3, 50, 'Prof tax', format1)
-        sheet.write(3, 51, 'income tax', format1)
+        sheet.write(3, 50, 'Prof Tax', format1)
+        sheet.write(3, 51, 'income Tax', format1)
         sheet.write(3, 52, 'Srchrg On ITax', format1)
         sheet.write(3, 53, 'Pf Loan Inst', format1)
         sheet.write(3, 54, 'Pf Loan Markup', format1)
@@ -89,7 +91,7 @@ class GenerateXLSXReport(models.Model):
 
 
         
-        format2 = workbook.add_format({'font_size': '12', 'align': 'vcenter'})
+        format2 = workbook.add_format({'font_size': '12', 'align': 'center',})
         row = 4
         sheet.set_column(row, 0, 50)
         sheet.set_column(row, 1, 25)
@@ -161,23 +163,63 @@ class GenerateXLSXReport(models.Model):
         over_all = 0
         tot_basic_salry = 0
         tot_House_rent = 0
+        tot_Conv_allown = 0
+        tot_Car_allown = 0
+        tot_Utilities_bills = 0
+        tot_special_allown = 0 
+        tot_gross_sal = 0
+        tot_accomadation_allwn = 0
+        tot_salry_allown = 0
+        tot_washing = 0
+        tot_Shift_bills = 0
+        tot_Bonus = 0
+        tot_Arrears = 0
+        tot_Overtime = 0
+        tot_Site_All = 0
+        tot_Food_Acc_Allowance = 0
+        tot_Mobile_All = 0
+        tot_Incentive = 0
+        tot_Off_Site_All = 0
+        tot_Variable_Pay = 0
+        tot_Variable_Pay_Adj = 0
+        tot_Shutdown_Allowance = 0
+        tot_Other = 0
+        tot_gross_payable = 0
+        tot_total = 0
+        tot_PF = 0
+        tot_EOBI = 0
+        tot_Prof = 0
+        tot_Income_tax = 0
+        tot_Srchrg_On_ITax = 0
+        tot_Pf_Loan_Inst = 0
+        tot_Pf_Loan_Markup = 0
+        tot_Adv_Sala = 0
+        tot_Spcl_Loan = 0
+        tot_Tele_Comm = 0
+        tot_Fac = 0
+        tot_Variable_Pay_Deductions = 0
+        tot_Variable_Pay_Adj_Ded = 0
+        tot_Misc_Deduct = 0
+        tot_total_ded = 0
+        tot_Net_Payable = 0
         for id in lines:
             if id.date_end:
                 date_end = id.date_end
                 date_end = date_end.strftime("%d/%m/%Y")
             else:
                 date_end = None
-            payslips = self.env['hr.payslip'].search([('payslip_run_id','=',id.name)])
+            payslips = self.env['hr.payslip'].search([('payslip_run_id','=',id.name),])
          
             for payslip in payslips:
                 total_ded = 0
+                tot_total_ded += total_ded
                 
                 if payslip.company_id:
                     company = payslip.company_id.name
                 else:
                     company = None
                     
-                employee = self.env['hr.employee'].search([('name','=',payslip.employee_id.name)])[0]
+                employee = self.env['hr.employee'].search([('id','=',payslip.employee_id.id)], limit=1)
                 
                 if employee.department_id:
                     department = employee.department_id.name
@@ -236,328 +278,248 @@ class GenerateXLSXReport(models.Model):
                     grade_type = None
                     
                 Srchrg_On_ITax =  0
+                tot_Srchrg_On_ITax += Srchrg_On_ITax
                     
                     
                 Prof = 0
+                tot_Prof += Prof
                     
                 Net_Payable = 0
-                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
+                basic_salry = 0
+                over_time_works = 0
+                total_days = 0
+                gross_salry = 0
+                Income_tax = 0
+                gross_sal = 0
+                gross_payable = 0
+                total = 0
+                PF = 0
+                EOBI = 0
+                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),('date','>=',data.date_start),('date','<=',data.date_end)], limit=1)
                 for payslip_line in payroll.line_ids:
                     if payslip_line.code == 'NET':
                         Net_Payable = payslip_line.amount 
-                 
-                        
-                 
-                    
-                basic_salry = 0
-                salry = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for basic in salry.line_ids:
+                        tot_Net_Payable += Net_Payable
                     if basic.code == 'BASIC':
                         basic_salry = basic.amount     
-                        tot_basic_salry += basic_salry
-                    
-                    
-                over_time_works = 0
-                time = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for extra_hourse in time.worked_days_line_ids:
+                        tot_basic_salry += basic_salry 
+                for extra_hourse in payroll.worked_days_line_ids:
                     if extra_hourse.work_entry_type_id.code in ("Normal OT","Gazetted OT","Rest Day OT"):
-                         over_time_works = overtime_work_days + extra_hourse.number_of_hours
-                   
-                    
-                total_days = 0
-                days = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for workday in days.worked_days_line_ids:
+                         over_time_works = overtime_work_days + extra_hourse.number_of_hours                
+                for workday in payroll.worked_days_line_ids:
                     if workday.work_entry_type_id.code != "ABSENT100":
-                        total_days = total_days + workday.number_of_days
-                  
-                    
-                        
-                gross_salry = 0
-                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
+                        total_days = total_days + workday.number_of_days 
                 for payslip_line in payroll.line_ids:
                     if payslip_line.code == 'GROSS':
                         gross_salry = payslip_line.amount
-
-                        
-                        
-                Income_tax = 0
-                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
                 for payslip_line in payroll.line_ids:
                     if payslip_line.code == 'INC01':
                         Income_tax = payslip_line.amount 
-               
-                        
-                        
-                gross_sal = 0
-                gross = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for gros_line in gross.line_ids:
+                        tot_Income_tax += Income_ta
+                for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('BASIC', 'ALW'):
-                        gross_sal = gros_line.amount  
-                 
-                  
-                        
-                gross_payable = 0
-                gross = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for gros_line in gross.line_ids:
+                        gross_sal = gros_line.amount 
+                        tot_gross_sal += gross_sal      
+                for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('GROSS', 'COMP'):
-                        gross_payable = gros_line.amount   
-                
-                        
-                        
-                total = 0
-                gross = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for gros_line in gross.line_ids:
+                        gross_payable = gros_line.amount 
+                        tot_gross_payable += gross_payable
+                for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('GROSS', 'COMP'):
-                        total = gros_line.amount         
-               
-                        
-                       
-                        
-                PF = 0
-                gross = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for gros_line in gross.line_ids:
+                        total = gros_line.amount
+                        tot_total += totaL
+                for gros_line in payroll.line_ids:
                     if gros_line.code in ('PF01'):
-                        PF = gros_line.amount   
-                   
-                        
-                EOBI = 0
-                gross = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
-                for gros_line in gross.line_ids:
+                        PF = gros_line.amount 
+                        tot_PF += PF
+                for gros_line in payroll.line_ids:
                     if gros_line.code in ('EOB01'):
-                        EOBI = gros_line.amount          
+                        EOBI = gros_line.amount   
+                        tot_EOBI += EOBI        
+                       
                 
                         
                         
                 House_rent = 0
+                Misc_Deduct = 0
+                Variable_Pay_Adj_Ded = 0
+                Variable_Pay_Deductions = 0
+                Fac = 0
+                Tele_Comm = 0
+                Spcl_Loan = 0
+                Adv_Sala = 0
+                Pf_Loan_Inst = 0
+                Incentive = 0
+                Other = 0
+                Shutdown_Allowance = 0
+                Variable_Pay = 0
                 Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'HR01':
                         House_rent = benifit_line.amount
                         tot_House_rent += House_rent
-                        
-                        
-                Misc_Deduct = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'MD01':
-                        Misc_Deduct = benifit_line.amount       
-                    
-                        
-                Variable_Pay_Adj_Ded = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        Misc_Deduct = benifit_line.amount
+                        tot_Misc_Deduct += Misc_Deduct 
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'VPA01':
-                        Variable_Pay_Adj_Ded = benifit_line.amount        
-                        
-                    
-                        
-                Variable_Pay_Deductions = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        Variable_Pay_Adj_Ded = benifit_line.amount 
+                        tot_Variable_Pay_Adj_Ded = Variable_Pay_Adj_Ded       
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'VP01':
-                        Variable_Pay_Deductions = benifit_line.amount        
-                    
-                        
-                        
-                Fac = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        Variable_Pay_Deductions = benifit_line.amount  
+                        tot_Variable_Pay_Deductions += Variable_Pay_Deductions   
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'FAC01':
-                        Fac = benifit_line.amount        
-                
-                            
-                        
-                        
-                Tele_Comm = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        Fac = benifit_line.amount
+                        tot_Fac += Fac      
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'TC01':
                         Tele_Comm = benifit_line.amount
-                          
-                        
-                        
-                        
-                Spcl_Loan = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        tot_Tele_Comm += Tele_Comm
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'SLO01':
-                        Spcl_Loan = benifit_line.amount        
-                        
-                        
-                        
-                        
-                Adv_Sala = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        Spcl_Loan = benifit_line.amount  
+                        tot_Spcl_Loan += Spcl_Loan
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'AS01':
                         House_rent = benifit_line.amount 
-                       
-                        
-                        
-                Pf_Loan_Inst = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        tot_Adv_Sala += Adv_Sala
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'PFI01':
                         Adv_Sala = benifit_line.amount
+                        tot_Pf_Loan_Inst += Pf_Loan_Inst
      
                         
                 Pf_Loan_Markup = 0
+                tot_Pf_Loan_Markup += Pf_Loan_Markup
                        
-                        
-                        
-                        
-                Incentive = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'IN01':
-                        Incentive = benifit_line.amount 
+                        Incentive = benifit_line.amount
+                        tot_Incentive += Incentive
                      
-                        
-                Other = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'OR01':
-                        Other = benifit_line.amount         
+                        Other = benifit_line.amount    
+                        tot_Other += other
                    
                            
-                        
-                        
-                Shutdown_Allowance = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'SHU01':
-                        Shutdown_Allowance = benifit_line.amount         
+                        Shutdown_Allowance = benifit_line.amount   
+                        tot_Shutdown_Allowance += Shutdown_Allowance
                  
-                        
-                Variable_Pay = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'VP01':
                         Variable_Pay = benifit_line.amount 
+                        tot_Variable_Pay += Variable_Pay
                  
                         
                         
                 Variable_Pay_Adj = 0
+                Mobile_All = 0
+                Food_Acc_Allowance = 0
+                Site_All = 0
+                Overtime = 0
+                special_allown = 0
+                Bonus = 0
+                Utilities_bills = 0
+                Shift_bills = 0
+                Conv_allown = 0
+                accomadation_allwn = 0
+                Car_allown = 0
+                Off_Site_All = 0
+                salry_allown = 0
+                Arrears = 0
+                washing = 0
                 Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'VPA01':
-                        Variable_Pay_Adj = benifit_line.amount         
+                        Variable_Pay_Adj = benifit_line.amount 
+                        tot_Variable_Pay_Adj += Variable_Pay_Adj
                     
-                        
-                Mobile_All = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'MOB01':
                         Mobile_All = benifit_line.amount 
-                        
-
-                        
-                        
-                Food_Acc_Allowance = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
+                        tot_Mobile_All += Mobile_All
+                    
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'FAA01':
-                        Food_Acc_Allowance = benifit_line.amount         
+                        Food_Acc_Allowance = benifit_line.amount  
+                        tot_Food_Acc_Allowance += Food_Acc_Allowance
                       
-                        
-                Site_All = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'STA01':
-                        Site_All = benifit_line.amount        
-                      
+                        Site_All = benifit_line.amount   
+                        tot_Site_All += Site_All
                         
-                        
-                Overtime = 0
-                Hr_rent = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
                 for benifit_line in Hr_rent.benefit_line_ids:
                     if benifit_line.input_type_id.code == 'OT100':
-                        Overtime = benifit_line.amount        
+                        Overtime = benifit_line.amount 
+                        tot_Overtime += Overtime
                   
-                        
-                special_allown = 0
-                spec_allwn = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for spec_line in spec_allwn.benefit_line_ids:
+                for spec_line in Hr_rent.benefit_line_ids:
                     if spec_line.input_type_id.code == 'SP01':
-                        special_allown = spec_line.amount   
-                     
-                        
-                Bonus = 0
-                spec_allwn = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for spec_line in spec_allwn.benefit_line_ids:
+                        special_allown = spec_line.amount 
+                        tot_special_allown += special_allown
+                    
+                for spec_line in Hr_rent.benefit_line_ids:
                     if spec_line.input_type_id.code == 'B01':
-                        Bonus = spec_line.amount         
+                        Bonus = spec_line.amount 
+                        tot_Bonus += Bonus
                         
-                        
-                        
-                Utilities_bills = 0
-                Ut_bill = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for utlity_line in Ut_bill.benefit_line_ids:
+                for utlity_line in Hr_rent.benefit_line_ids:
                     if utlity_line.input_type_id.code == 'UT01':
                         Utilities_bills = utlity_line.amount
+                        tot_Utilities_bills += Utilities_bills
                         
-                        
-                        
-                Shift_bills = 0
-                shft_bill = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for utlity_line in Ut_bill.benefit_line_ids:
+                for utlity_line in Hr_rent.benefit_line_ids:
                     if utlity_line.input_type_id.code == 'SA01':
-                        Utilities_bills = utlity_line.amount        
+                        Utilities_bills = utlity_line.amount    
+                        tot_Shift_bills += Shift_bills
 
-                    
-                Conv_allown = 0
-                conv = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for benifit in conv.benefit_line_ids:
+                for benifit in Hr_rent.benefit_line_ids:
                     if benifit.input_type_id.code == 'CO01':
                         Conv_allown = benifit.amount 
+                        tot_Conv_allown += Conv_allown
                         
-                accomadation_allwn = 0
-                acc = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for benifit in acc.benefit_line_ids:
+                for benifit in Hr_rent.benefit_line_ids:
                     if benifit.input_type_id.code == 'ACC01':
-                        accomadation_allwn = benifit.amount       
+                        accomadation_allwn = benifit.amount
+                        tot_accomadation_allwn += accomadation_allwn
                         
-                        
-                        
-                Car_allown = 0
-                car_all = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for car in car_all.benefit_line_ids:
+                for car in Hr_rent.benefit_line_ids:
                     if car.input_type_id.code == 'CAR01':
                         Car_allown = car.amount 
-                        
-                        
-                Off_Site_All = 0
-                car_all = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for car in car_all.benefit_line_ids:
+                        tot_Car_allown += Car_allown
+                    
+                for car in Hr_rent.benefit_line_ids:
                     if car.input_type_id.code == 'OTA01':
                         Off_Site_All = car.amount 
+                        tot_Off_Site_All += Off_Site_All
                                 
-                        
-                        
-                salry_allown = 0
-                sal_all = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for sal in sal_all.benefit_line_ids:
+                for sal in Hr_rent.benefit_line_ids:
                     if sal.input_type_id.code == 'SAR':
                         salry_allown = sal.amount  
-                        
-                        
-                Arrears = 0
-                sal_all = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for sal in sal_all.benefit_line_ids:
+                        tot_salry_allown += salry_allown
+                for sal in Hr_rent.benefit_line_ids:
                     if sal.input_type_id.code == 'ARR01':
-                        Arrears = sal.amount         
-                        
-                washing = 0
-                was_all = self.env['hr.contract'].search([('employee_id','=',employee.id)],limit=1)
-                for was in was_all.benefit_line_ids:
+                        Arrears = sal.amount 
+                        tot_Arrears += Arrears
+                for was in Hr_rent.benefit_line_ids:
                     if was.input_type_id.code == 'WA01':
-                        washing = was.amount         
+                        washing = was.amount 
+                        tot_washing += washing
                         
                     
-                total_ded = PF + EOBI + Prof + Income_tax + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total + PF + EOBI + Prof + Income_tax + Pf_Loan_Inst
+                total_ded = PF + EOBI + Prof + Income_tax + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total 
+                
+
                 
                 
-                over_all = basic_salry + House_rent + Conv_allown + Utilities_bills + Car_allown + special_allown + gross_sal + accomadation_allwn + salry_allown + salry_allown + washing + Shift_bills + Bonus + Arrears + Overtime + Site_All + Variable_Pay + Variable_Pay_Adj + Shutdown_Allowance + Other + gross_payable + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total_ded + Net_Payable
+                over_all = basic_salry + House_rent + Conv_allown + Utilities_bills + Car_allown + special_allown + gross_sal + accomadation_allwn + salry_allown + washing + Shift_bills + Bonus + Arrears + Overtime + Site_All + Variable_Pay + Variable_Pay_Adj + Shutdown_Allowance + Other + gross_payable + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total_ded + Net_Payable + PF + EOBI + Prof
             
                 
                 cost_account = ' '    
@@ -629,72 +591,72 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 61, Misc_Deduct, format2)
                 sheet.write(row, 62, total_ded, format2)
                 sheet.write(row, 63, Net_Payable, format2)
-                sheet.write(row, 64, over_all, format2)
+                
                 row = row + 1
-            sheet.write(row, 0,  str(),format2)
-            sheet.write(row, 1,  str(),format2)
-            sheet.write(row, 2,  str(),format2)
-            sheet.write(row, 3,  str(),format2)
-            sheet.write(row, 4,  str(),format2)
-            sheet.write(row, 5,  str(),format2)
-            sheet.write(row, 6,  str(),format2)
-            sheet.write(row, 7,  str(),format2)
-            sheet.write(row, 8,  str(),format2)
-            sheet.write(row, 9,  str(),format2)
-            sheet.write(row, 10, str(),format2)
-            sheet.write(row, 11, str(),format2)
-            sheet.write(row, 12, str(),format2)
-            sheet.write(row, 13, str(),format2)
-            sheet.write(row, 14, str(),format2)
-            sheet.write(row, 15, str(),format2)
-            sheet.write(row, 16, str(),format2)
-            sheet.write(row, 17, str(),format2)
-            sheet.write(row, 18, str(),format2)
-            sheet.write(row, 19, str(),format2)
-            sheet.write(row, 20, str(),format2)
-            sheet.write(row, 21, str(),format2)
-            sheet.write(row, 22, str(),format2)
-            sheet.write(row, 23, tot_basic_salry,)
-            sheet.write(row, 24, tot_House_rent, format2)
-            sheet.write(row, 25, Conv_allown, format2)
-            sheet.write(row, 26, Utilities_bills, format2)
-            sheet.write(row, 27, Car_allown, format2)
-            sheet.write(row, 28, special_allown, format2)
-            sheet.write(row, 29, gross_sal, format2)
-            sheet.write(row, 30, accomadation_allwn, format2)
-            sheet.write(row, 31, salry_allown, format2)
-            sheet.write(row, 32, washing, format2)
-            sheet.write(row, 33, Shift_bills, format2)
-            sheet.write(row, 34, Bonus, format2)
-            sheet.write(row, 35, Arrears, format2)
-            sheet.write(row, 36, Overtime, format2)
-            sheet.write(row, 37, Site_All, format2)
-            sheet.write(row, 38, Food_Acc_Allowance, format2)
-            sheet.write(row, 39, Mobile_All, format2)
-            sheet.write(row, 40, Incentive, format2)
-            sheet.write(row, 41, Off_Site_All, format2)
-            sheet.write(row, 42, Variable_Pay, format2)
-            sheet.write(row, 43, Variable_Pay_Adj, format2)
-            sheet.write(row, 44, Shutdown_Allowance, format2)
-            sheet.write(row, 45, Other, format2)
-            sheet.write(row, 46, gross_payable, format2)
-            sheet.write(row, 47, total, format2)
-            sheet.write(row, 48, PF, format2)
-            sheet.write(row, 49, EOBI, format2)
-            sheet.write(row, 50, Prof, format2)
-            sheet.write(row, 51, Income_tax, format2)
-            sheet.write(row, 52, Srchrg_On_ITax, format2)
-            sheet.write(row, 53, Pf_Loan_Inst, format2)
-            sheet.write(row, 54, Pf_Loan_Markup, format2)
-            sheet.write(row, 55, Adv_Sala, format2)
-            sheet.write(row, 56, Spcl_Loan, format2)
-            sheet.write(row, 57, Tele_Comm, format2)
-            sheet.write(row, 58, Fac, format2)
-            sheet.write(row, 59, Variable_Pay_Deductions, format2)
-            sheet.write(row, 60, Variable_Pay_Adj_Ded, format2)
-            sheet.write(row, 61, Misc_Deduct, format2)
-            sheet.write(row, 62, total_ded, format2)
-            sheet.write(row, 63, Net_Payable, format2)    
+            sheet.write(row, 0,  str())
+            sheet.write(row, 1,  str())
+            sheet.write(row, 2,  str())
+            sheet.write(row, 3,  str())
+            sheet.write(row, 4,  str())
+            sheet.write(row, 5,  str())
+            sheet.write(row, 6,  str())
+            sheet.write(row, 7,  str())
+            sheet.write(row, 8,  str())
+            sheet.write(row, 9,  str())
+            sheet.write(row, 10, str())
+            sheet.write(row, 11, str())
+            sheet.write(row, 12, str())
+            sheet.write(row, 13, str())
+            sheet.write(row, 14, str())
+            sheet.write(row, 15, str())
+            sheet.write(row, 16, str())
+            sheet.write(row, 17, str())
+            sheet.write(row, 18, str())
+            sheet.write(row, 19, str())
+            sheet.write(row, 20, str())
+            sheet.write(row, 21, str())
+            sheet.write(row, 22, str())
+            sheet.write(row, 23, tot_basic_salry, bold)
+            sheet.write(row, 24, tot_House_rent, bold)
+            sheet.write(row, 25, tot_Conv_allown, bold)
+            sheet.write(row, 26, tot_Utilities_bills, bold)
+            sheet.write(row, 27, tot_Car_allown, bold)
+            sheet.write(row, 28, tot_special_allown, bold)
+            sheet.write(row, 29, tot_gross_sal, bold)
+            sheet.write(row, 30, tot_accomadation_allwn, bold)
+            sheet.write(row, 31, tot_salry_allown, bold)
+            sheet.write(row, 32, tot_washing, bold)
+            sheet.write(row, 33, tot_Shift_bills, bold)
+            sheet.write(row, 34, tot_Bonus, bold)
+            sheet.write(row, 35, tot_Arrears, bold)
+            sheet.write(row, 36, tot_Overtime, bold)
+            sheet.write(row, 37, tot_Site_All, bold)
+            sheet.write(row, 38, tot_Food_Acc_Allowance, bold)
+            sheet.write(row, 39, tot_Mobile_All, bold)
+            sheet.write(row, 40, tot_Incentive, bold)
+            sheet.write(row, 41, tot_Off_Site_All, bold)
+            sheet.write(row, 42, tot_Variable_Pay, bold)
+            sheet.write(row, 43, tot_Variable_Pay_Adj, bold)
+            sheet.write(row, 44, tot_Shutdown_Allowance, bold)
+            sheet.write(row, 45, tot_Other, bold)
+            sheet.write(row, 46, tot_gross_payable, bold)
+            sheet.write(row, 47, tot_total, bold)
+            sheet.write(row, 48, tot_PF, bold)
+            sheet.write(row, 49, tot_EOBI, bold)
+            sheet.write(row, 50, tot_Prof, bold)
+            sheet.write(row, 51, tot_Income_tax, bold)
+            sheet.write(row, 52, tot_Srchrg_On_ITax, bold)
+            sheet.write(row, 53, tot_Pf_Loan_Inst, bold)
+            sheet.write(row, 54, tot_Pf_Loan_Markup, bold)
+            sheet.write(row, 55, tot_Adv_Sala, bold)
+            sheet.write(row, 56, tot_Spcl_Loan, bold)
+            sheet.write(row, 57, tot_Tele_Comm, bold)
+            sheet.write(row, 58, tot_Fac, bold)
+            sheet.write(row, 59, tot_Variable_Pay_Deductions, bold)
+            sheet.write(row, 60, tot_Variable_Pay_Adj_Ded, bold)
+            sheet.write(row, 61, tot_Misc_Deduct, bold)
+            sheet.write(row, 62, tot_total_ded, bold)
+            sheet.write(row, 63, tot_Net_Payable, bold)    
 
 
                
