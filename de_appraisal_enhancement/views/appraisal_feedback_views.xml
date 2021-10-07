@@ -84,6 +84,7 @@
                             <field name="mid_year_date" readonly="1"/>
                             <field name="date_mid_deadline" readonly="1"/>
                             <field name="future_aspiration" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="training_need" attrs="{'readonly':[('state','!=','draft')]}"/>
                         </group>
                         <group>
                             <field name="end_year_date" readonly="1"/>
@@ -136,12 +137,14 @@
                                     <field name='objective' readonly="1"/>
                                     <field name='weightage' readonly="1"/>
                                     <field name='priority' readonly="1"/>
+                                    <field name="employee_rating_score" />
+                                    <field name="employee_rating_level" />
                                     <field name="remarks" attrs="{'readonly':[('state','!=','draft')]}"/>
-                                    <field name='percentage_score' attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name='percentage_score' attrs="{'readonly':[('state','!=','draft')]}" invisible="1"/>
                                     <field name="remarks_mngr" attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name='percentage_score_mngr' attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name="rating_score" />
-                                    <field name="rating_level" />
+                                    <field name='percentage_score_mngr' attrs="{'readonly':[('state','!=','confirm')]}" invisibl='1'/>
+                                    <field name="manager_rating_score" />
+                                    <field name="manager_rating_level" />
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -163,11 +166,13 @@
                                     <field name='weightage' readonly="1"/>
                                     <field name='priority' readonly = "1"/>
                                     <field name="remarks" attrs="{'readonly':[('state','!=','draft')]}"/>
-                                    <field name='conformance_level' attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="employee_rating_score" />
+                                    <field name="employee_rating_level" />
+                                    <field name='conformance_level' attrs="{'readonly':[('state','!=','draft')]}" invisible='1'/>
                                     <field name="remarks_mngr" attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name='conformance_level_mngr' attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name="rating_score" />
-                                    <field name="rating_level" />
+                                    <field name='conformance_level_mngr' attrs="{'readonly':[('state','!=','confirm')]}" invisible='1'/>
+                                    <field name="manager_rating_score" />
+                                    <field name="manager_rating_level" />
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
@@ -190,15 +195,16 @@
                                     <field name='objective' readonly="1"/>
                                     <field name='weightage' readonly="1"/>
                                     <field name='priority' readonly="1"/>
-                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
-<!--                                     <field name='weightage_score' readonly = "1"/> -->
+                                    <field name="employee_rating_score"  />
+                                    <field name="employee_rating_level"  />
+                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}" invisible='1'/>
                                     <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
-                                    <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"  invisible='1'/>
                                     <field name="full_remarks_mngr" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
                                     <field name='weightage_score_mngr' readonly="1"/>
-                                     <field name="rating_score" />
-                                    <field name="rating_level" />
-                                    <field name="concerned_person" invisible='1'/>
+                                     <field name="manager_rating_score" invisible='1' />
+                                    <field name="manager_rating_level" />
+                                    <field name="concerned_person" />
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>
                                 </tree>
@@ -218,14 +224,16 @@
                                     <field name='core_values' readonly="1"/>
                                     <field name='weightage' readonly="1"/>
                                     <field name='priority' readonly = "1"/>
-                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
+                                    <field name='rating' attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}" invisible='1'/>
+                                    <field name="employee_rating_score"/>
+                                    <field name="employee_rating_level" />
 <!--                                     <field name='weightage_score' readonly = "1"/> -->
                                     <field name="full_remarks" attrs="{'readonly':[('state','!=','end_year_appraisee_review')]}"/>
-                                    <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
+                                    <field name='rating_mngr' attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}" invisible='1'/>
                                     <field name="full_remarks_mngr" attrs="{'readonly':[('state','!=','end_year_appraiser_review')]}"/>
                                     <field name='weightage_score_mngr' readonly="1"/>
-                                     <field name="rating_score" />
-                                    <field name="rating_level" />
+                                     <field name="manager_rating_score"/>
+                                    <field name="manager_rating_level" />
                                     <field name="concerned_person" invisible='1'/>
                                     <field name="appraisal_period" invisible='1'/>
                                     <field name="state" invisible='1'/>

@@ -95,6 +95,9 @@ class HrAppraisalInherit(models.Model):
 
             objective_ids = self.env['hr.appraisal.objective'].search([('employee_id', '=',record.employee_id.id),('objective_year', '=',record.appraisal_year)])
             if objective_ids:
+                rec.update({
+                'training_need': objective_ids.traing_need,
+                })
                 if objective_ids.objective_lines:
                     for line in objective_ids.objective_lines:
                         self.env['hr.appraisal.feedback.objective.line'].create({
