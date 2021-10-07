@@ -123,9 +123,9 @@ class HrAppraisalObjective(models.Model):
             for line in obj.objective_lines:
                 line_count += 1
             if line_count < 3:
-                raise UserError('At least 3 objective require to Submit Objective Setting (minimum=3, Maximum=8)')
+                raise UserError('At least 3 objective require to Confirm Objective Setting (minimum=3, Maximum=8)')
             if line_count > 8:
-                raise UserError('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)') 
+                raise UserError('Maximum 8 objective require to Confirm Objective Setting (minimum=3, Maximum=8)') 
             if obj.total_weightage != 100:
                 raise UserError('Total Weightage must be equal 100') 
             obj.update({
