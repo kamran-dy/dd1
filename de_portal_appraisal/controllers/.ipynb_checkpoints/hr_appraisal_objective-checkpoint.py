@@ -497,7 +497,17 @@ class CreateAppraisal(http.Controller):
         record.action_sent_review()        
         return request.redirect('/appraisal/objective/%s'%(record.id))
 
-    
+    @http.route('/new/objective/save', type="http", auth="public", website=True)
+    def new_objective_setting_submit(self, **kw):
+        vals ={
+            'employee_id': kw.get('employee_id'),
+            'objective_year': kw.get('objective_year'),
+            'traing_need':  kw.get('traing_need'),
+            'description':  kw.get('description'),
+        }
+        record = request.env['hr.appraisal.objective'].sudo().create(vals)
+        return request.redirect('/edit/add/objective/line/%s'%(record.id))
+
     
     
     @http.route('/appraisal/create/',type="http", website=True, auth='user')

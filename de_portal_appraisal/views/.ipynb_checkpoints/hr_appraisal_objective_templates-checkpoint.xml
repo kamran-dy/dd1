@@ -13,9 +13,7 @@
                 <t t-esc="appraisal.id"/>
             </li>
         </xpath>
-    </template>
-
-    
+    </template>   
     
     
     <template id="portal_my_home" name="Show appraisals / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="25">
@@ -991,7 +989,7 @@
 
                      </div> 
                              
-                            <form id="saleForm"  action="/appraisal/objective/save"  method="post"  enctype="multipart/form-data">
+                            <form id="saleForm"  action="/new/objective/save"  method="post"  enctype="multipart/form-data">
                                  
                                 <br/>
                             <div class="container mt-4 mb-5">
