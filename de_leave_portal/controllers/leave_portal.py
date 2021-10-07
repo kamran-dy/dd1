@@ -337,6 +337,7 @@ class CustomerPortal(CustomerPortal):
         values = {
             'page_name': 'timeoff',
             'timeoff': timeoff,
+            'current_date':fields.date.today(),
             'timeoff_user_flag':timeoff_user_flag,
             'next_id' : next_id,
             'company_info': company_info,

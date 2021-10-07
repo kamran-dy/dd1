@@ -260,14 +260,22 @@
                     
                               
                               <t t-if="timeoff.state != 'cancel'" >  
-                              <t t-if="not request.date.today() >= timeoff.request_date_from" >  
+                              <t t-if="not current_date >= timeoff.request_date_from" >  
                               <div class="offset-md-10 col-md-1" style="margin-top:20px;">
                                 <a t-attf-href="/hr/leave/cancel/#{timeoff.id}?"><i  class="btn btn-primary">Cancel</i></a>
                             </div>                  
                             <div class="col-md-1" style="margin-top:20px;">
                                       
                             </div>
-                              </t>    
+                              </t>
+							<t t-if="timeoff.state=='confirm'" >  
+                              <div class="offset-md-10 col-md-1" style="margin-top:20px;">
+                                <a t-attf-href="/hr/leave/cancel/#{timeoff.id}?"><i  class="btn btn-primary">Cancel</i></a>
+                            </div>                  
+                            <div class="col-md-1" style="margin-top:20px;">
+                                      
+                            </div>
+                              </t>							  
                             </t>       
                               
                          
