@@ -51,7 +51,7 @@
 						<group>
                             <field name="check_in"  attrs="{'readonly': [('state','!=', 'draft')]}"/>
                             <field name="check_out" attrs="{'readonly': [('state','!=', 'draft')]}"/>
-                            <field name="attendance_id" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                            <field name="attendance_id" attrs="{'readonly': [('state','!=', 'draft')],'required': [('partial', 'in',['Check In Time Missing','Out Time Missing'])]}"/>
 							<field name="date" attrs="{'readonly': [('state','!=', 'draft')]}" />
                              <field name="number_of_Days" attrs="{'readonly': [('state','!=', 'draft')]}" />
 

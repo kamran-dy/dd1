@@ -48,6 +48,10 @@ class HrAttendance(models.Model):
                     cur.execute(statement, (
                      ATT_DATE,ATT_TIME, CARD_NO, CREATION_DATE, MAC_NUMBER,REMARKS,UPDATION_DATE))
                     conn.commit()
+                    wfh.update({
+                    'wfh_posted': True
+                    })
+      
                 if wfh.check_out:
                     ATT_DATE = str(wfh.att_date)
                     if wfh.att_date:  
@@ -65,6 +69,6 @@ class HrAttendance(models.Model):
                     cur.execute(statement, (
                      ATT_DATE,ATT_TIME, CARD_NO, CREATION_DATE, MAC_NUMBER,REMARKS,UPDATION_DATE))
                     conn.commit()
-                wfh.update({
-                    'wfh_posted': True
-                })
+                    wfh.update({
+                       'wfh_posted': True
+                    })

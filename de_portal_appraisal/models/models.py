@@ -1,54 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, _
+# from odoo import models, fields, api
 
 
-class PortalAppraisal(models.Model):
-    _inherit = 'hr.appraisal.feedback'
-    
+# class de_portal_appraisal(models.Model):
+#     _name = 'de_portal_appraisal.de_portal_appraisal'
+#     _description = 'de_portal_appraisal.de_portal_appraisal'
 
-class ResCompany(models.Model):
-    _inherit = 'res.company'  
-    
-class HrAppraisalImprovements(models.Model):
-    _inherit = 'hr.appraisal.improvements'  
-    
-class HrAppraisalImprovLine(models.Model):
-    _inherit = 'hr.appraisal.improvements.line'     
-    
-class HrEmployee(models.Model):
-    _inherit = 'hr.employee'      
-    
-class HrDepartment(models.Model):
-    _inherit = 'hr.department'        
-    
-
-    
-class AppraisalObjective(models.Model):
-    _inherit = 'hr.appraisal.objective'    
-    
-
-class GradeType(models.Model):
-    _inherit = 'grade.type'        
-    
-class HrAppraisalProbation(models.Model):
-    _inherit = 'hr.appraisal.probation'          
-    
-
-class HrAppraisalObjectiveLine(models.Model):
-    _inherit = 'hr.appraisal.objective.line'       
-    
-class HrAppraisalFeedbackAppraisee(models.Model):
-    _inherit = 'hr.appraisal.feedback.values.appraisee.line'           
-    
-    
-class HrAppraisalFeedbackobjAppraisee(models.Model):
-    _inherit = 'hr.appraisal.feedback.objective.appraisee.line'               
-    
-    
-class HrAppraisalFeedbackendyaerAppraisee(models.Model):
-    _inherit = 'hr.appraisal.feedback.values.line'                   
-    
-    
-class HrAppraisalFeedbackendyaer(models.Model):
-    _inherit = 'hr.appraisal.feedback.objective.line'                       
+#     name = fields.Char()
+#     value = fields.Integer()
+#     value2 = fields.Float(compute="_value_pc", store=True)
+#     description = fields.Text()
+#
+#     @api.depends('value')
+#     def _value_pc(self):
+#         for record in self:
+#             record.value2 = float(record.value) / 100

@@ -56,7 +56,6 @@ class HrTimesheetAttendance(models.Model):
                 'check_in': line.check_in,
                 'check_out': line.check_out,
                 'att_date': line.check_out,
-                'remarks': 'Timesheet',
             } 
             attendance = self.env['hr.attendance'].sudo().create(attendance_vals)
             line.update({
@@ -100,7 +99,7 @@ class HrTimesheetAttendance(models.Model):
                         'request_owner_id': line.employee_id.user_id.id,
                         'category_id': line.category_id.id,
                         'timesheet_att_id': line.id,
-                        'reason': '  Timesheet Requested By: ' + str(line.employee_id.name)+"\n",
+                        'reason': ' Employee: ' + str(line.employee_id.name)+"\n",
                         'request_status': 'new',
                 })
                 approval_request_id = self.env['approval.request'].create(request_list)

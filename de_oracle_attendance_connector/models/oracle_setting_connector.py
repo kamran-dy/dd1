@@ -73,7 +73,8 @@ class OracleSettingConnector(models.Model):
         attendance_ids = []
         conn = cx_Oracle.connect('xx_odoo/xxodoo123$@//10.8.8.191:1521/PROD')
         cur = conn.cursor()
-        statement = "select p.att_time AS timestamp, p.mac_number AS machine, p.card_no AS card, p.att_date AS attendance_date, p.creation_date AS creation_date, p.remarks AS remarks, p.updation_date AS updation_date from attend_data p where p.creation_date>=sysdate-4"
+        statement = "select p.att_time AS timestamp, p.mac_number AS machine, p.card_no AS card, p.att_date AS attendance_date, p.creation_date AS creation_date, p.remarks AS remarks, p.updation_date AS updation_date from attend_data p where p.creation_date >=sysdate-1"
+
         cur.execute(statement)
         attendances = cur.fetchall()  
         for attendance in attendances:

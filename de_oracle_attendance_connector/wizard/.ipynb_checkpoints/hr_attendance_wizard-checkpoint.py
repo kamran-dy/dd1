@@ -35,7 +35,7 @@ class HrAttendanceWizard(models.TransientModel):
     
     #   Rousch Pakistan Power Limited
     
-    def cron_hr_user_attendance_validate_rousch(self):
+    def action_attendace_validated_rousch(self):
         user_attendance = self.env['hr.user.attendance']
         user_attendance.action_attendace_validated_rousch()    
         

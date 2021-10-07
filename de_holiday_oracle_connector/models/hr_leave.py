@@ -13,6 +13,9 @@ class HrLeaveType(models.Model):
     ebs_type_number = fields.Integer(string='EBS Number')  
 
 
+class IrConfig(models.Model):
+    _inherit = 'ir.config_parameter'
+
 class HrLeave(models.Model):
     _inherit = 'hr.leave'
 
@@ -29,18 +32,12 @@ class HrLeave(models.Model):
          
         conn = cx_Oracle.connect('xx_odoo/xxodoo123$@//10.8.8.191:1521/PROD')    
         cur = conn.cursor()
-        statement = 'select * from ODOO_LEAVE_TRANSACTION'
+        statement = "select * from ODOO_LEAVE_TRANSACTION where OFFICE_EMP_ID='4643'"
         cur.execute(statement)
         comitment_data = cur.fetchall()
-        cstatement = 'select count(*) from ODOO_LEAVE_TRANSACTION'
-        cur.execute(cstatement)
-        ccomitment_data = cur.fetchall()
-        dstatement = 'select * from ODOO_LEAVE_TRANSACTION_DTL'
-        cur.execute(dstatement)
-        #conn.commit()
-        dcomitment_data = cur.fetchall()
-        raise UserError('Count '+str(ccomitment_data)+' '+str(comitment_data)+'     Detail Data '+str(dcomitment_data))
-
+        
+        raise UserError(str(comitment_data))   
+ 
     def action_re_send_holiday_data(self):
         holidays = self.env['hr.leave'].search([('is_posted','=', True),('state','=','validate'),('request_date_from','>','2021-07-15'),('holiday_status_id.name','!=','Rest Day')], limit=100)
         
@@ -210,9 +207,7 @@ class HrLeave(models.Model):
                             })
 
                     leave.action_send_holiday_line_data(leave.id)
-                    leave.update({
-                        'is_posted' : True
-                         })
+                    
 
 
     def action_send_holiday_line_data(self,leave):

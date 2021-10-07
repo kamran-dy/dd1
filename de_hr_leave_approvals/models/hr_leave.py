@@ -45,7 +45,7 @@ class HolidaysRequest(models.Model):
             for shift_line in shift_schedule_line:
                 shift = shift_line.first_shift_id
                 if not shift:
-                    shift = line.employee_id.shift_id
+                    shift = self.employee_id.shift_id
                 if not shift:
                     shift = self.env['resource.calendar'].sudo().search([('shift_type','=','general'),('company_id','=',line.employee_id.company_id.id)], limit=1)
                 for gazetted_day in shift.global_leave_ids:
@@ -59,9 +59,11 @@ class HolidaysRequest(models.Model):
                         gazetted_date_to = gazetted_day.date_to + relativedelta(hours=+5)
                         if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                             tot_rest_days -= 1    
-                    tot_rest_days += 1    
-            delta_days = (self.request_date_to - self.request_date_from).days  
-            days = delta_days - tot_rest_days - gazetted_days_count
+                    tot_rest_days += 1
+            days = 0 
+            if self.request_date_to and  self.request_date_from:   
+                delta_days = (self.request_date_to - self.request_date_from).days  
+                days = delta_days - tot_rest_days - gazetted_days_count + 1
             empshift = self.env['hr.employee'].search([('id','=',employee_id)], limit=1)
             hours = days * empshift.shift_id.hours_per_day if empshift.shift_id else 8
             return {'days': days, 'hours': hours}
@@ -102,14 +104,12 @@ class HolidaysRequest(models.Model):
                         if str(shift_line.date.strftime('%y-%m-%d')) >= str(gazetted_date_from.strftime('%y-%m-%d')) and str(shift_line.date.strftime('%y-%m-%d')) <= str(gazetted_date_to.strftime('%y-%m-%d')):
                             tot_rest_days -= 1    
 
-                    tot_rest_days += 1    
-
-            delta_days = (self.request_date_to - self.request_date_from).days  
-            days = delta_days - tot_rest_days - gazetted_days_count
+                    tot_rest_days += 1
+            days=0    
+            if self.request_date_to and  self.request_date_from:
+                delta_days = (self.request_date_to - self.request_date_from).days  
+                days = delta_days - tot_rest_days - gazetted_days_count + 1
             
-            total_days = tot_rest_days - gazetted_days_count
-            delta_days = line.request_date_to - line.request_date_from
-            qdelta_days = delta_days.days 
             line.update({
                   'number_of_days': days
                 })   

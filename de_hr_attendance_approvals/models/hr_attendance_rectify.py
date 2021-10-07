@@ -32,7 +32,7 @@ class HrAttendanceRectification(models.Model):
             ('Out Time Missing', 'Out Time Missing'),
         ], string='Type', required=True,
         )
-    attendance_id = fields.Many2one('hr.attendance', string="Attendance")
+    attendance_id = fields.Many2one('hr.attendance', string="Attendance", domain="[('employee_id','=',employee_id)]")
     state = fields.Selection([
         ('draft', 'Draft'),
         ('submitted', 'To Approve'),
