@@ -82,10 +82,7 @@ class HrAppraisalObjective(models.Model):
             for line in rec.objective_lines:
                 count = count + line.weightage
                 line_count += 1
-#             if line_count < 3:
-#                 raise UserError('At least 3 objective require to Submit Objective Setting (minimum=3, Maximum=8)')
-#             if line_count > 8:
-#                     raise UserError('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)')    
+    
             rec.total_weightage = count
 
     @api.model
@@ -103,13 +100,37 @@ class HrAppraisalObjective(models.Model):
     
     
     def action_sent_review(self):
-        self.state = 'waiting'
+        for obj in self:
+            line_count = 0
+            for line in obj.objective_lines:
+                line_count += 1
+            if line_count < 3:
+                raise UserError('At least 3 objective require to Submit Objective Setting (minimum=3, Maximum=8)')
+            if line_count > 8:
+                raise UserError('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)') 
+            if obj.total_weightage != 100:
+                raise UserError('Total Weightage must be equal 100')        
+            obj.update({
+                'state': 'waiting'
+            })
         
     def action_reset(self):
         self.state = 'draft'     
         
     def action_submit(self):
-        self.state = 'confirm'    
+        for obj in self:
+            line_count = 0
+            for line in obj.objective_lines:
+                line_count += 1
+            if line_count < 3:
+                raise UserError('At least 3 objective require to Submit Objective Setting (minimum=3, Maximum=8)')
+            if line_count > 8:
+                raise UserError('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)') 
+            if obj.total_weightage != 100:
+                raise UserError('Total Weightage must be equal 100') 
+            obj.update({
+                    'state': 'confirm'
+                })    
         
     
 class HrAppraisalObjectiveline(models.Model):
