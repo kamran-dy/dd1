@@ -754,9 +754,9 @@ class CustomerPortal(CustomerPortal):
             'page_name' : 'appraisal',
             'appraisal' : appraisal,
             'categories': categories,
-            'employee_name': employees,
+            'employee_name': appraisal.employee_id,
+            'managers': appraisal.employee_id.name,
             'exist_obj': exist_obj,
-            'managers': employees.parent_id.name,
             'status': status,
             'edit_objective': False,
             'manager_objective': False,
@@ -776,8 +776,8 @@ class CustomerPortal(CustomerPortal):
             'page_name' : 'appraisal',
             'appraisal' : appraisal,
             'categories': categories,
-            'employee_name': employees,
-            'managers': employees.parent_id.name,
+            'employee_name': appraisal.employee_id,
+            'managers': appraisal.employee_id.name,
             'status': status,
             'appraisal_user_flag': appraisal_user_flag,
             'next_id' : next_id,
@@ -970,142 +970,10 @@ class CustomerPortal(CustomerPortal):
             manager_objective = True
         values = self._appraisal_edit_get_page_view_values(appraisal_sudo, edit_objective,manager_objective, next_id, pre_id, appraisal_user_flag,access_token, **kw) 
         return request.render("de_portal_appraisal.portal_appraisal_objective", values)
-
     
 
-    @http.route(['/appraisal/next/<int:appraisal_id>'], type='http', auth="user", website=True)
-    def portal_appraisal_next(self, appraisal_id, access_token=None, **kw):
-        
-        appraisal_id_list = paging(0,1,0)
-        next_next_id = 0
-        appraisal_id_list.sort()
-        
-        length_list = len(appraisal_id_list)
-        if length_list == 0:
-            return request.redirect('/my')
-        length_list = length_list - 1
-        
-        if appraisal_id in appraisal_id_list:
-            appraisal_id_loc = appraisal_id_list.index(appraisal_id)
-            next_next_id = appraisal_id_list[appraisal_id_loc + 1] 
-            next_next_id_loc = appraisal_id_list.index(next_next_id)
-            if next_next_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            else:
-                next_id = 1
-                pre_id = 1      
-        else:
-            buffer_larger = 0
-            buffer_smaller = 0
-            buffer = 0
-            for ids in appraisal_id_list:
-                if ids < appraisal_id:
-                    buffer_smaller = ids
-                if ids > appraisal_id:
-                    buffer_smaller = ids
-                if buffer_larger and buffer_smaller:
-                    break
-            if buffer_larger:
-                next_next_id = buffer_smaller
-            elif buffer_smaller:
-                next_next_id = buffer_larger
-                
-            next_next_id_loc = appraisal_id_list.index(next_next_id)
-            length_list = len(appraisal_id_list)
-            length_list = length_list + 1
-            if next_next_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            elif next_next_id_loc == 0:
-                next_id = 1
-                pre_id = 0
-            else:
-                next_id = 1
-                pre_id = 1
-         
-        values = []
-        active_user = http.request.env.context.get('uid')
-        appraisal_user = []
-        id = appraisal_id
-        try:
-            appraisal_sudo = self._document_check_access('hr.appraisal.objective', next_next_id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')
-        
-        appraisal_user_flag = 0
 
 
-        values = self._appraisal_get_page_view_values(appraisal_sudo,next_id, pre_id, access_token, **kw) 
-        return request.render("de_portal_appraisal.portal_appraisal_objective", values)
-
-  
-    @http.route(['/appraisal/pre/<int:appraisal_id>'], type='http', auth="user", website=True)
-    def portal_appraisal_previous(self, appraisal_id, access_token=None, **kw):
-        
-        appraisal_id_list = paging(0,1,0)
-        pre_pre_id = 0
-        appraisal_id_list.sort()
-        length_list = len(appraisal_id_list)
-    
-        if length_list == 0:
-            return request.redirect('/my')
-        
-        length_list = length_list - 1
-        if appraisal_id in appraisal_id_list:
-            appraisal_id_loc = appraisal_id_list.index(appraisal_id)
-            pre_pre_id = appraisal_id_list[appraisal_id_loc - 1] 
-            pre_pre_id_loc = appraisal_id_list.index(appraisal_id)
-
-            if appraisal_id_loc == 1:
-                next_id = 1
-                pre_id = 0
-            else:
-                next_id = 1
-                pre_id = 1      
-        else:
-            buffer_larger = 0
-            buffer_smaller = 0
-            buffer = 0
-            for ids in appraisal_id_list:
-                if ids < appraisal_id:
-                    buffer_smaller = ids
-                if ids > appraisal_id:
-                    buffer_smaller = ids
-                if buffer_larger and buffer_smaller:
-                    break
-            if buffer_smaller:
-                pre_pre_id = buffer_smaller
-            elif buffer_larger:
-                pre_pre_id = buffer_larger
-                
-            pre_pre_id_loc = appraisal_id_list.index(pre_pre_id)
-            length_list = len(appraisal_id_list)
-            length_list = length_list -1
-            if pre_pre_id_loc == 0:
-                next_id = 1
-                pre_id = 0
-            elif pre_pre_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            else:
-                next_id = 1
-                pre_id = 1
-   
-        values = []
-        active_user = http.request.env.context.get('uid')
-        appraisal_user = []
-        id = pre_pre_id
-        try:
-            appraisal_sudo = self._document_check_access('hr.appraisal.objective', pre_pre_id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')
-        
-        appraisal_user_flag = 0
-        
-        values = self._appraisal_get_page_view_values(appraisal_sudo, next_id,pre_id, access_token, **kw) 
-        return request.render("de_portal_appraisal.portal_appraisal_objective", values)
-    
 ################################################################
 #         Appraisal FeedBack
 ################################################################
@@ -1119,6 +987,7 @@ class CustomerPortal(CustomerPortal):
   
     def _feedback_get_page_view_values(self,feedback, next_id = 0,pre_id= 0, feedback_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+        employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
         manager_edit = False
         edit_flag =  False
         review_flag = False
@@ -1126,6 +995,8 @@ class CustomerPortal(CustomerPortal):
             'page_name' : 'feedback',
             'feedback' : feedback,
             'review_flag': review_flag,
+            'employee_name': feedback.employee_id,
+            'managers': feedback.employee_id.name,
             'manager_edit': manager_edit,
             'edit_flag': edit_flag,
             'full_review_flag': False,
@@ -1145,6 +1016,8 @@ class CustomerPortal(CustomerPortal):
             'page_name' : 'feedback',
             'feedback' : feedback,
             'review_flag': review_flag,
+            'employee_name': feedback.employee_id,
+            'managers': feedback.employee_id.name,
             'manager_edit': manager_edit,
             'edit_flag': edit_flag,
             'full_review_flag': full_review_flag,
@@ -1357,136 +1230,4 @@ class CustomerPortal(CustomerPortal):
         values = self._feedback_get_page_view_values(feedback_sudo, next_id, pre_id, feedback_user_flag,access_token, **kw) 
         return request.render("de_portal_appraisal.portal_appraisal_feedback", values)
 
-    @http.route(['/feedback/next/<int:feedback_id>'], type='http', auth="user", website=True)
-    def portal_feedback_next(self, feedback_id, access_token=None, **kw):
-        
-        feedback_id_list = paging(0,1,0)
-        next_next_id = 0
-        feedback_id_list.sort()
-        
-        length_list = len(feedback_id_list)
-        if length_list == 0:
-            return request.redirect('/my')
-        length_list = length_list - 1
-        
-        if feedback_id in feedback_id_list:
-            feedback_id_loc = feedback_id_list.index(feedback_id)
-            next_next_id = feedback_id_list[feedback_id_loc + 1] 
-            next_next_id_loc = feedback_id_list.index(next_next_id)
-            if next_next_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            else:
-                next_id = 1
-                pre_id = 1      
-        else:
-            buffer_larger = 0
-            buffer_smaller = 0
-            buffer = 0
-            for ids in feedback_id_list:
-                if ids < feedback_id:
-                    buffer_smaller = ids
-                if ids > feedback_id:
-                    buffer_smaller = ids
-                if buffer_larger and buffer_smaller:
-                    break
-            if buffer_larger:
-                next_next_id = buffer_smaller
-            elif buffer_smaller:
-                next_next_id = buffer_larger
-                
-            next_next_id_loc = feedback_id_list.index(next_next_id)
-            length_list = len(feedback_id_list)
-            length_list = length_list + 1
-            if next_next_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            elif next_next_id_loc == 0:
-                next_id = 1
-                pre_id = 0
-            else:
-                next_id = 1
-                pre_id = 1
-         
-        values = []
-        active_user = http.request.env.context.get('uid')
-        feedback_user = []
-        id = feedback_id
-        try:
-            feedback_sudo = self._document_check_access('hr.appraisal.feedback', next_next_id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')
-        
-        feedback_user_flag = 0
-
-
-        values = self._feedback_get_page_view_values(feedback_sudo,next_id, pre_id, access_token, **kw) 
-        return request.render("de_portal_appraisal.portal_appraisal_feedback", values)
-
-  
-    @http.route(['/feedback/pre/<int:feedback_id>'], type='http', auth="user", website=True)
-    def portal_feedback_previous(self, feedback_id, access_token=None, **kw):
-        
-        feedback_id_list = paging(0,1,0)
-        pre_pre_id = 0
-        feedback_id_list.sort()
-        length_list = len(feedback_id_list)
-    
-        if length_list == 0:
-            return request.redirect('/my')
-        
-        length_list = length_list - 1
-        if feedback_id in feedback_id_list:
-            feedback_id_loc = feedback_id_list.index(feedback_id)
-            pre_pre_id = feedback_id_list[feedback_id_loc - 1] 
-            pre_pre_id_loc = feedback_id_list.index(feedback_id)
-
-            if feedback_id_loc == 1:
-                next_id = 1
-                pre_id = 0
-            else:
-                next_id = 1
-                pre_id = 1      
-        else:
-            buffer_larger = 0
-            buffer_smaller = 0
-            buffer = 0
-            for ids in feedback_id_list:
-                if ids < feedback_id:
-                    buffer_smaller = ids
-                if ids > feedback_id:
-                    buffer_smaller = ids
-                if buffer_larger and buffer_smaller:
-                    break
-            if buffer_smaller:
-                pre_pre_id = buffer_smaller
-            elif buffer_larger:
-                pre_pre_id = buffer_larger
-                
-            pre_pre_id_loc = feedback_id_list.index(pre_pre_id)
-            length_list = len(feedback_id_list)
-            length_list = length_list -1
-            if pre_pre_id_loc == 0:
-                next_id = 1
-                pre_id = 0
-            elif pre_pre_id_loc == length_list:
-                next_id = 0
-                pre_id = 1
-            else:
-                next_id = 1
-                pre_id = 1
-   
-        values = []
-        active_user = http.request.env.context.get('uid')
-        feedback_user = []
-        id = pre_pre_id
-        try:
-            feedback_sudo = self._document_check_access('hr.appraisal.feedback', pre_pre_id, access_token)
-        except (AccessError, MissingError):
-            return request.redirect('/my')
-        
-        feedback_user_flag = 0
-        
-        values = self._feedback_get_page_view_values(feedback_sudo, next_id,pre_id, access_token, **kw) 
-        return request.render("de_portal_appraisal.portal_appraisal_feedback", values)
-
+ 
