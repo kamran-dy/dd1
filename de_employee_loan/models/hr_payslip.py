@@ -97,36 +97,36 @@ class HrPayslip(models.Model):
             
             
     def compute_sheet(self):
-        for other_input in self.input_line_ids:
-            if other_input.code=='LOAN':
-                other_input.unlink()
-        if self.contract_id:
-            contracts = self.contract_id
-            employee = self.employee_id
-            date_from = self.date_from
-            date_to = self.date_to
-            data = []
-            other_inputs = self.env['hr.payslip.input.type'].search([])
-            contract_obj = self.env['hr.contract']
-            emp_id = contract_obj.browse(contracts[0].id).employee_id
-            lon_obj = self.env['hr.loan'].search([('employee_id', '=', emp_id.id), ('state', '=', 'approve')])
-            for loan in lon_obj:
-                for loan_line in loan.loan_lines:
-                    if date_from <= loan_line.date <= date_to and not loan_line.paid:
-                        for result in other_inputs:
-                            if result.code == 'LOAN':  
-                                data.append((0,0,{
-                                'payslip_id': self.id,
-                                'sequence': 1,
-                                'code': result.code,
-                                'contract_id': self.contract_id.id,
-                                'input_type_id': result.id,
-                                'amount': loan_line.amount,
-                                 'loan_line_id': loan_line.id   
-                                }))    
-        self.input_line_ids = data
+        for payslip in self:
+            for other_input in payslip.input_line_ids:
+                if other_input.code=='LOAN':
+                    other_input.unlink()
+            if payslip.contract_id:
+                contracts = payslip.contract_id
+                employee = payslip.employee_id
+                date_from = payslip.date_from
+                date_to = payslip.date_to
+                data = []
+                other_inputs = self.env['hr.payslip.input.type'].search([])
+                contract_obj = self.env['hr.contract']
+                emp_id = contract_obj.browse(contracts[0].id).employee_id
+                lon_obj = self.env['hr.loan'].search([('employee_id', '=', emp_id.id), ('state', '=', 'approve')])
+                for loan in lon_obj:
+                    for loan_line in loan.loan_lines:
+                        if date_from <= loan_line.date <= date_to and not loan_line.paid:
+                            for result in other_inputs:
+                                if result.code == 'LOAN':  
+                                    data.append((0,0,{
+                                    'payslip_id': payslip.id,
+                                    'sequence': 1,
+                                    'code': result.code,
+                                    'contract_id': payslip.contract_id.id,
+                                    'input_type_id': result.id,
+                                    'amount': loan_line.amount,
+                                    'loan_line_id': loan_line.id   
+                                    }))    
+            payslip.input_line_ids = data
         res = super(HrPayslip, self).compute_sheet()
-
         return res
    
 
