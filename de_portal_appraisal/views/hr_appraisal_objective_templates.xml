@@ -313,21 +313,31 @@
                     </div>
                 </section>
             </div>
-               <div>
-                    <a class="mb-5" id="submit-object" t-attf-href="/edit/add/objective/line/#{appraisal.id}?">
-                        <button class="btn btn-primary pull-right">Add Objective</button>
-                    </a>
-<!--                      <a class="mb-5" id="submit-objectedit" t-attf-href="/edit/add/objective/line/#{appraisal.id}?">
-                        <button class="btn btn-primary pull-right">Add Objective</button>
-                    </a> -->
-                </div> 
-                
+               <t t-if='appraisal.state!="confirm"'> 
+                   <div>
+                        <a class="mb-5" id="submit-object" t-attf-href="/edit/add/objective/line/#{appraisal.id}?">
+                            <button class="btn btn-primary pull-right">Add Objective</button>
+                        </a>
+                        
+                    </div> 
+                </t> 
+                <t t-if='appraisal.state!="confirm"'> 
+                   <div>
+                     <t t-if='appraisal.employee_id.parent_id.user_id.id==uid'> 
+                        <a class="mb-5" id="confirm-object" t-attf-href="/action/confirm/objective/#{appraisal.id}?">
+                             <button class="btn btn-primary pull-right" style='margin-right:8px;'>Confirm</button>
+                         </a>
+                     </t>    
+                    </div> 
+                </t> 
             <form id="saleForm"  action="/appraisal/objective/save"  method="post"  enctype="multipart/form-data">
+             
                 <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
                         <div style="width: 200px;" class="s_website_form_label"></div>
                         
+                     <t t-if='appraisal.state!="confirm"'>
                          <button id='objectivesubmit' type="submit" class="btn btn-primary pull-left">Submit</button>
-                         
+                     </t>   
                          <p class='text-center'><b>Total Weightage: </b>
                             <t t-if='appraisal.total_weightage==100'>  
                                 <i class="badge badge-pill badge-success" >
@@ -338,7 +348,7 @@
                                 <span t-esc='appraisal.total_weightage'/> %</i>
                             </t>  
                          </p>                        
-                        </div>
+                </div>
                     <br/>
                                 
                         <div class="container">
@@ -459,7 +469,11 @@
                       
                   </div>
                 </div>
-               </div>    
+               </div>
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
+
+                <input id='recordid' type="hidden" class="form-control s_website_form_input" name="record_id"   t-att-value="appraisal.id"/>
+                
                 </form> 
                  <div >
                  
@@ -482,13 +496,12 @@
                             <p class="o_default_snippet_text" style='text-color:#666666;'>Period: <t t-esc='line.date_from.strftime("%d-%b-%Y")'/> to <t t-esc='line.date_to.strftime("%d-%b-%Y")'/></p>
                               <div>                                  
                                  <div data-snippet="s_share"  data-name="Share">
-                                     <i class="badge badge-pill badge-success pull-left" ><t t-esc='line.weightage'/> %</i>                                                <!-- <div>
-                                         <a class="mb-5" id="submit-object" t-attf-href="/edit/add/objective/line/#{appraisal.id}?">
-                                            <button class="btn btn-primary pull-right">Add Objective</button>
-                                        </a> 
-                                     </div>   -->
+                                     <i class="badge badge-pill badge-success pull-left" ><t t-esc='line.weightage'/> %</i>           
+                                     
+                                  <t t-if='appraisal.state!="confirm"'>
                                      <a t-attf-href="/delete/objective/line/#{line.id}?" class="fa fa-trash pull-right" style="font-size:20px;color:red"></a>                    
                                      <a t-attf-href="/edit/objective/line/#{line.id}?" class="fa fa-pencil-square-o pull-right" style="font-size:20px;color:green"></a>
+                                  </t>    
                                 </div>
                                 </div>      
                         </div>

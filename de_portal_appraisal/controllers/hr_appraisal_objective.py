@@ -141,55 +141,7 @@ class CreateAppraisal(http.Controller):
         return request.render("de_portal_appraisal.edit_feedback_objective",appraisal_page_content()) 
     
     
-    @http.route('/objective/line/save',type="http", website=True, auth='user')
-    def objective_line_template(self, **kw):
-        objectiveline = request.env['hr.appraisal.objective'].search([('id', '=', kw.get('objective_id'))])
-        objective_list = ast.literal_eval(kw.get('objective_vals'))
-        obj_count = 0
-        if objectiveline:
-            if kw.get('note'):
-               objectiveline.update({
-                   'note': kw.get('note')
-               })
-            if kw.get('traing_need'):
-               objectiveline.update({
-                   'traing_need': kw.get('traing_need')
-               })
-        for obj_line in objective_list:
-            obj_count += 1
-            if obj_count > 1 :
-                if obj_line['col1']:
-                    objective_line = request.env['hr.appraisal.objective.line'].search([('id', '=', obj_line['col1'])])
-                    if objective_line:
-                        categoryid = request.env['hr.objective.category'].search([('name','=',obj_line['col2'])], limit=1)
-                        statusid = request.env['hr.objective.status'].search([('name','=',obj_line['col9'])], limit=1)
-                        objective_line.update({
-                                'category_id': categoryid.id,
-                                'objective': obj_line['col3'],
-                                'description': obj_line['col4'],
-                                'date_from':  obj_line['col5'],
-                                'date_to': obj_line['col6'],
-                                'weightage': obj_line['col7'],
-                                'priority': obj_line['col8'],
-                                'status_id': statusid.id,
-                            })
-                else:
-                    line_vals = {
-                        'category_id': categoryid.id,
-                        'objective_id': objectiveline.id,
-#                         'objective': obj_line['col3'],
-                        'description': obj_line['col4'],
-                        'date_from':  obj_line['col5'],
-                        'date_to': obj_line['col6'],
-                        'weightage': obj_line['col7'],
-                        'priority': obj_line['col8'],
-                        'status_id': statusid.id,
-                    }
-                    line_obj = request.env['hr.appraisal.objective.line'].sudo().create(line_vals)
-        return request.redirect('/appraisal/objective/%s'%(objectiveline.id))        
-    
-    
-    
+  
     @http.route('/feedback/line/save', type="http", auth="public", website=True)
     def feedback_line(self, **kw):
         feedbackuser = request.env['hr.appraisal.feedback'].search([('id', '=', kw.get('docuid'))])
@@ -528,13 +480,17 @@ class CreateAppraisal(http.Controller):
     
     @http.route('/appraisal/objective/save', type="http", auth="public", website=True)
     def submit_objective_setting(self, **kw):
-        objective_val = {
-            'description': kw.get('description'),
-            'employee_id': int(kw.get('employee_id')),
-            'objective_year': kw.get('objective_year'),
-        }
-        record = request.env['hr.appraisal.objective'].sudo().create(objective_val)
-        record.action_sent_review()
+        record = request.env['hr.appraisal.objective'].sudo().search([('id','=',int(kw.get('record_id')))])
+        line_count = 0
+        for line in record.objective_lines:
+            line_count += 1
+        if line_count < 3:
+            raise UserError(('At least 3 objective require to Submit Objective Setting (minimum=3, Maximum=8)'))
+        if line_count > 8:
+            raise UserError(_('Maximum 8 objective require to Submit Objective Setting (minimum=3, Maximum=8)')) 
+        if record.total_weightage != 100:
+            raise UserError('Total Weightage must be equal 100')  
+#         record.action_sent_review()        
         return request.redirect('/edit/add/objective/line/%s'%(record.id))
 
     
@@ -547,17 +503,6 @@ class CreateAppraisal(http.Controller):
         return request.render("de_portal_appraisal.portal_appraisal",appraisal_page_content()) 
     
    
-    
-    @http.route('/appraisal/objective/line/save', type="http", auth="public", website=True)
-    def create_sheet_expense_line(self, **kw):
-        global appraisal_objective_list
-        appraisal_val = {
-            'objective': kw.get('objective'),
-            'weightage':  kw.get('weightage'),
-            'priority': kw.get('priority'),          
-        }
-        appraisal_objective_list.append(appraisal_val)
-        return request.render("de_portal_appraisal.create_appraisal_objective",appraisal_page_content())
     
    
 class CustomerPortal(CustomerPortal):
