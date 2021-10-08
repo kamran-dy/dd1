@@ -125,11 +125,11 @@ class EmployeeReportXlS(models.AbstractModel):
         format2 = workbook.add_format({'align': 'center'})
         format3 = workbook.add_format({'align': 'center','bold': True,'border': True,})
         
-        company_list = ' '
-        for company in docs.company:
-            comprany_list =company_list + ' '+ str(company.name) 
+        all_company_list = ' '
+        for acompany in docs.company:
+            all_company_list =all_company_list + ' '+ str(acompany.name) 
             
-        sheet.merge_range('A1:G2', company_list, format3)
+        sheet.merge_range('A1:G2', str(all_company_list), format3)
         sheet.write('B3:B3','Date From', header_row_style)
         sheet.write('C3:C3',docs.date_form.strftime('%d-%b-%Y'), header_row_style)
         sheet.write('D3:D3','Date To', header_row_style)
