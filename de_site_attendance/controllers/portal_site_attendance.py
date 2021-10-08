@@ -96,6 +96,7 @@ class CreateAttendance(http.Controller):
     
       
     
+
     @http.route('/hr/site/attendance/line/save', type="http", auth="public", website=True)
     def create_site_attendance_line(self, **kw):
         list = []
