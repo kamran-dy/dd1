@@ -288,7 +288,7 @@ class CreateAppraisal(http.Controller):
         exist_line_obj.update({
             'category_id': kw.get('category_id'),
             'objective': kw.get('objective'),
-            'description': kw.get('description'),
+            'description': kw.get('objective'),
             'weightage': kw.get('weightage'),
             'date_from': kw.get('date_from'),
             'date_to': kw.get('date_to'),
@@ -316,7 +316,7 @@ class CreateAppraisal(http.Controller):
             'objective_id': exist_obj.id,
             'category_id': kw.get('category_id'),
             'objective': kw.get('objective'),
-            'description': kw.get('description'),
+            'description': kw.get('objective'),
             'weightage': kw.get('weightage'),
             'date_from': kw.get('date_from'),
             'date_to': kw.get('date_to'),
@@ -363,11 +363,29 @@ class CreateAppraisal(http.Controller):
     
     @http.route('/appraisal/objective/save', type="http", auth="public", website=True)
     def submit_objective_setting(self, **kw):
-        record = request.env['hr.appraisal.objective'].sudo().search([('id','=',int(kw.get('record_id')))])
+        record = request.env['hr.appraisal.objective'].sudo().search([('id','=',int(kw.get('record_id')))])  
+        line_count = 0
+        for line in record.objective_lines:
+            line_count += 1
+        if line_count < 3:
+            raise UserError(('At least 3 objectives require to Submit Objective Setting (Minimum=3, Maximum=8)'))
+        if line_count > 8:
+            raise UserError(_('Maximum 8 objectives require to Submit Objective Setting (Minimum=3, Maximum=8)')) 
+        if record.total_weightage != 100:
+            raise UserError('Total Weightage must be equal 100')  
+        return request.render("de_portal_appraisal.appraisal_submited", {})
+    
+    @http.route('/appraisal/extra/objective/save', type="http", auth="public", website=True)
+    def extra_submit_objective_setting(self, **kw):
+        record = request.env['hr.appraisal.objective'].sudo().search([('id','=',int(kw.get('records_id')))])
+        if kw.get('description'):
+            record.update({
+                'description': kw.get('description')
+            })  
         if kw.get('traing_need'):
             record.update({
                 'traing_need': kw.get('traing_need')
-            })    
+            })      
         line_count = 0
         for line in record.objective_lines:
             line_count += 1
@@ -380,7 +398,7 @@ class CreateAppraisal(http.Controller):
         record.action_sent_review() 
         return request.render("de_portal_appraisal.appraisal_submited", {})
     
-        return request.redirect('/appraisal/objective/%s'%(record.id))
+    
 
     @http.route('/new/objective/save', type="http", auth="public", website=True)
     def new_objective_setting_submit(self, **kw):
