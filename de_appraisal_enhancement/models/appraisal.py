@@ -102,6 +102,7 @@ class HrAppraisalInherit(models.Model):
                     for line in objective_ids.objective_lines:
                         self.env['hr.appraisal.feedback.objective.line'].create({
                             'objective': line.objective,
+                            'obj_description': line.description,
                             'weightage': line.weightage,
                             'priority': line.priority,
                             'feedback_id': rec.id
@@ -114,6 +115,7 @@ class HrAppraisalInherit(models.Model):
                     for line in value_ids.values_lines:
                         self.env['hr.appraisal.feedback.values.line'].create({
                             'core_values': line.core_value,
+                            'core_description': line.description,
                             'weightage': line.weightage,
                             'priority': line.priority,
                             'feedback_id': rec.id})
@@ -124,6 +126,7 @@ class HrAppraisalInherit(models.Model):
                     for line in objective_ids.objective_lines:
                         self.env['hr.appraisal.feedback.objective.appraisee.line'].create({
                             'objective': line.objective,
+                            'obj_description': line.description,
                             'weightage': line.weightage,
                             'priority': line.priority,
                             'feedback_id': rec.id
@@ -135,103 +138,10 @@ class HrAppraisalInherit(models.Model):
                     for line in value_ids.values_lines:
                         self.env['hr.appraisal.feedback.values.appraisee.line'].create({
                             'core_values': line.core_value,
+                            'core_description': line.description,
                             'weightage': line.weightage,
                             'priority': line.priority,
                             'feedback_id': rec.id
                         })
                         
                         
-#         for record in appraisals: 
-#             current_date = date.today()
-#             end_date = current_date + timedelta(days=365)
-            
-#             if current_date == record.date_mid:
-#                 emp_start_date = self.date_mid
-#                 emp_deadline_date = emp_start_date + timedelta(days=5)
-#                 mgr_start_date = emp_deadline_date + timedelta(days=1)
-#                 mgr_deadline_date = mgr_start_date + timedelta(days=5)
-#                 for i in range(2):
-                    
-#                     if i == 0:
-#                         start_date = emp_start_date
-#                         deadline_date = emp_deadline_date
-#                         person = 'employee'
-#                     else:
-#                         start_date = mgr_start_date
-#                         deadline_date = mgr_deadline_date
-#                         person = 'manager'
-#                     rec =  self.env['hr.appraisal.feedback'].create({
-#                                 'name': record.employee_id.id,
-#                                 'appraisal_period': 'half_year',
-#                                 'concerned_person': person,
-#                                 'performance_period': self.appraisal_year,
-#                                 'date_start': start_date,
-#                                 'date_deadline': deadline_date,
-                        
-#                                 })
-
-#                     objective_ids = self.env['hr.appraisal.objective'].search([('employee_id', '=',record.employee_id.id),('objective_year', '=',record.appraisal_year)])
-#                     if objective_ids:
-#                         for line in objective_ids.objective_lines:
-
-#                             self.env['hr.appraisal.feedback.objective.line'].create({
-#                                 'objective': line.objective,
-#                                 'weightage': line.weightage,
-#                                 'priority': line.priority,
-#                                 'feedback_id': rec.id})
-
-
-#                     value_ids = self.env['hr.appraisal.values'].search([('company_id','=',record.company_id.id)], order='company_id asc',limit=1)
-#                     if value_ids:
-#                         for line in value_ids.values_lines:
-#                             self.env['hr.appraisal.feedback.values.line'].create({
-#                                 'core_values': line.core_value,
-#                                 'objective': line.description,
-#                                 'weightage': line.weightage,
-#                                 'priority': line.priority,
-#                                 'feedback_id': rec.id})
-
-                            
-
-#             if current_date == record.date_end:
-#                 emp_start_date = self.date_end
-#                 emp_deadline_date = emp_start_date + timedelta(days=5)
-#                 mgr_start_date = emp_deadline_date + timedelta(days=1)
-#                 mgr_deadline_date = mgr_start_date + timedelta(days=5)
-#                 for i in range(2):
-#                     if i == 0:
-#                         start_date = emp_start_date
-#                         deadline_date = emp_deadline_date
-#                         person = 'employee'
-#                     else:
-#                         start_date = mgr_start_date
-#                         deadline_date = mgr_deadline_date
-#                         person = 'manager'
-#                     rec =  self.env['hr.appraisal.feedback'].create({
-#                                             'name': record.employee_id.id,
-#                                             'appraisal_period': 'full_year',
-#                                             'concerned_person': person,
-#                                             'performance_period': self.appraisal_year,
-#                                             'date_start': start_date,
-#                                             'date_deadline': deadline_date,
-#                                             })
-
-#                     objective_ids = self.env['hr.appraisal.objective'].search([('employee_id', '=',record.employee_id.id),('objective_year', '=',record.appraisal_year)])
-#                     if objective_ids:
-#                         for line in objective_ids.objective_lines:
-#                             self.env['hr.appraisal.feedback.objective.line'].create({
-#                                             'objective': line.objective,
-#                                             'weightage': line.weightage,
-#                                             'priority': line.priority,
-#                                             'feedback_id': rec.id})
-
-
-#                     value_ids = self.env['hr.appraisal.values'].search([('company_id','=',record.company_id.id)], order='company_id asc',limit=1)
-#                     if value_ids:
-#                         for line in value_ids.values_lines:
-#                             self.env['hr.appraisal.feedback.values.line'].create({
-#                                             'core_values': line.core_value,
-#                                             'objective': line.description,
-#                                             'weightage': line.weightage,
-#                                             'priority': line.priority,
-#                                             'feedback_id': rec.id})

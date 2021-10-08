@@ -45,7 +45,66 @@ class HrAppraisalFeedback(models.Model):
     future_aspiration = fields.Char('career aspirations in next 2 to 3 years')
     feedback_to_manager = fields.Char('Feedback to line manager')
     training_need = fields.Char('Training Need')
- 
+    rating_level = fields.Selection([
+        ('Outstanding Performance', 'Outstanding Performance'),
+        ('Excellent Performance', 'Excellent Performance'),
+        ('Strong Performance', 'Strong Performance'),
+        ('Needs Improvement', 'Needs Improvement'),
+        ('Unsatisfactory', 'Unsatisfactory'),
+    ], string='Employee Rating Level', index=True, copy=False, compute='compute_total_rating_level')
+    rating_score = fields.Float(string='Mnanager Rating Score', compute='compute_rating_level')
+    
+    @api.depends('rating_level')
+    def compute_rating_level(self):
+        for line in self:
+            total_grand = 0
+            half_year_obj_score = 0
+            half_year_core_score = 0
+            full_year_obj_score = 0
+            full_year_core_score = 0
+            for half_year_obj_line in line.feedback_objective_appraisee_lines:
+                half_year_obj_score += half_year_obj_line.manager_rating_score
+            for half_year_core_line in line.feedback_values_appraisee_lines:
+                half_year_obj_score += half_year_obj_line.manager_rating_score    
+            for full_year_obj_line in line.feedback_objective_lines:
+                full_year_obj_score += full_year_obj_line.manager_rating_score
+            for full_year_core_line in line.feedback_values_lines:
+                full_year_obj_score += full_year_obj_line.manager_rating_score        
+            total_grand = (half_year_obj_score/5) +  (half_year_core_score/5) + (full_year_obj_score/5) + (full_year_core_score/5) 
+            line.update({
+                'rating_score': total_grand
+            })
+           
+     
+            
+    @api.depends('rating_score')
+    def compute_total_rating_level(self):
+        for line in self:
+            if line.rating_score >=1 and line.rating_score <=1.4:
+                line.update({
+                'rating_level': 'Unsatisfactory'
+                }) 
+            if line.rating_score >=1.5 and line.rating_score <=2.4:
+                line.update({
+                'rating_level': 'Needs Improvement'
+                }) 
+            if line.rating_score >2.5 and line.rating_score <3.4:
+                line.update({
+                'rating_level': 'Strong Performance'
+                }) 
+            if line.rating_score >=3.5 and line.rating_score <=4.4:
+                line.update({
+                'rating_level': 'Excellent Performance'
+                }) 
+            if line.rating_score >=4.5 and line.rating_score <=5:
+                line.update({
+                'rating_level': 'Outstanding Performance'
+                })          
+            else:
+               line.update({
+                'rating_level': False
+                })        
+                
     
     def unlink(self):
     	for rec in self:
@@ -314,6 +373,7 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
     concerned_person = fields.Selection(related='feedback_id.concerned_person')
     full_remarks = fields.Char('Emp. Remarks')
     objective = fields.Char('Objective')
+    obj_description = fields.Char('Description')
     weightage = fields.Float('Weightage')
     priority = fields.Selection([
         ('low', 'Low'),
@@ -322,7 +382,6 @@ class HrAppraisalFeedbackObjectiveLine(models.Model):
         ('very_high', 'Very High'),
     ], string='Priority', index=True, copy=False, default='low', required = True, track_visibility='onchange')
     rating = fields.Integer('Emp. Full Year Rating', track_visibility='onchange')
-#     weightage_score = fields.Float('Weightage Score', compute='compute_weightage_score')
     comments = fields.Char('Comments')   
     full_remarks_mngr = fields.Char('Manager Remarks')
     rating_mngr = fields.Integer('Manager Full Year Rating')
@@ -441,6 +500,7 @@ class HrAppraisalFeedbackValuesLine(models.Model):
     concerned_person = fields.Selection(related='feedback_id.concerned_person')
     full_remarks = fields.Char('Emp. Remarks')
     core_values = fields.Char('Core Values')
+    core_description = fields.Char('Description')
     weightage = fields.Float('Weightage')
     
     full_remarks_mngr = fields.Char('Manager Remarks')
@@ -601,6 +661,7 @@ class HrAppraisalFeedbackObjectiveAppraiseeLine(models.Model):
     remarks = fields.Char('Emp. Remarks')
     remarks_mngr = fields.Char('Manager Remarks')
     objective = fields.Char('Objective')
+    obj_description = fields.Char('Description')
     weightage = fields.Float('Weightage')
     priority = fields.Selection([
         ('low', 'Low'),
@@ -748,6 +809,7 @@ class HrAppraisalFeedbackValuesAppraiseeLine(models.Model):
     remarks = fields.Char('Emp. Remarks')
     remarks_mngr = fields.Char('Manager Remarks')
     core_values = fields.Char('Core Values')
+    core_description = fields.Char('Description')
     weightage = fields.Float('Weightage')
     priority = fields.Selection([
         ('low', 'Low'),
