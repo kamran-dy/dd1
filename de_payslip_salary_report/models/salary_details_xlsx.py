@@ -591,8 +591,8 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 61, Misc_Deduct, format2)
                 sheet.write(row, 62, total_ded, format2)
                 sheet.write(row, 63, Net_Payable, format2)
-                
                 row = row + 1
+                sr_no += 1
             sheet.write(row, 0,  str())
             sheet.write(row, 1,  str())
             sheet.write(row, 2,  str())
