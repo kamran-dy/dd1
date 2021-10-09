@@ -10,7 +10,6 @@ class EmployeeReportXlS(models.AbstractModel):
     _description = 'Purchase report'
     _inherit = 'report.report_xlsx.abstract'
     
-    
     def action_get_abset_days(self, data):
         absent_list = []
         
@@ -31,10 +30,8 @@ class EmployeeReportXlS(models.AbstractModel):
                 aemp_list.append(selected_emp.id)
             employees = self.env['hr.employee'].sudo().search([('id','in', aemp_list)])
             
-
         sr_no = 1
-       
-            
+         
         for employee in employees:
             leave_status = ' '
             rectification_status = ' '
