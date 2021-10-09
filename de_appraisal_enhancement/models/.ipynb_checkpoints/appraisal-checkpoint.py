@@ -102,7 +102,7 @@ class HrAppraisalInherit(models.Model):
                     for line in objective_ids.objective_lines:
                         self.env['hr.appraisal.feedback.objective.line'].create({
                             'objective': line.objective,
-                            'obj_description': line.description,
+                            'obj_description': line.measuring_indicator,
                             'weightage': line.weightage,
                             'priority': line.priority,
                             'feedback_id': rec.id
@@ -126,7 +126,7 @@ class HrAppraisalInherit(models.Model):
                     for line in objective_ids.objective_lines:
                         self.env['hr.appraisal.feedback.objective.appraisee.line'].create({
                             'objective': line.objective,
-                            'obj_description': line.description,
+                            'obj_description': line.measuring_indicator,
                             'weightage': line.weightage,
                             'priority': line.priority,
                             'feedback_id': rec.id
