@@ -212,7 +212,6 @@ class GenerateXLSXReport(models.Model):
          
             for payslip in payslips:
                 total_ded = 0
-                tot_total_ded += total_ded
                 
                 if payslip.company_id:
                     company = payslip.company_id.name
@@ -510,20 +509,21 @@ class GenerateXLSXReport(models.Model):
                     if sal.input_type_id.code == 'ARR01':
                         Arrears = sal.amount 
                         tot_Arrears += Arrears
+                        
+                        
                 for was in Hr_rent.benefit_line_ids:
                     if was.input_type_id.code == 'WA01':
                         washing = was.amount 
-                        tot_washing += washing
-                        
-                    
-                total_ded = PF + EOBI + Prof + Income_tax + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total 
-                
-
-                
+                        tot_washing += washing 
+                total_ded = PF + EOBI + Prof + Income_tax + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total               
                 
                 over_all = basic_salry + House_rent + Conv_allown + Utilities_bills + Car_allown + special_allown + Gross + accomadation_allwn + salry_allown + washing + Shift_bills + Bonus + Arrears + Overtime + Site_All + Variable_Pay + Variable_Pay_Adj + Shutdown_Allowance + Other + gross_payable + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total_ded + Net_Payable + PF + EOBI + Prof
             
-                
+            
+            
+            
+            
+                tot_total_ded += total_ded
                 cost_account = ' '    
                 contract = self.env['hr.contract'].search([('employee_id','=',employee.id)], limit=1)  
                 for cost_line in contract.cost_center_information_line:
