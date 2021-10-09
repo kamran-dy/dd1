@@ -5,8 +5,10 @@
                     <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
                         <t t-call="de_payroll_pdf_report.pdf_report_layout"/>
                      <div class="page">
-                         <strong><span t-field="o.name" style="color:blue"/></strong>
-                         <br/>
+                         <div style="text-align: center;">
+                         <span t-field="o.name" style="color:blue"/>
+                         </div>
+<!--                          <br/> -->
                          <div class="row">
                              <div style="font-size:12px" class="col-6" >
                                  <table style="border: 1px solid black;" width="400">
@@ -206,6 +208,10 @@
                                          </tr>
                                      </tbody>
                                  </table>
+                                 <div style="text-align: center;">
+                                  <p style="color:blue">System generated document, does not require signature</p>
+                                      <div style="border-bottom: 1px solid black;"/>
+                                 </div>
                          </div>
                                
                                
