@@ -183,7 +183,6 @@
                                  </table>
                              </div>
                             </div>
-                  
                                <br/>
                          <br/>
                         <div class="row">
@@ -194,8 +193,6 @@
                                              <td  >Contributions</td>
                                              <td  >Withdrawals</td>
                                             <td  >Balance</td>
-
-
                                          </tr>
                                      <tbody style="color:blue">
                                          <tr>
@@ -203,8 +200,6 @@
                                             <td  style="border: 1px solid black;"></td>
                                              <td  style="border: 1px solid black;"></td>
                                             <td  style="border: 1px solid black;"></td>
-
-
                                          </tr>
                                      </tbody>
                                  </table>
@@ -212,13 +207,7 @@
                                   <p style="color:blue">System generated document, does not require signature</p>
                                       <div style="border-bottom: 1px solid black;"/>
                                  </div>
-                         </div>
-                               
-                               
-                               
-                               
-                               
-                               
+                         </div>   
                                
                           </div>
                                  
