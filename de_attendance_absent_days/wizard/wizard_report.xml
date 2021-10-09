@@ -40,7 +40,7 @@
 
 
 		<record id="attendance_report_data_xlx" model="ir.actions.act_window">
-			<field name="name">mployee report</field>
+			<field name="name">Absent report</field>
 			<field name="res_model">attendance.model</field>
 			<field name="view_id" ref="attendance_wizard_form_view"/>
 			<field name="target">new</field>
