@@ -167,7 +167,7 @@ class GenerateXLSXReport(models.Model):
         tot_Car_allown = 0
         tot_Utilities_bills = 0
         tot_special_allown = 0 
-        tot_gross_sal = 0
+        tot_Gross = 0
         tot_accomadation_allwn = 0
         tot_salry_allown = 0
         tot_washing = 0
@@ -290,7 +290,7 @@ class GenerateXLSXReport(models.Model):
                 total_days = 0
                 gross_salry = 0
                 Income_tax = 0
-                gross_sal = 0
+                Gross = 0
                 gross_payable = 0
                 total = 0
                 PF = 0
@@ -320,8 +320,8 @@ class GenerateXLSXReport(models.Model):
                         tot_Income_tax += Income_tax
                 for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('BASIC', 'ALW'):
-                        gross_sal = gros_line.amount 
-                        tot_gross_sal += gross_sal      
+                        gros_line.amount 
+                        tot_Gross += Gross    
                 for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('GROSS', 'COMP'):
                         gross_payable = gros_line.amount 
@@ -521,7 +521,7 @@ class GenerateXLSXReport(models.Model):
 
                 
                 
-                over_all = basic_salry + House_rent + Conv_allown + Utilities_bills + Car_allown + special_allown + gross_sal + accomadation_allwn + salry_allown + washing + Shift_bills + Bonus + Arrears + Overtime + Site_All + Variable_Pay + Variable_Pay_Adj + Shutdown_Allowance + Other + gross_payable + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total_ded + Net_Payable + PF + EOBI + Prof
+                over_all = basic_salry + House_rent + Conv_allown + Utilities_bills + Car_allown + special_allown + Gross + accomadation_allwn + salry_allown + washing + Shift_bills + Bonus + Arrears + Overtime + Site_All + Variable_Pay + Variable_Pay_Adj + Shutdown_Allowance + Other + gross_payable + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total_ded + Net_Payable + PF + EOBI + Prof
             
                 
                 cost_account = ' '    
@@ -558,7 +558,7 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 26, Utilities_bills, format2)
                 sheet.write(row, 27, Car_allown, format2)
                 sheet.write(row, 28, special_allown, format2)
-                sheet.write(row, 29, gross_sal, format2)
+                sheet.write(row, 29, Gross,format2)
                 sheet.write(row, 30, accomadation_allwn, format2)
                 sheet.write(row, 31, salry_allown, format2)
                 sheet.write(row, 32, washing, format2)
@@ -625,7 +625,7 @@ class GenerateXLSXReport(models.Model):
             sheet.write(row, 26, tot_Utilities_bills, bold)
             sheet.write(row, 27, tot_Car_allown, bold)
             sheet.write(row, 28, tot_special_allown, bold)
-            sheet.write(row, 29, tot_gross_sal, bold)
+            sheet.write(row, 29, tot_Gross, bold)
             sheet.write(row, 30, tot_accomadation_allwn, bold)
             sheet.write(row, 31, tot_salry_allown, bold)
             sheet.write(row, 32, tot_washing, bold)
