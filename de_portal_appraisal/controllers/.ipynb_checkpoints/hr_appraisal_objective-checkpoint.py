@@ -145,6 +145,273 @@ def paging(data, flag1 = 0, flag2 = 0):
         
 class CreateAppraisal(http.Controller):
     
+    @http.route('/appraisal/feedback/data/save',type="http", website=True, auth='user')
+    def appraisal_feedback_data_objective_template(self, **kw):
+        feedback = request.env['hr.appraisal.feedback'].sudo().search([('id','=',int(kw.get('record_id')))])
+        if feedback.name.department_id.manager_id.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('full_year_value_comment'):
+                feedback.update({
+                    'full_year_value_comment': kw.get('full_year_value_comment')
+                })
+            if kw.get('full_year_value_comment'):
+                feedback.update({
+                    'full_year_value_comment': kw.get('full_year_value_comment')
+                })
+            if kw.get('full_year_appraiser_objective_comment'):
+                feedback.update({
+                    'full_year_appraiser_objective_comment': kw.get('full_year_appraiser_objective_comment')
+                })
+            if kw.get('full_year_appraiser_value_comment'):
+                feedback.update({
+                    'full_year_appraiser_value_comment': kw.get('full_year_appraiser_value_comment')
+                })
+            if kw.get('strength_1'):
+                feedback.update({
+                    'strength_1': kw.get('strength_1')
+                })
+            if kw.get('strength_2'):
+                feedback.update({
+                    'strength_2': kw.get('strength_2')
+                })
+            if kw.get('strength_3'):
+                feedback.update({
+                    'strength_3': kw.get('strength_3')
+                })
+            if kw.get('strength_4'):
+                feedback.update({
+                    'strength_4': kw.get('strength_4')
+                })
+            if kw.get('strength_5'):
+                feedback.update({
+                    'strength_5': kw.get('strength_5')
+                })
+            if kw.get('improvements_1'):
+                feedback.update({
+                    'improvements_1': kw.get('improvements_1')
+                })
+            if kw.get('improvements_2'):
+                feedback.update({
+                    'improvements_2': kw.get('improvements_2')
+                })
+            if kw.get('improvements_3'):
+                feedback.update({
+                    'improvements_3': kw.get('improvements_3')
+                })
+            if kw.get('improvements_4'):
+                feedback.update({
+                    'improvements_4': kw.get('improvements_4')
+                })
+            if kw.get('improvements_5'):
+                feedback.update({
+                    'improvements_5': kw.get('improvements_5')
+                }) 
+            if kw.get('training_1'):
+                feedback.update({
+                    'training_1': kw.get('training_1')
+                })
+            if kw.get('training_2'):
+                feedback.update({
+                    'training_2': kw.get('training_2')
+                })
+            if kw.get('training_3'):
+                feedback.update({
+                    'training_3': kw.get('training_3')
+                })
+            if kw.get('training_4'):
+                feedback.update({
+                    'training_4': kw.get('training_4')
+                })
+            if kw.get('training_5'):
+                feedback.update({
+                    'training_5': kw.get('training_5')
+                }) 
+            if kw.get('reason_1'):
+                feedback.update({
+                    'reason_1': kw.get('reason_1')
+                })
+            if kw.get('reason_2'):
+                feedback.update({
+                    'reason_2': kw.get('reason_2')
+                })
+            if kw.get('reason_3'):
+                feedback.update({
+                    'reason_3': kw.get('reason_3')
+                })
+            if kw.get('reason_4'):
+                feedback.update({
+                    'reason_4': kw.get('reason_4')
+                })
+            if kw.get('reason_5'):
+                feedback.update({
+                    'reason_5': kw.get('reason_5')
+                })
+            if kw.get('recommend_promotion'):
+                if kw.get('recommend_promotion') !='blank':
+                    feedback.update({
+                        'recommend_promotion': kw.get('recommend_promotion')
+                    })
+            if kw.get('promotion_position'):
+                if kw.get('promotion_position') !='blank':
+                    feedback.update({
+                        'promotion_position': kw.get('promotion_position')
+                    })
+            if kw.get('date_effective'):
+                feedback.update({
+                        'date_effective': kw.get('date_effective')
+                    })          
+        if feedback.name.parent_id.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('full_year_value_comment'):
+                feedback.update({
+                    'full_year_value_comment': kw.get('full_year_value_comment')
+                })
+            if kw.get('full_year_value_comment'):
+                feedback.update({
+                    'full_year_value_comment': kw.get('full_year_value_comment')
+                })
+            if kw.get('full_year_appraiser_objective_comment'):
+                feedback.update({
+                    'full_year_appraiser_objective_comment': kw.get('full_year_appraiser_objective_comment')
+                })
+            if kw.get('full_year_appraiser_value_comment'):
+                feedback.update({
+                    'full_year_appraiser_value_comment': kw.get('full_year_appraiser_value_comment')
+                })
+            if kw.get('strength_1'):
+                feedback.update({
+                    'strength_1': kw.get('strength_1')
+                })
+            if kw.get('strength_2'):
+                feedback.update({
+                    'strength_2': kw.get('strength_2')
+                })
+            if kw.get('strength_3'):
+                feedback.update({
+                    'strength_3': kw.get('strength_3')
+                })
+            if kw.get('strength_4'):
+                feedback.update({
+                    'strength_4': kw.get('strength_4')
+                })
+            if kw.get('strength_5'):
+                feedback.update({
+                    'strength_5': kw.get('strength_5')
+                })
+            if kw.get('improvements_1'):
+                feedback.update({
+                    'improvements_1': kw.get('improvements_1')
+                })
+            if kw.get('improvements_2'):
+                feedback.update({
+                    'improvements_2': kw.get('improvements_2')
+                })
+            if kw.get('improvements_3'):
+                feedback.update({
+                    'improvements_3': kw.get('improvements_3')
+                })
+            if kw.get('improvements_4'):
+                feedback.update({
+                    'improvements_4': kw.get('improvements_4')
+                })
+            if kw.get('improvements_5'):
+                feedback.update({
+                    'improvements_5': kw.get('improvements_5')
+                }) 
+            if kw.get('training_1'):
+                feedback.update({
+                    'training_1': kw.get('training_1')
+                })
+            if kw.get('training_2'):
+                feedback.update({
+                    'training_2': kw.get('training_2')
+                })
+            if kw.get('training_3'):
+                feedback.update({
+                    'training_3': kw.get('training_3')
+                })
+            if kw.get('training_4'):
+                feedback.update({
+                    'training_4': kw.get('training_4')
+                })
+            if kw.get('training_5'):
+                feedback.update({
+                    'training_5': kw.get('training_5')
+                }) 
+            if kw.get('reason_1'):
+                feedback.update({
+                    'reason_1': kw.get('reason_1')
+                })
+            if kw.get('reason_2'):
+                feedback.update({
+                    'reason_2': kw.get('reason_2')
+                })
+            if kw.get('reason_3'):
+                feedback.update({
+                    'reason_3': kw.get('reason_3')
+                })
+            if kw.get('reason_4'):
+                feedback.update({
+                    'reason_4': kw.get('reason_4')
+                })
+            if kw.get('reason_5'):
+                feedback.update({
+                    'reason_5': kw.get('reason_5')
+                })
+            if kw.get('recommend_promotion'):
+                if kw.get('recommend_promotion') !='blank':
+                    feedback.update({
+                        'recommend_promotion': kw.get('recommend_promotion')
+                    })
+            if kw.get('promotion_position'):
+                if kw.get('promotion_position') !='blank':
+                    feedback.update({
+                        'promotion_position': kw.get('promotion_position')
+                    })
+            if kw.get('date_effective'):
+                feedback.update({
+                        'date_effective': kw.get('date_effective')
+                    })        
+        if feedback.name.user_id.id==http.request.env.context.get('uid'):
+            if kw.get('agreement'):
+                if kw.get('agreement') != 'blank':
+                    feedback.update({
+                        'agreement': kw.get('agreement')
+                    })
+            if kw.get('full_year_agreement'):
+                if kw.get('full_year_agreement') != 'blank':
+                    feedback.update({
+                        'full_year_agreement': kw.get('full_year_agreement')
+                    })        
+            if kw.get('objective_comment'):
+                feedback.update({
+                    'objective_comment': kw.get('objective_comment')
+                })    
+            if kw.get('value_comment'):
+                feedback.update({
+                    'value_comment': kw.get('value_comment')
+                })
+            if kw.get('half_year_appraiser_objective_comment'):
+                feedback.update({
+                    'half_year_appraiser_objective_comment': kw.get('half_year_appraiser_objective_comment')
+                })
+            if kw.get('half_year_appraiser_value_comment'):
+                feedback.update({
+                    'half_year_appraiser_value_comment': kw.get('half_year_appraiser_value_comment')
+                }) 
+            if kw.get('training_need'):
+                feedback.update({
+                    'training_need': kw.get('training_need')
+                }) 
+            if kw.get('future_aspiration'):
+                feedback.update({
+                    'future_aspiration': kw.get('future_aspiration')
+                })
+            if kw.get('feedback_to_manager'):
+                feedback.update({
+                    'feedback_to_manager': kw.get('feedback_to_manager')
+                })    
+        return request.redirect('/appraisal/feedback/%s'%(feedback.id))
+    
+    
     
     @http.route('/update/obj/feedback/line/save',type="http", website=True, auth='user')
     def update_appraisal_objective_template(self, **kw):
@@ -983,6 +1250,8 @@ class CustomerPortal(CustomerPortal):
     def _feedback_get_page_view_values(self,feedback, next_id = 0,pre_id= 0, feedback_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
         employees = request.env['hr.employee'].sudo().search([('user_id','=',http.request.env.context.get('uid'))])
+        grade_types = request.env['grade.designation'].sudo().search([])
+        job_positions = request.env['hr.job'].sudo().search([('company_id','=',employees.company_id.id)])
         manager_edit = False
         edit_flag =  False
         review_flag = False
@@ -990,6 +1259,8 @@ class CustomerPortal(CustomerPortal):
             'page_name' : 'feedback',
             'feedback' : feedback,
             'review_flag': review_flag,
+            'job_positions': job_positions,
+            'grade_types': grade_types,
             'employee_name': feedback.name,
             'managers': feedback.name.parent_id.name,
             'manager_edit': manager_edit,
@@ -1007,9 +1278,13 @@ class CustomerPortal(CustomerPortal):
     
     def _edit_feedback_get_page_view_values(self,feedback, full_edit_flag, full_review_flag, full_manager_edit, manager_edit, edit_flag, review_flag, next_id = 0,pre_id= 0, feedback_user_flag = 0, access_token = None, **kwargs):
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+        grade_types = request.env['grade.designation'].sudo().search([])
+        job_positions = request.env['hr.job'].sudo().search([('company_id','=',employees.company_id.id)])
         values = {
             'page_name' : 'feedback',
             'feedback' : feedback,
+            'job_positions': job_positions,
+            'grade_types': grade_types,
             'review_flag': review_flag,
             'employee_name': feedback.name,
             'managers': feedback.name.parent_id.name,
