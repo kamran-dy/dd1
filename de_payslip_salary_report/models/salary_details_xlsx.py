@@ -208,7 +208,7 @@ class GenerateXLSXReport(models.Model):
                 date_end = date_end.strftime("%d/%m/%Y")
             else:
                 date_end = None
-            payslips = self.env['hr.payslip'].search([('payslip_run_id','=',id.name),])
+            payslips = self.env['hr.payslip'].search([('payslip_run_id','=',id.name),], limit=1)
          
             for payslip in payslips:
                 total_ded = 0
@@ -295,11 +295,13 @@ class GenerateXLSXReport(models.Model):
                 total = 0
                 PF = 0
                 EOBI = 0
-                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),('date','>=',data.date_start),('date','<=',data.date_end)], limit=1)
+                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
+                
                 for payslip_line in payroll.line_ids:
                     if payslip_line.code == 'NET':
                         Net_Payable = payslip_line.amount 
                         tot_Net_Payable += Net_Payable
+                for basic in payroll.line_ids:
                     if basic.code == 'BASIC':
                         basic_salry = basic.amount     
                         tot_basic_salry += basic_salry 
@@ -315,7 +317,7 @@ class GenerateXLSXReport(models.Model):
                 for payslip_line in payroll.line_ids:
                     if payslip_line.code == 'INC01':
                         Income_tax = payslip_line.amount 
-                        tot_Income_tax += Income_ta
+                        tot_Income_tax += Income_tax
                 for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('BASIC', 'ALW'):
                         gross_sal = gros_line.amount 
@@ -327,7 +329,7 @@ class GenerateXLSXReport(models.Model):
                 for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('GROSS', 'COMP'):
                         total = gros_line.amount
-                        tot_total += totaL
+                        tot_total += total
                 for gros_line in payroll.line_ids:
                     if gros_line.code in ('PF01'):
                         PF = gros_line.amount 
@@ -593,6 +595,7 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 63, Net_Payable, format2)
                 
                 row = row + 1
+                sr_no += 1
             sheet.write(row, 0,  str())
             sheet.write(row, 1,  str())
             sheet.write(row, 2,  str())
@@ -656,10 +659,7 @@ class GenerateXLSXReport(models.Model):
             sheet.write(row, 60, tot_Variable_Pay_Adj_Ded, bold)
             sheet.write(row, 61, tot_Misc_Deduct, bold)
             sheet.write(row, 62, tot_total_ded, bold)
-            sheet.write(row, 63, tot_Net_Payable, bold)    
-
-
-               
+            sheet.write(row, 63, tot_Net_Payable, bold)                  
                 
                 
                     
