@@ -194,11 +194,12 @@ class CustomerPortal(CustomerPortal):
     
     
     def _probation_get_page_view_values(self,probation, edit_probation,edit_emp_probation, edit_hod_probation, edit_hr_probation, next_id = 0,pre_id= 0, probation_user_flag = 0, access_token = None, **kwargs):
-        company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
-        
+        company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])         
+        grade = request.env['grade.designation'].sudo().search([])
         values = {
             'page_name' : 'probation',
             'probation' : probation,
+            'grade': grade,
             'probation_user_flag': probation_user_flag,
             'next_id' : next_id,
             'edit_probation': edit_probation,

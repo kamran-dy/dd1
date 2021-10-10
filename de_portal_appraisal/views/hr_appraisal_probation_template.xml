@@ -259,7 +259,7 @@
                            <t t-if="probation.employee_id.user_id.id == uid">
                                     <t class="col-lg-7 col-md-8" >
                                        <t t-if="edit_emp_probation == False"> 
-                                        <a t-attf-href="/action/confirm/empreview/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Reviewed By Employee</div> </a> 
+                                        <a t-attf-href="/action/confirm/empreview/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm</div> </a> 
                                     </t>
                                   </t>   
                                 </t>  
@@ -269,7 +269,7 @@
                          <t t-if="probation.employee_id.parent_id.user_id.id == uid">
                                     <t class="col-lg-7 col-md-8" >
                                        <t t-if="edit_hr_probation == False"> 
-                                        <a t-attf-href="/action/confirm/hrreview/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">HR Review</div> </a> 
+                                        <a t-attf-href="/action/confirm/hrreview/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm</div> </a> 
                                     </t>
                                      </t>   
                                  </t>  
@@ -356,14 +356,38 @@
                             </div>
                            </div>
                        
+                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_position">
+                                                     <span class="s_website_form_label_content">Employee Type</span>
+                                        </label>
+                                    <div class="col-sm">
+                                        <t t-esc="probation.employee_id.emp_type"    />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                    <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="manager_department">
+                                            <span class="s_website_form_label_content">Department</span>
+                                    </label>
+                                    <div class="col-sm">
+                                            <t t-esc="probation.employee_id.department_id.name"    />
+                                    </div>
+                              </div>
+                            </div>
+                           </div>
+                       
                            <div class="s_website_form_rows row s_col_no_bgcolor">
                                 <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                                     <div class="row s_col_no_resize s_col_no_bgcolor">
                                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_position">
-                                                     <span class="s_website_form_label_content">Position</span>
+                                                     <span class="s_website_form_label_content">Job Position</span>
                                         </label>
                                     <div class="col-sm">
-                                        <t t-esc="probation.employee_id.name"    />
+                                        <t t-esc="probation.employee_id.job_id.name"    />
                                             </div>
                                         </div>
                                     </div>
@@ -374,11 +398,75 @@
                                             <span class="s_website_form_label_content">Target Year</span>
                                     </label>
                                     <div class="col-sm">
-                                            <t t-esc="probation.target_Year"    />
+                                        
+                                             <t t-if="probation.target_Year == '2020'">
+                                            <i class="badge badge-pill badge-info" >FY 2020-21</i>
+                                        </t>
+                                         <t t-if="probation.target_Year == '2021'">
+                                            <i class="badge badge-pill badge-info" >FY 2021-22</i>
+                                        </t>
+                                         <t t-if="probation.target_Year == '2022'">
+                                            <i class="badge badge-pill badge-info" >FY 2022-23</i>
+                                        </t>
+                                         <t t-if="probation.target_Year == '2023'">
+                                            <i class="badge badge-pill badge-info" >FY 2023-24</i>
+                                        </t>
+                                         <t t-if="probation.target_Year == '2024'">
+                                            <i class="badge badge-pill badge-info" >FY 2024-25</i>
+                                        </t>
+                                         <t t-if="probation.target_Year == '2025'">
+                                            <i class="badge badge-pill badge-info" >FY 2025-26</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2026'">
+                                            <i class="badge badge-pill badge-info" >FY 2026-27</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2027'">
+                                            <i class="badge badge-pill badge-info" >FY 2027-28</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2028'">
+                                            <i class="badge badge-pill badge-info" >FY 2028-29</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2029'">
+                                            <i class="badge badge-pill badge-info" >FY 2029-30</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2030'">
+                                            <i class="badge badge-pill badge-info" >FY 2030-31</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2031'">
+                                            <i class="badge badge-pill badge-info" >FY 2031-32</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2032'">
+                                            <i class="badge badge-pill badge-info" >FY 2032-33</i>
+                                        </t>
+                                        <t t-if="probation.target_Year == '2033'">
+                                            <i class="badge badge-pill badge-info" >FY 2033-34</i>
+                                        </t>
+                                     <t t-if="probation.target_Year == '2034'">
+                                            <i class="badge badge-pill badge-info" >FY 2034-35</i>
+                                        </t>
+                                     <t t-if="probation.target_Year == '2035'">
+                                            <i class="badge badge-pill badge-info" >FY 2035-36</i>
+                                        </t>
+                                     <t t-if="probation.target_Year == '2036'">
+                                            <i class="badge badge-pill badge-info" >FY 2036-37</i>
+                                        </t>
+                                     <t t-if="probation.target_Year == '2037'">
+                                            <i class="badge badge-pill badge-info" >FY 2037-38</i>
+                                        </t>
+                                    <t t-if="probation.target_Year == '2038'">
+                                            <i class="badge badge-pill badge-info" >FY 2038-39</i>
+                                        </t>
+                                    <t t-if="probation.target_Year == '2039'">
+                                            <i class="badge badge-pill badge-info" >FY 2039-39</i>
+                                        </t>
+                                    <t t-if="probation.target_Year == '2040'">
+                                            <i class="badge badge-pill badge-info" >FY 2040-41</i>
+                                        </t>
                                     </div>
                               </div>
                             </div>
                            </div>
+                          
                        
                              <div class="s_website_form_rows row s_col_no_bgcolor">
                                 <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
@@ -386,8 +474,8 @@
                                         <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_position">
                                                      <span class="s_website_form_label_content">Date Of Joining</span>
                                         </label>
-                                    <div class="col-sm">
-                                        <t t-esc="probation.employee_id.date"    />
+                                        <div class="col-sm">
+                                          <t t-esc="probation.employee_id.date"    t-options='{"widget": "date"}'/>
                                             </div>
                                         </div>
                                     </div>
@@ -415,12 +503,12 @@
                                  <div class="col-md-6"> <strong></strong>
                                      <t t-if='edit_probation==True'>  
                                     <select  id="reviewed_employee" class="form-control  s_website_form_input" name="reviewed_employee" >                      
-                                                 <option value="blank"></option>
+                                                <option value="blank"></option>
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
                                     </select> 
                                     </t>   
-                                  <span t-esc="probation.reviewed_employee"  />  
+                                  <i class="badge badge-pill badge-info"><span t-esc="probation.reviewed_employee"  /></i>  
                                 </div>
                             </div>
                              <style>
@@ -430,28 +518,20 @@
                              </style>    
                              <br/>
                              <div class="row">            
-                                <div class="col-md-6"> <strong>Job Knowledge : </strong>
-                                
+                                <div class="col-md-6"> <strong>Job Knowledge : </strong>                         
                                 </div>
                                  <div id='dprobation' class="col-md-6"> <strong></strong>
                                      <t t-if='edit_probation==True'>
-                                         <label class="radio-inline">
-                                          <input type="radio" name="knowledge"/>1
-                                        </label>
-                                        <label class="radio-inline">
-                                          <input type="radio" name="knowledge"/>2
-                                        </label>
-                                        <label class="radio-inline">
-                                          <input type="radio" name="knowledge"/>3
-                                        </label>
-                                       <label class="radio-inline">
-                                          <input type="radio" name="knowledge"/>4
-                                        </label>
-                                        <label class="radio-inline">
-                                        </label>  
+                                          <select style='display:inline-block;'  id="knowledge" class="form-control  s_website_form_input" name="knowledge" >
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                    </select>  
                                     </t>   
                                      
-                                   <span t-esc="probation.knowledge"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.knowledge"  /> </i>
                                 </div>
                                   
                             </div>
@@ -470,7 +550,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.productivity"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.productivity"  /> </i> 
                                 </div>
                                   
                             </div>
@@ -489,7 +569,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.quality_of_work"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.quality_of_work"  /></i>  
                                 </div>
                                   
                             </div> 
@@ -508,7 +588,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>    
-                                   <span t-esc="probation.technical_skills"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.technical_skills"  /></i>  
                                 </div>
                                   
                             </div>  
@@ -527,7 +607,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.analytical_skills"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.analytical_skills"  /> </i> 
                                 </div>
                                   
                             </div>  
@@ -546,7 +626,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.creativity"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.creativity"  /></i>  
                                 </div>
                                   
                             </div>  
@@ -565,7 +645,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.team_player"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.team_player"  /></i>  
                                 </div>
                                   
                             </div>
@@ -584,7 +664,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.hardwork"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.hardwork"  /></i>  
                                 </div>
                                   
                             </div> 
@@ -603,7 +683,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.communication_skills"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.communication_skills"  /> </i> 
                                 </div>
                                   
                             </div> 
@@ -622,7 +702,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>     
-                                   <span t-esc="probation.dependability"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.dependability"  /></i>  
                                 </div>
                                   
                             </div>  
@@ -641,7 +721,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>    
-                                   <span t-esc="probation.initiative"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.initiative"  /> </i> 
                                 </div>
                                   
                             </div> 
@@ -660,7 +740,7 @@
                                                 <option value="5">5</option>
                                         </select> 
                                     </t>    
-                                   <span t-esc="probation.meet_deadline"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.meet_deadline"  /></i>  
                                 </div>
                                   
                             </div> 
@@ -679,7 +759,7 @@
                                                 <option value="5">5</option>
                                     </select> 
                                     </t>    
-                                   <span t-esc="probation.discipline"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.discipline"  /></i>  
                                 </div>
                                   
                             </div>
@@ -688,7 +768,7 @@
                                  <div class="col-md-6"> <strong><p style='color:red;'>Overall Evaluation</p></strong>
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
-                                    <span t-esc="probation.overall_evaluation"  />
+                                    <i class="badge badge-pill badge-info" ><span t-esc="probation.overall_evaluation"  /></i>
                                 </div>
                                   
                             </div> 
@@ -780,7 +860,7 @@
                         </script>  
                        
                             <br/>
-                             <h4><p style='color:blue;'>Confirmation Status</p></h4>
+                             <h4><p style='color:blue;'>Confirmation</p></h4>
                            <br/>
                              <div class="row">            
                                 <div class="col-md-6"> <strong>Confirmation Status: </strong>
@@ -789,12 +869,13 @@
                                  <div class="col-md-6"> <strong></strong>
                                    <t t-if='edit_probation==True'>  
                                     <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                                <option value="blank"></option>
                                                 <option value="confirm">Confirm Employee</option>
                                                 <option value="dont_confirm">Do Not Confirm</option>
                                                 <option value="extend">Extend Probation</option>
                                     </select> 
                                     </t>    
-                                   <span t-esc="probation.confirmation_status"  />  
+                                   <i class="badge badge-pill badge-info" ><span t-esc="probation.confirmation_status"  /></i>  
                                 </div>
                                   
                             </div>  
@@ -820,11 +901,18 @@
                                 
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
-                                    <t t-if='edit_probation==True'>  
-                                    <input id="grade" name="grade" class="form-control s_website_form_input" t-att-value='probation.grade' />
+                                    <t t-if='edit_probation==True'>
+                                     <select class="form-control  o_website_form_input" name="grade" readonly="1" >                                  <option value="blank"></option> 
+                                                <t t-foreach="grade" t-as="g">
+                                                    
+                                                    <option t-att-value="g.name">
+                                                        <t t-esc="g.name" />
+                                                    </option>
+                                                </t>
+                                        </select>   
                                     </t>  
                                   <t t-if='edit_probation==False'>     
-                                    <span t-esc="probation.grade"  /> 
+                                    <i class="badge badge-pill badge-info" ><span t-esc="probation.grade"  /></i> 
                                   </t>  
                                 </div>
                                   
@@ -863,7 +951,7 @@
                        
                          <h4><p style='color:blue;'>Employee Comments</p></h4>
                            <div class="row">            
-                                 <div class="col-md-6"> <strong></strong>
+                                 <div class="col-md-12"> <strong></strong>
                                    <t t-if='edit_emp_probation==True'>  
                                     <textarea id="employee_comment" name="employee_comment" t-att-value='probation.employee_comment' rows="4" cols="50">
                                          
@@ -877,10 +965,8 @@
                        
                          <h4><p style='color:blue;'>HR Comments</p></h4>
                            <div class="row">            
-                                <div class="col-md-6">
                                 
-                                </div>
-                                 <div class="col-md-6"> <strong></strong>
+                                 <div class="col-md-12"> <strong></strong>
                                    <t t-if='edit_hr_probation==True'>  
                                     <textarea id="hr_comments" name="hr_comments" t-att-value='probation.hr_comments' rows="4" cols="50">
                                          
@@ -894,7 +980,7 @@
                        
                          <h4><p style='color:blue;'>HOD Comments</p></h4>
                            <div class="row">            
-                                <div class="col-md-6">                               
+                                <div class="col-md-12">                               
                                </div>
                                  <div class="col-md-6"> <strong></strong>
                                    <t t-if='edit_hod_probation==True'>  
