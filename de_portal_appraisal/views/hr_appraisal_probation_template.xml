@@ -72,8 +72,45 @@
                             </t>
                                 <t t-if="probation.employee_id.parent_id.user_id.id != uid">   
                                 <t t-if="probation.employee_id.department_id.manager_id.user_id.id == uid">  
-                                <tr>
-                                      <td class="text-left">
+                                 <tr>
+                                       <td class="text-left">
+                                        #<span t-esc="probation.id" />
+                                       </td>
+                                       <td>
+                                          <a t-attf-href="/appraisal/probation/#{probation.id}?{{ keep_query() }}"><span t-field="probation.employee_id.name"/></a>
+                                       </td>
+                                       <td class="text-left">
+                                          <span t-esc="probation.date_of_joining" t-options='{"widget": "date"}' />
+                                       </td>
+                                       <td class="text-left">
+                                            <span t-esc="probation.expiry"  t-options='{"widget": "date"}'/>
+                                       </td>
+                                       <td class="text-left">
+                                            <t t-if="probation.state == 'draft'">
+                                                <i class="badge badge-pill badge-info" >Draft</i>
+                                            </t>
+                                            <t t-if="probation.state == 'employee_waiting'">
+                                                <i class="badge badge-pill badge-info" >Sent For Employees Review</i>
+                                            </t>
+                                            <t t-if="probation.state == 'confirmed'">
+                                                <i class="badge badge-pill badge-info" >Approved</i>
+                                            </t>
+                                            <t t-if="probation.state == 'employee_review'">
+                                                <i class="badge badge-pill badge-info" >Reviewed By Employee</i>
+                                            </t>
+                                            <t t-if="probation.state == 'hr_review'">
+                                                <i class="badge badge-pill badge-info" >Reviewd By HR</i>
+                                            </t>
+                                             <t t-if="probation.state == 'done'">
+                                                <i class="badge badge-pill badge-info" >Done</i>
+                                            </t>
+                                       </td>                                   
+                                  </tr>
+                                 </t> 
+                                </t>                                 
+                                <t t-if="probation.employee_id.user_id.id == uid">                                  
+                                <tr>                                    
+                                    <td class="text-left">
                                         #<span t-esc="probation.id" />
                                     </td>
                                      <td>
@@ -106,64 +143,11 @@
                                         </t>
                                          <t t-if="probation.state == 'done'">
                                             <i class="badge badge-pill badge-info" >Done</i>
-                                        </t>
-                                       
-                                    </td>                                   
-                            
+                                        </t>                                      
+                                    </td>                                                                               
                                 </tr>
-                                    </t> 
-                                    </t> 
-                                
-                                <t t-if="probation.employee_id.user_id.id == uid">   
-                                
-                                <tr>
-                                     
-                                         <td class="text-left">
-                                        #<span t-esc="probation.id" />
-                                    </td>
-                                     <td>
-                                        <a t-attf-href="/appraisal/probation/#{probation.id}?{{ keep_query() }}"><span t-field="probation.employee_id.name"/></a>
-                                    </td>
-                                    
-                                     
-                                    <td class="text-left">
-                                        <span t-esc="probation.date_of_joining" t-options='{"widget": "date"}' />
-                                    </td>
-                                    <td class="text-left">
-                                        <span t-esc="probation.expiry"  t-options='{"widget": "date"}'/>
-                                    </td>
-                                   
-                                    <td class="text-left">
-                                        <t t-if="probation.state == 'draft'">
-                                            <i class="badge badge-pill badge-info" >Draft</i>
-                                        </t>
-                                        <t t-if="probation.state == 'employee_waiting'">
-                                            <i class="badge badge-pill badge-info" >Sent For Employees Review</i>
-                                        </t>
-                                        <t t-if="probation.state == 'confirmed'">
-                                            <i class="badge badge-pill badge-info" >Approved</i>
-                                        </t>
-                                        <t t-if="probation.state == 'employee_review'">
-                                            <i class="badge badge-pill badge-info" >Reviewed By Employee</i>
-                                        </t>
-                                        <t t-if="probation.state == 'hr_review'">
-                                            <i class="badge badge-pill badge-info" >Reviewd By HR</i>
-                                        </t>
-                                         <t t-if="probation.state == 'done'">
-                                            <i class="badge badge-pill badge-info" >Done</i>
-                                        </t>
-                                       
-                                    </td>                                   
-                                                        
-                            
-                                </tr>
-                            </t>
-                                
+                            </t>                                                                              
                             </t>    
-
-                            <tr>
-                                
-                            </tr> 
                         </tbody>
                     </t>
                 </t>
@@ -171,52 +155,46 @@
         </t>
     </template>
      
-    <template id="portal_appraisal_probation" name="probation form ">
-        <t t-call="portal.portal_layout">
-             
-          
+    <template id="portal_appraisal_probation" name="probation form">
+        <t t-call="portal.portal_layout">          
             <div id="optional_placeholder"></div>
             <t t-call="portal.portal_record_layout">
                 <t t-set="card_header">
                     <div id="optional_placeholder"></div>
                     <div class="container">
-                         <t t-if="probation.employee_id.parent_id.user_id.id == uid">
+                            <t t-if="probation.employee_id.parent_id.user_id.id == uid">
                              <t t-if="probation.state in ('confirmed','draft')">
                                <t t-if="edit_probation==False">  
-                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Edit</div> </a> 
-                            </t>
-                            </t>     
+                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%;">Edit</div> </a> 
+                               </t>
+                             </t>     
                             </t> 
                            <t t-if="probation.employee_id.user_id.id == uid">
                              <t t-if="probation.state=='employee_waiting'">
                                <t t-if="edit_emp_probation==False">  
-                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Edit</div> </a> 
+                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%;">Edit</div> </a> 
                             </t>
                             </t>     
                             </t> 
                         <t t-if="probation.employee_id.department_id.manager_id.user_id.id == uid">
                              <t t-if="probation.state=='hr_review'">
                                <t t-if="edit_hod_probation==False">  
-                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Edit</div> </a> 
+                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%;">Edit</div> </a> 
                             </t>
                             </t>     
                             </t> 
                         <t t-if="probation.employee_id.user_id.id == uid">
                              <t t-if="probation.state=='employee_review'">
                                <t t-if="edit_hr_probation==False">  
-                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Edit</div> </a> 
+                                <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%;">Edit</div> </a> 
                             </t>
                             </t>     
                             </t> 
-                      <div class="card">
-                            
-                                     
-                        <div class="card-header">
-                             <div>
-                                  
+                      <div class="card">                                    
+                            <div class="card-header">
+                             <div>                                  
                                 </div>
-                               <div>
-                               
+                               <div>                              
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-11">
@@ -262,29 +240,29 @@
                          <t t-if="probation.employee_id.parent_id.user_id.id == uid">
                                     <t class="col-lg-7 col-md-8" >
                                        <t t-if="edit_probation == False"> 
-                                        <a t-attf-href="/action/confirm/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm</div> </a> 
+                                        <a t-attf-href="/action/confirm/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%;">Confirm</div> </a> 
                                     </t>
                                      </t>   
                                  </t>  
                             </t>  
                          <t t-if="probation.state == 'confirmed' ">
-                         <t t-if="probation.employee_id.parent_id.user_id.id == uid">
+                          <t t-if="probation.employee_id.parent_id.user_id.id == uid">
                                     <t class="col-lg-7 col-md-8" >
                                        <t t-if="edit_probation == False"> 
                                         <a t-attf-href="/action/emp/review/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Send For Employee Review</div> </a> 
                                     </t>
-                                     </t>   
-                                 </t>  
+                                  </t>   
+                               </t>  
                             </t>  
                         
-                        <t t-if="probation.state == 'employee_waiting' ">
-                         <t t-if="probation.employee_id.user_id.id == uid">
+                         <t t-if="probation.state == 'employee_waiting' ">
+                           <t t-if="probation.employee_id.user_id.id == uid">
                                     <t class="col-lg-7 col-md-8" >
                                        <t t-if="edit_emp_probation == False"> 
                                         <a t-attf-href="/action/confirm/empreview/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Reviewed By Employee</div> </a> 
                                     </t>
-                                     </t>   
-                                 </t>  
+                                  </t>   
+                                </t>  
                             </t>  
                         
                         <t t-if="probation.state == 'employee_review' ">
@@ -329,49 +307,104 @@
                                 <span id="s_website_form_result"></span>
                          </div> 
                        
-                    </div>
+                    </div> 
+                       
+                            <div class="s_website_form_rows row s_col_no_bgcolor">
+                                <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_employee">
+                                                     <span class="s_website_form_label_content">Employee</span>
+                                        </label>
+                                    <div class="col-sm">
+                                        <t t-esc="probation.employee_id.name"    />
+                                            </div>
+                                        </div>
+                                    </div>
 
-                            <div class="row">
-                                <div class="col-md-6"> <strong>Employee : </strong>
-                                    <t t-if="probation.employee_id">
-                                        <span t-esc="probation.employee_id.name"/>
-                                    </t>
-                                </div>
-                                 <div class="col-md-6"> <strong>Manager : </strong>
-                                    <t t-if="probation.manager_name">
-                                        <span t-esc="probation.manager_name.name"/>
-                                    </t>
-                                </div>  
+                            <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                    <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="manager_manager">
+                                            <span class="s_website_form_label_content">Manager</span>
+                                    </label>
+                                    <div class="col-sm">
+                                            <t t-esc="probation.employee_id.parent_id.name"    />
+                                    </div>
+                              </div>
                             </div>
-                             <br/>
-                             <div class="row">            
-                                <div class="col-md-6"> <strong>Poition : </strong>
-                                    <t t-if="probation.position">
-                                        <span t-esc="probation.position"/>
-                                    </t>
-                                </div>
-                                 <div class="col-md-6"> <strong>Target Year : </strong>
-                                    <t t-if="probation.target_Year">
-                                        <span t-esc="probation.target_Year"/>
-                                    </t>
-                                </div>
-                                  
+                           </div>
+                           <div class="s_website_form_rows row s_col_no_bgcolor">
+                                <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_code">
+                                                     <span class="s_website_form_label_content">Employee Code</span>
+                                        </label>
+                                    <div class="col-sm">
+                                        <t t-esc="probation.employee_id.emp_number"    />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                    <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="manager_grade">
+                                            <span class="s_website_form_label_content">Grade</span>
+                                    </label>
+                                    <div class="col-sm">
+                                            <t t-esc="probation.employee_id.grade_designation.name"    />
+                                    </div>
+                              </div>
                             </div>
-                             <br/>
-                             <div class="row">            
-                                <div class="col-md-6"> <strong>Date of Joining : </strong>
-                                    <t t-if="probation.date_of_joining">
-                                        <span t-esc="probation.date_of_joining" t-options='{"widget": "date"}'/>
-                                    </t>
-                                </div>
-                                 <div class="col-md-6"> <strong>Probation Expiry : </strong>
-                                    <t t-if="probation.expiry">
+                           </div>
+                       
+                           <div class="s_website_form_rows row s_col_no_bgcolor">
+                                <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_position">
+                                                     <span class="s_website_form_label_content">Position</span>
+                                        </label>
+                                    <div class="col-sm">
+                                        <t t-esc="probation.employee_id.name"    />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                    <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="manager_target_year">
+                                            <span class="s_website_form_label_content">Target Year</span>
+                                    </label>
+                                    <div class="col-sm">
+                                            <t t-esc="probation.target_Year"    />
+                                    </div>
+                              </div>
+                            </div>
+                           </div>
+                       
+                             <div class="s_website_form_rows row s_col_no_bgcolor">
+                                <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                                    <div class="row s_col_no_resize s_col_no_bgcolor">
+                                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_position">
+                                                     <span class="s_website_form_label_content">Date Of Joining</span>
+                                        </label>
+                                    <div class="col-sm">
+                                        <t t-esc="probation.employee_id.date"    />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                            <div class="row s_col_no_resize s_col_no_bgcolor">
+                                    <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="manager_target_year">
+                                            <span class="s_website_form_label_content">Probation Expiry</span>
+                                    </label>
+                                    <div class="col-sm">
                                         <span t-esc="probation.expiry"  t-options='{"widget": "date"}'/>
-                                    </t>
-                                </div>
-                                  
+                                    </div>
+                              </div>
                             </div>
-                             <br/>
+                           </div>
+                       
+                        
                              <h3><p style='color:blue;'>Area To Review</p></h3>
                              <br/>
                                <div class="row">            
@@ -381,14 +414,14 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                      <t t-if='edit_probation==True'>  
-                                    <select  id="reviewed_employee" class="form-control  s_website_form_input" name="reviewed_employee" >
+                                    <select  id="reviewed_employee" class="form-control  s_website_form_input" name="reviewed_employee" >                      
+                                                 <option value="blank"></option>
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
                                     </select> 
                                     </t>   
                                   <span t-esc="probation.reviewed_employee"  />  
                                 </div>
-                                  
                             </div>
                              <style>
                                  #dprobation select option {
@@ -401,14 +434,21 @@
                                 
                                 </div>
                                  <div id='dprobation' class="col-md-6"> <strong></strong>
-                                     <t t-if='edit_probation==True'>  
-                                    <select   id="knowledge" class="form-control  s_website_form_input" name="knowledge" >
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                    </select> 
+                                     <t t-if='edit_probation==True'>
+                                         <label class="radio-inline">
+                                          <input type="radio" name="knowledge"/>1
+                                        </label>
+                                        <label class="radio-inline">
+                                          <input type="radio" name="knowledge"/>2
+                                        </label>
+                                        <label class="radio-inline">
+                                          <input type="radio" name="knowledge"/>3
+                                        </label>
+                                       <label class="radio-inline">
+                                          <input type="radio" name="knowledge"/>4
+                                        </label>
+                                        <label class="radio-inline">
+                                        </label>  
                                     </t>   
                                      
                                    <span t-esc="probation.knowledge"  />  
@@ -422,7 +462,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select style='display:inline-block;'  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select style='display:inline-block;'  id="productivity" class="form-control  s_website_form_input" name="productivity" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -441,7 +481,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="quality_of_work" class="form-control  s_website_form_input" name="quality_of_work" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -460,7 +500,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                      <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="technical_skills" class="form-control  s_website_form_input" name="technical_skills" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -479,7 +519,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="analytical_skills" class="form-control  s_website_form_input" name="analytical_skills" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -498,7 +538,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="creativity" class="form-control  s_website_form_input" name="creativity" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -517,7 +557,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="team_player" class="form-control  s_website_form_input" name="team_player" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -536,7 +576,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="hardwork" class="form-control  s_website_form_input" name="hardwork" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -555,7 +595,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="communication_skills" class="form-control  s_website_form_input" name="communication_skills" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -574,7 +614,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                     <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="dependability" class="form-control  s_website_form_input" name="dependability" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -593,7 +633,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                      <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="initiative" class="form-control  s_website_form_input" name="initiative" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -612,13 +652,13 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                      <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                       <select  id="meet_deadline" class="form-control  s_website_form_input" name="meet_deadline" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
                                                 <option value="4">4</option>
                                                 <option value="5">5</option>
-                                    </select> 
+                                        </select> 
                                     </t>    
                                    <span t-esc="probation.meet_deadline"  />  
                                 </div>
@@ -631,7 +671,7 @@
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                      <t t-if='edit_probation==True'>  
-                                    <select  id="confirmation_status" class="form-control  s_website_form_input" name="confirmation_status" >
+                                    <select  id="discipline" class="form-control  s_website_form_input" name="discipline" >
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -806,27 +846,23 @@
                             </div>
                        
                           <div  id='probation_extend_date' class="row">            
-                                <div class="col-md-6"> <strong>Probation extension Period: </strong>
-                                
+                                <div class="col-md-6"> <strong>Probation extension Period: </strong>             
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
                                    <t t-if='edit_probation==True'>  
                                     <select  id="probation_extension_period" class="form-control  s_website_form_input" name="probation_extension_period" >
+                                                <option value="blank"></option>
                                                 <option value="1">1 Month</option>
                                                 <option value="3">3 Month</option>
                                                 <option value="6">6 Month</option>
                                     </select> 
                                     </t>    
                                    <span t-esc="probation.probation_extension_period"  />  
-                                </div>
-                                  
-                            </div>
+                                </div>                                  
+                            </div> 
                        
                          <h4><p style='color:blue;'>Employee Comments</p></h4>
                            <div class="row">            
-                                <div class="col-md-6"> <strong>Comments : </strong>
-                                
-                                </div>
                                  <div class="col-md-6"> <strong></strong>
                                    <t t-if='edit_emp_probation==True'>  
                                     <textarea id="employee_comment" name="employee_comment" t-att-value='probation.employee_comment' rows="4" cols="50">
@@ -836,13 +872,12 @@
                                   <t t-if='edit_emp_probation==False'>     
                                     <span t-esc="probation.employee_comment"  /> 
                                   </t>      
-                                </div>
-                                  
+                                </div>                                  
                             </div>
                        
                          <h4><p style='color:blue;'>HR Comments</p></h4>
                            <div class="row">            
-                                <div class="col-md-6"> <strong>HR Comments : </strong>
+                                <div class="col-md-6">
                                 
                                 </div>
                                  <div class="col-md-6"> <strong></strong>
@@ -854,20 +889,17 @@
                                   <t t-if='edit_hr_probation==False'>     
                                     <span t-esc="probation.hr_comments"  /> 
                                   </t>    
-                                </div>
-                                  
-                            </div>
+                                </div>                                  
+                            </div>    
                        
                          <h4><p style='color:blue;'>HOD Comments</p></h4>
                            <div class="row">            
-                                <div class="col-md-6"> <strong>Comments : </strong>
-                                
-                                </div>
+                                <div class="col-md-6">                               
+                               </div>
                                  <div class="col-md-6"> <strong></strong>
                                    <t t-if='edit_hod_probation==True'>  
-                                    <textarea id="comments" name="comments" t-att-value='probation.comments' rows="4" cols="50">
-                                         
-                                    </textarea> 
+                                    <textarea id="comments" name="comments" t-att-value='probation.comments' rows="4" cols="50">                                         
+                                   </textarea> 
                                     </t>  
                                   <t t-if='edit_hod_probation==False'>     
                                     <span t-esc="probation.comments"  /> 
@@ -875,39 +907,18 @@
                                 </div>
                                   
                             </div>
-                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                         <input type="hidden" name="probationid" t-att-value="probation.id"/>
-
+                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>                                      <input type="hidden" name="probationid" t-att-value="probation.id"/>
                   </form>
                      <div class="row">                             
-                           <br/>
-                       
-                            <div class="col-md-6"> <strong> </strong>
-                            
-                                
-                            </div>  
-                           
-                            <div class="col-md-6"> <strong> </strong>
-                            
-                               
-                                
-                            </div>  
-                         
-                    </div>         
-                             
-                       
-                  
-
+                           <br/>                      
+                           <div class="col-md-6"> <strong> </strong>                                
+                            </div>                             
+                            <div class="col-md-6"> <strong> </strong>                                
+                            </div>                          
+                    </div>                          
                 </t> 
             </t>
-<!--             <div class="mt32">
-                <h4><strong>Message and communication history</strong></h4>
-                <t t-call="portal.message_thread">
-                    <t t-set="object" t-value="appraisal"/>
-                    <t t-set="pid" t-value="pid"/>
-                    <t t-set="hash" t-value="hash"/>
-                </t>
-            </div> -->
+
         </t>
     </template>
     

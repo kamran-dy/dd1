@@ -48,7 +48,6 @@ class CreateAppraisal(http.Controller):
         probation = request.env['hr.appraisal.probation'].search([('id','=', kw.get('probationid'))])
         if probation.state in ('draft','confirmed'):
             probation.update({
-                'reviewed_employee': kw.get('reviewed_employee'),
                 'knowledge': kw.get('knowledge'),
                 'productivity': kw.get('productivity'),
                 'quality_of_work': kw.get('quality_of_work'),
@@ -65,6 +64,10 @@ class CreateAppraisal(http.Controller):
                 'employee_can_excel': kw.get('employee_can_excel'),
                 'improvement_is_required': kw.get('improvement_is_required'),
             })
+            if kw.get('reviewed_employee') != 'blank':
+                probation.update({
+                    'reviewed_employee': kw.get('reviewed_employee')
+                })    
             if kw.get('confirmation_status') == 'confirm':
                 probation.update({
                     'gross_salary': kw.get('gross_salary'),
@@ -72,9 +75,10 @@ class CreateAppraisal(http.Controller):
                     'with_from': kw.get('with_from'),
                 })
             elif kw.get('confirmation_status') == 'extend':
-                probation.update({
-                    'probation_extension_period': kw.get('probation_extension_period'),
-                })
+                if  kw.get('probation_extension_period') != 'blank':
+                    probation.update({
+                        'probation_extension_period': kw.get('probation_extension_period'),
+                    })
                 
         if probation.state =='employee_waiting':
             probation.update({
@@ -267,7 +271,7 @@ class CustomerPortal(CustomerPortal):
                 search_domain = OR([search_domain, [('state', 'ilike', search)]])
             domain += search_domain
         domain += ['|','|',('employee_id.user_id', '=', http.request.env.context.get('uid')),('employee_id.parent_id.user_id', '=', http.request.env.context.get('uid')),('employee_id.department_id.manager_id.user_id', '=', http.request.env.context.get('uid'))]
-        probation_count = request.env['hr.appraisal.probation'].search_count(domain)
+        probation_count = request.env['hr.appraisal.probation'].sudo().search_count(domain)
 
         pager = portal_pager(
             url="/appraisal/probations",
@@ -277,14 +281,10 @@ class CustomerPortal(CustomerPortal):
             page=page,
             step=self._items_per_page
         )
-
-        _probations = request.env['hr.appraisal.probation'].search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
+        _probations = request.env['hr.appraisal.probation'].sudo().search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
         request.session['my_probation_history'] = _probations.ids[:100]
-
-        grouped_probations = [_probations]
-                
+        grouped_probations = [_probations]                
         paging(0,0,1)
-
         paging(grouped_probations)
         company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
         values.update({
@@ -340,8 +340,7 @@ class CustomerPortal(CustomerPortal):
                     pre_id = 1
         else:
             next_id = 0
-            pre_id = 0
-            
+            pre_id = 0            
         edit_probation = False
         edit_emp_probation = False
         edit_hod_probation = False
