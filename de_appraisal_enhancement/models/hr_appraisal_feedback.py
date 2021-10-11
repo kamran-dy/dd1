@@ -52,9 +52,9 @@ class HrAppraisalFeedback(models.Model):
         ('Needs Improvement', 'Needs Improvement'),
         ('Unsatisfactory', 'Unsatisfactory'),
     ], string='Employee Rating Level', index=True, copy=False, compute='compute_total_rating_level')
-    rating_score = fields.Float(string='Mnanager Rating Score', compute='compute_rating_level')
+    rating_score = fields.Float(string='Manager Rating Score', compute='compute_rating_level')
+    rating_score_calc = fields.Float(string='Manager Rating Score')
     
-    @api.depends('rating_level')
     def compute_rating_level(self):
         for line in self:
             total_grand = 0
@@ -72,38 +72,42 @@ class HrAppraisalFeedback(models.Model):
                 full_year_obj_score += full_year_obj_line.manager_rating_score        
             total_grand = (half_year_obj_score/5) +  (half_year_core_score/5) + (full_year_obj_score/5) + (full_year_core_score/5) 
             line.update({
-                'rating_score': total_grand
-            })
-           
+                'rating_score': total_grand,
+                'rating_score_calc': total_grand,
+            })           
      
             
     @api.depends('rating_score')
     def compute_total_rating_level(self):
         for line in self:
-            if line.rating_score >=1 and line.rating_score <=1.4:
+            if line.rating_score >= 1 and line.rating_score <= 1.4:
                 line.update({
-                'rating_level': 'Unsatisfactory'
-                }) 
-            if line.rating_score >=1.5 and line.rating_score <=2.4:
+                    'rating_level': 'Unsatisfactory'
+                })
+            elif line.rating_score >= 1.5 and line.rating_score <= 2.4:
                 line.update({
-                'rating_level': 'Needs Improvement'
-                }) 
-            if line.rating_score >2.5 and line.rating_score <3.4:
+                    'rating_level': 'Needs Improvement'
+                })   
+            elif line.rating_score >= 2.5 and line.rating_score <= 3.4:
                 line.update({
-                'rating_level': 'Strong Performance'
-                }) 
-            if line.rating_score >=3.5 and line.rating_score <=4.4:
+                    'rating_level': 'Strong Performance'
+                })   
+            elif line.rating_score >= 3.5 and line.rating_score <= 4.4:
                 line.update({
-                'rating_level': 'Excellent Performance'
-                }) 
-            if line.rating_score >=4.5 and line.rating_score <=5:
+                    'rating_level': 'Excellent Performance'
+                })
+            elif line.rating_score >= 4.5 and line.rating_score <= 5:
                 line.update({
-                'rating_level': 'Outstanding Performance'
-                })          
+                    'rating_level': 'Outstanding Performance'
+                })
+            elif line.rating_score > 5:
+                line.update({
+                    'rating_level': 'Outstanding Performance'
+                })    
             else:
-               line.update({
-                'rating_level': False
-                })        
+                line.update({
+                    'rating_level': False
+                })            
                 
     
     def unlink(self):

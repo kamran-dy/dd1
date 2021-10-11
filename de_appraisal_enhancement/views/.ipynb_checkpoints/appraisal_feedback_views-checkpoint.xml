@@ -98,6 +98,7 @@
                         </group>
                         <group>
                             <field name="rating_score" />
+                            <field name="rating_score_calc"  invisible='1'/>
                             <field name="appraisal_period" widget="radio" readonly="1" invisible="1"/>
                         </group>
                     </group>          
