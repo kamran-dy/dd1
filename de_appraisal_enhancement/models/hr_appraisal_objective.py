@@ -154,7 +154,7 @@ class HrAppraisalObjectiveline(models.Model):
     
     objective_id = fields.Many2one('hr.appraisal.objective')
     objective = fields.Char('Objective', required=True)
-    description = fields.Char('Description', required=True)
+    description = fields.Char('Description', required=False)
     date_from = fields.Date(string='Date From', required=True)
     date_to = fields.Date(string='Date To', required=True)
     priority = fields.Selection([

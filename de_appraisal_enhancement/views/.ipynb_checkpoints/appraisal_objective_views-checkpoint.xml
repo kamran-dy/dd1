@@ -39,7 +39,7 @@
                       <field name='objective_lines'  attrs="{'readonly': [('readonly_status','=','make_readonly')]}">
                         <tree editable="bottom">
                             <field name="category_id" />
-                            <field name="objective" />
+                            <field name="objective"  invisible='1'/>
                             <field name="description" />
                             <field name="date_from" />
                             <field name="date_to" />

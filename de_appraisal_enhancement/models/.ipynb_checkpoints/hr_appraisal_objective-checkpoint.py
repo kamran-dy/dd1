@@ -29,7 +29,8 @@ class HrAppraisalObjective(models.Model):
                                        ('2027', 'FY 2027-28'),
                                        ('2028', 'FY 2028-29'), 
                                        ('2029', 'FY 2029-30'), 
-                                       ('2030', 'FY 2030-31'), 
+                                       ('2030', 'FY 2030-31'),
+                                       ('2031', 'FY 2031-32'),
                                        ('2032', 'FY 2032-33'),
                                        ('2033', 'FY 2023-34'), 
                                        ('2034', 'FY 2034-35'), 
@@ -153,7 +154,7 @@ class HrAppraisalObjectiveline(models.Model):
     
     objective_id = fields.Many2one('hr.appraisal.objective')
     objective = fields.Char('Objective', required=True)
-    description = fields.Char('Description', required=True)
+    description = fields.Char('Description', required=False)
     date_from = fields.Date(string='Date From', required=True)
     date_to = fields.Date(string='Date To', required=True)
     priority = fields.Selection([

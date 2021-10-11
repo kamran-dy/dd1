@@ -40,7 +40,7 @@ class HrAppraisalValues(models.Model):
     @api.constrains('weightage')
     def limit_weightage(self):
         for rec in self:
-            count = 0
+            count = 0.0
             for line in rec.values_lines:
                 count = count + line.weightage
             rec.total_weightage = count
