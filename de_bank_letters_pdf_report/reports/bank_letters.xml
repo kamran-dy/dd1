@@ -1,0 +1,49 @@
+<odoo>
+    <template id="bank_letter_report">
+        <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                        <t t-call="de_bank_letters_pdf_report.pdf_report_layout"/>
+                        <div class="page">
+                            <p1>
+                                Bank Manager
+                                <br/>
+                                Bank Alfalah ltd
+                                <br/>
+                                Model Town lahore
+                            </p1>
+                            <br/>
+                            <p2 style="border-bottom: 1px solid black;">Subject:Distursement of Descon Corportion PVT LTD Employess Salaries for the Month of Nov,2020
+                            </p2>
+                            <br/>
+                            <br/>
+                            <p3>
+                                Dear sir,
+                                <br/>
+                                with refrence to captioned subject you are requested to disburse the amount PKR from Descon Corporation Pvt Ltd Account against 
+                                cheque# <span t-field="o.cheque_no"/> which details are mentioned below against the salary sheet(attached) against respective employee maintaining account in same branch
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                
+                            </p3>
+                             <t t-foreach="o.bank" t-as="acc" style="font-weight: bold;">
+                                <span t-field="acc.company_id.name"/> 
+                                </t>
+                        </div>
+                       
+                    </div>
+            </t>
+            </t>
+       
+    </template>
+
+    <report
+            id="bank_report_data"
+            string="Bank letters (PDF)"
+            model="bank.model"
+            report_type="qweb-pdf"
+            file="de_bank_letters_pdf_report.bank_letter_report"
+            name="de_bank_letters_pdf_report.bank_letter_report"/>
+</odoo>
