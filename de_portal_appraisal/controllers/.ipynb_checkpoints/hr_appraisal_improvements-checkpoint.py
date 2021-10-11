@@ -158,6 +158,35 @@ class CustomerPortal(CustomerPortal):
         obj_line_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)])
         return request.render("de_portal_appraisal.add_appraisal_improvement", add_appraisal_improvements_page_content(obj_line_sudo.id))
     
+    @http.route(['/delete/improvement/line/save/<int:line_id>'], type='http', auth="user", website=True)
+    def delete_improvement_line_template(self, line_id, access_token=None, **kw): 
+        record = 0
+        obj_line_sudo = request.env['hr.appraisal.improvements.line'].sudo().search([('id','=', line_id)])
+        record = obj_line_sudo.hr_aprsl_improve_id
+        obj_line_sudo.unlink()
+        return request.redirect('/appraisal/improvement/%s'%(record.id))
+    
+    @http.route(['/action/confirm/improvement/<int:line_id>'], type='http', auth="user", website=True)
+    def action_comfirm_improvement(self, line_id, access_token=None, **kw): 
+        record = 0
+        obj_line_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)])
+        
+        obj_line_sudo.action_confirmed()
+        return request.redirect('/appraisal/improvement/%s'%(obj_line_sudo.id))
+    
+    @http.route(['/action/send/improvement/<int:line_id>'], type='http', auth="user", website=True)
+    def send_for_employee_review_improvement(self, line_id, access_token=None, **kw): 
+        record = 0
+        obj_line_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)])
+        obj_line_sudo.action_waiting()
+        return request.redirect('/appraisal/improvement/%s'%(obj_line_sudo.id))
+    
+    @http.route(['/action/confirm/employee/<int:line_id>'], type='http', auth="user", website=True)
+    def action_confirm_employee_review_improvement(self, line_id, access_token=None, **kw): 
+        record = 0
+        obj_line_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)])
+        obj_line_sudo.action_review()
+        return request.redirect('/appraisal/improvement/%s'%(obj_line_sudo.id))
     
     
     @http.route(['/appraisal/improvements', '/appraisal/improvement/page/<int:page>'], type='http', auth="user", website=True)
