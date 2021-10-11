@@ -43,6 +43,20 @@ def add_appraisal_improvements_page_content(ref):
         'company_info': company_info,
     }
 
+def add_appraisal_improvements_line_page_content(ref):
+    global appraisal_improvements_list 
+    managers = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].search([('parent_id.user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+    improvement_line = request.env['hr.appraisal.improvements.line'].sudo().search([('id','=',ref)])
+    return {
+        'managers': managers,
+        'employees' : employees,
+        'improvement': improvement_line,
+        'appraisal_improvements_list': appraisal_improvements_list,
+        'company_info': company_info,
+    }
+
 def paging(data, flag1 = 0, flag2 = 0):        
     if flag1 == 1:
         return config.list12
@@ -108,6 +122,27 @@ class CreateImprovements(http.Controller):
                 })
         return request.redirect('/appraisal/improvement/%s'%(record.id))
     
+    
+    @http.route('/edit/improvement/line/save', type="http", auth="public", website=True)
+    def edit_exist_appraisal_improvement_lines(self, **kw):
+        record = request.env['hr.appraisal.improvements.line'].sudo().search([('id','=',int(kw.get('line_id')))])
+        if kw.get('rating'):
+            record.update({
+                'rating': kw.get('rating'),
+            })
+        if kw.get('performance_improvement_area'):
+            record.update({
+                'performance_improvement_area': kw.get('performance_improvement_area'),
+            })    
+        if kw.get('action_plan'):
+            record.update({
+                'action_plan': kw.get('action_plan'),
+                })
+        return request.redirect('/appraisal/improvement/%s'%(record.hr_aprsl_improve_id.id))
+    
+    
+   
+    
     @http.route('/add/improvement/line/save', type="http", auth="public", website=True)
     def new_add_line_appraisal_improvement(self, **kw):
         record = request.env['hr.appraisal.improvements'].sudo().search([('id','=',int(kw.get('rec_id')))])
@@ -143,7 +178,20 @@ class CustomerPortal(CustomerPortal):
             'pre_id' : pre_id,
         }
         return self._get_page_view_values(improvement, access_token, values, 'my_improvement_history', False, **kwargs)
-
+    
+    @http.route(['/edit/improvement/line/<int:line_id>'], type='http', auth="user", website=True)
+    def edit_exist_improvement_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.improvements.line'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.improvements.line'].sudo().search([('id','=', line_id)])
+        return request.render("de_portal_appraisal.edit_appraisal_improvement", add_appraisal_improvements_line_page_content(obj_line_sudo.id))
+    
     
     @http.route(['/new/improvement/line/save/<int:line_id>'], type='http', auth="user", website=True)
     def edit_improvement_line_template(self, line_id, access_token=None, **kw):
@@ -179,6 +227,14 @@ class CustomerPortal(CustomerPortal):
         record = 0
         obj_line_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)])
         obj_line_sudo.action_waiting()
+        return request.redirect('/appraisal/improvement/%s'%(obj_line_sudo.id))
+    
+    @http.route(['/action/done/<int:line_id>'], type='http', auth="user", website=True)
+    def action_done_improvement(self, line_id, access_token=None, **kw): 
+        record = 0
+        obj_line_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)])
+        
+        obj_line_sudo.action_done()
         return request.redirect('/appraisal/improvement/%s'%(obj_line_sudo.id))
     
     @http.route(['/action/confirm/employee/<int:line_id>'], type='http', auth="user", website=True)

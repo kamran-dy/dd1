@@ -271,7 +271,10 @@ class CustomerPortal(CustomerPortal):
             if search_in in ('state', 'all'):
                 search_domain = OR([search_domain, [('state', 'ilike', search)]])
             domain += search_domain
-        domain += ['|','|',('employee_id.user_id', '=', http.request.env.context.get('uid')),('employee_id.parent_id.user_id', '=', http.request.env.context.get('uid')),('employee_id.department_id.manager_id.user_id', '=', http.request.env.context.get('uid'))]
+        domain += ['|','|',
+                   '|',('employee_id.user_id', '=', http.request.env.context.get('uid'))
+                   ,('employee_id.company_id.hr_id.user_id', '=', http.request.env.context.get('uid')),
+                   ('employee_id.parent_id.user_id', '=', http.request.env.context.get('uid')),('employee_id.department_id.manager_id.user_id', '=', http.request.env.context.get('uid'))]
         probation_count = request.env['hr.appraisal.probation'].sudo().search_count(domain)
 
         pager = portal_pager(

@@ -553,7 +553,6 @@ class CreateAppraisal(http.Controller):
         line_id = kw.get('line_id')
         exist_line_obj = request.env['hr.appraisal.objective.line'].search([('id','=',line_id)])
         exist_line_obj.update({
-            'category_id': kw.get('category_id'),
             'objective': kw.get('objective'),
             'description': kw.get('objective'),
             'weightage': kw.get('weightage'),
@@ -561,9 +560,15 @@ class CreateAppraisal(http.Controller):
             'date_to': kw.get('date_to'),
         })
         if kw.get('status_id'):
-            exist_line_obj.update({
-                'status_id': kw.get('status_id'),
-            })
+            if kw.get('status_id') !='blank':
+                exist_line_obj.update({
+                    'status_id': kw.get('status_id'),
+                })
+        if kw.get('category_id'):
+            if kw.get('category_id') !='blank':
+                exist_line_obj.update({
+                  'category_id': kw.get('category_id'),
+                })        
         if kw.get('measuring_indicator'):
             exist_line_obj.update({
                 'measuring_indicator': kw.get('measuring_indicator'),
@@ -574,6 +579,7 @@ class CreateAppraisal(http.Controller):
                     'priority': kw.get('priority'),
                 })    
         return request.redirect('/appraisal/objective/%s'%(exist_line_obj.objective_id.id))
+    
     
     @http.route('/add/objective/line/save',type="http", website=True, auth='user')
     def add_appraisal_objective_template_submit(self, **kw):
@@ -663,7 +669,7 @@ class CreateAppraisal(http.Controller):
         if record.total_weightage != 100:
             raise UserError('Total Weightage must be equal 100')  
         record.action_sent_review() 
-        return request.render("de_portal_appraisal.appraisal_submited", {})
+        return request.redirect('/appraisal/objective/%s'%(record.id))
     
     
 

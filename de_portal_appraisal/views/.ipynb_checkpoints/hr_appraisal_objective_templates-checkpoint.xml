@@ -6,17 +6,14 @@
     <template id="portal_layout" name="Portal layout: appraisal menu entry" inherit_id="portal.portal_breadcrumbs" priority="25">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'appraisal' or appraisal" class="col-lg-2" t-attf-class="breadcrumb-item #{'active ' if not appraisal else ''}">
-                <a t-if="appraisal" t-attf-href="/appraisal/objectives?{{ keep_query() }}">Appraisal</a>
-                <t t-else="">Appraisal</t>
-            </li>
-            <li t-if="appraisal" class="breadcrumb-item active text-truncate col-8 col-lg-10">
-                <t t-esc="appraisal.id"/>
+                <a t-if="appraisal" t-attf-href="/appraisal/objectives?{{ keep_query() }}">Objective Setting</a>
+                <t t-else="">Objective Setting</t>
             </li>
         </xpath>
     </template>   
     
     
-    <template id="portal_my_home" name="Show appraisals / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="25">
+    <template id="portal_my_home" name="Objective Setting / fifty" customize_show="True" inherit_id="portal.portal_my_home" priority="25">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-call="portal.portal_docs_entry"  groups="de_portal_appraisal.group_appraisal">
                 <t t-set="title">Appraisal</t>
@@ -31,7 +28,6 @@
          <t t-set="foo" t-value="2 + 1"/>
          <t t-call="portal.portal_layout">
              <br/>
-            <br/>
              <br/>  
            <div class="card-deck">
           <div class="card bg-primary">
@@ -90,8 +86,8 @@
                         <tbody>
                             <t t-foreach="appraisals" t-as="appraisal">   
                             <t t-if="appraisal.employee_id.parent_id.user_id.id == uid">   
-                                
-                                <tr>
+                              
+                                   <tr>
                                       <td class="text-left">
                                         #<span t-esc="appraisal.id" />
                                     </td>
@@ -488,7 +484,9 @@
                   </section> 
                  </t>     
                 </div>
-                <form id="objectiveForm"  action="/appraisal/extra/objective/save"  method="post"  enctype="multipart/form-data">
+                 <br/>
+                
+                <form id="objectiveextraForm"  action="/appraisal/extra/objective/save"  method="post"  enctype="multipart/form-data">
 
                 <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
@@ -539,10 +537,20 @@
                   </div>
                 </div>
                </div>
+                    <br/>
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
 
                         <input id='recordsid' type="hidden" class="form-control s_website_form_input" name="records_id"   t-att-value="appraisal.id"/>
 
+                <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
+                        <div style="width: 200px;" class="s_website_form_label"></div>
+                        
+                     <t t-if='appraisal.state!="confirm"'>
+                         <button id='objectiveextrasubmit' type="submit" class="btn btn-primary pull-left">Submit</button>
+                     </t>                    
+                </div> 
+                    <br/>
+                    <br/>
             </form>   
             <div class="mt32">
                 <h4><strong>Message and communication history</strong></h4>
@@ -595,13 +603,18 @@
                                             </label>
                                             <div class="col-sm">
                                                <select  id="categ" class="form-control  s_website_form_input" name="category_id" required='1'> 
+                                                   <option  value="blank">
+                                                        
+                                                    </option>   
                                                  <t t-foreach="categories" t-as="categ">
                                                  
                                                     <option  t-att-value="categ.id">
                                                         <t t-esc="categ.name"/>
                                                     </option>                                                    
                                                   </t> 
-                                               </select>      
+                                               </select> 
+                                            <i class="badge badge-pill badge-info" ><t t-esc='exist_line_obj.category_id.name'/></i>   
+
                                             </div>
                                         </div>
                                     </div>
@@ -665,14 +678,17 @@
                                             </label>
                                             <div class="col-sm">
                                                <select  id="status" class="form-control  s_website_form_input" name="status_id" > 
-                                                 <t t-foreach="status" t-as="stat">
+                                                   <option value="blank">
+                                                        
+                                                    </option> 
+                                                   <t t-foreach="status" t-as="stat">
                                                  
                                                     <option t-att-value="stat.id">
                                                         <t t-esc="stat.name"/>
                                                     </option>                                                    
                                                   </t> 
                                                </select> 
-
+                                             <i class="badge badge-pill badge-info" ><t t-esc='exist_line_obj.status_id.name'/></i>   
                                             </div>
                                         </div>
                                     </div>
@@ -693,7 +709,8 @@
                                                 <option value="medium">Medium</option>
                                                 <option value="high">High</option>
                                                 <option value="very_high">Very High</option>
-                                            </select> 
+                                            </select>
+                                             <i class="badge badge-pill badge-info" ><t t-esc='exist_line_obj.priority'/></i>   
                                             </div>
                                         </div>
                                     </div>                                       
@@ -730,30 +747,10 @@
                                     </div>
                                     
                                 </div>
-                                <br/>
-                                
-<!--                                  <div class="s_website_form_rows row s_col_no_bgcolor">
-                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
-                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="comments">
-                                               <span class="s_website_form_label_content">Comments</span>
-                                                <span class="s_website_form_mark"> *</span>
-                                            </label>
-                                            <div class="col-sm">
-                                                 <input id='descriptiona' type="text" class="form-control s_website_form_input" name="description"   required='1'  t-att-value="exist_line_obj.description"/> 
-                                            
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div> -->
+                                <br/>                              
                                 <br/>
                                 <input id='id' type="hidden" class="form-control s_website_form_input" name="line_id"  t-att-value="exist_line_obj.id"/>
-
-                                
-                               
-                                                                                                  
+                                                                                                 
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
                                     
                                  <div class="form-group col-12 s_website_form_submit" data-name="Submit Button">
@@ -761,23 +758,12 @@
                                         <button id='objectivesubmit' type="submit" class="btn btn-primary pull-left">Update</button>
                                         <span id="s_website_form_result"></span>
                                     </div>
-                                <br/>  
-                                  
-                        
-                                  
-                                </form> 
-                                   
-                                                            
-                            </div>
-         
-        </t>
+                                    <br/>            
+                                </form>                                                            
+                           </div>    
+                   </t>
     </template>
-    
-    
-    
-    
-    
-    
+      
     
         <!--  Add New Objective Below-->
     
@@ -795,7 +781,7 @@
                                     </div>
                                 </section>
                             </div>
-                            <form id="saleForm"  action="/add/objective/line/save"  method="post"  enctype="multipart/form-data">
+                            <form id="newaddlineForm"  action="/add/objective/line/save"  method="post"  enctype="multipart/form-data">
                                   
                             <div class="container mt-4 mb-5">
                                 <div class="row">
@@ -954,22 +940,7 @@
                                     
                                 </div>
                                 <br/>
-<!--                                  <div class="s_website_form_rows row s_col_no_bgcolor">
-                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
-                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="comments">
-                                               <span class="s_website_form_label_content">Comments</span>
-                                                <span class="s_website_form_mark"> *</span>
-                                            </label>
-                                            <div class="col-sm">
-                                                <textarea  class="form-control s_website_form_input" name="description"  required='1'></textarea>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <br/> -->
                                 <input id='id' type="hidden" class="form-control s_website_form_input" name="rec_id"  t-att-value="appraisal.id"/>                                                                                                
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
                                     
@@ -1145,24 +1116,10 @@
                                                 
                                             </div>
                                         </div>
-                                    </div> 
-                                      
+                                    </div>                                       
                                 </div>
                                 
                                  <div class="s_website_form_rows row s_col_no_bgcolor">
-                                    
-                                     <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
-                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="description">
-                                                <span class="s_website_form_label_content">Description</span>
-                                                <span class="s_website_form_mark"> </span>
-                                            </label>
-                                            <div class="col-sm">
-                                                  <input type="text" class="form-control s_website_form_input" name="description"  />
-                                                
-                                            </div>
-                                        </div>
-                                    </div> 
                                      
                                      <div class="form-group col-6 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
                                         <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -1215,6 +1172,22 @@
                                     </div> 
                                                                                                          
                                 </div>
+                                <div class="s_website_form_rows row s_col_no_bgcolor">
+                                    
+                                     <div class="form-group col-12 s_website_form_field s_website_form_required" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="description">
+                                                <span class="s_website_form_label_content">Description</span>
+                                                <span class="s_website_form_mark"> </span>
+                                            </label>
+                                            <div class="col-sm">
+                                                <textarea  class="form-control s_website_form_input" name="description"  ></textarea>
+                                                
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <br/>
                                                                                                   
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
                                     

@@ -165,7 +165,13 @@
                                       <t t-if="improvement.employee_id.parent_id.user_id.id == uid">
                                         <a t-attf-href="/action/send/improvement/#{improvement.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%; ">Send for Employee Review</div> </a>
                                       </t>
-                                </t>      
+                                </t> 
+                                <t t-if="improvement.state == 'follow_up'">
+                                   
+                                      <t t-if="improvement.employee_id.parent_id.user_id.id == uid">
+                                        <a t-attf-href="/action/done/#{improvement.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%; ">Done</div> </a>
+                                      </t>
+                                </t>
                                <t t-if="improvement.state=='employee_waiting'">                                   
                                       <t t-if="improvement.employee_id.user_id.id == uid">
                                         <a t-attf-href="/action/confirm/employee/#{improvement.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%; ">Confirm</div> </a>
@@ -305,9 +311,12 @@
                               <div>                                  
                                  <div data-snippet="s_share"  data-name="Share">                                     
                                    <t t-if='improvement.state=="draft"'>
-                                       <a t-attf-href="/delete/improvement/line/#{line.id}?" class="fa fa-trash pull-right" style="font-size:20px;color:red"></a>                    
+                                       <a t-attf-href="/delete/improvement/line/save/#{line.id}?" class="fa fa-trash pull-right" style="font-size:20px;color:red"></a>                    
                                        <a t-attf-href="/edit/improvement/line/#{line.id}?" class="fa fa-pencil-square-o pull-right" style="font-size:20px;color:green"></a>
                                    </t>    
+                                   <t t-if='improvement.state=="follow_up"'>
+                                       <a t-attf-href="/edit/improvement/line/#{line.id}?" class="fa fa-pencil-square-o pull-right" style="font-size:20px;color:green"></a>
+                                   </t>       
                                 </div>
                                 </div>      
                         </div>
@@ -337,7 +346,7 @@
                                     </div>
                                 </section>
                             </div>
-                            <form id="saleForm"  action="/add/obj/line/save"  method="post"  enctype="multipart/form-data">                            
+                            <form id="saleForm"  action="/edit/improvement/line/save"  method="post"  enctype="multipart/form-data">                            
                                 <div class="container mt-4 mb-5">
                                  <div class="row">
                                     <div class="col-lg-7 col-xl-6 mr-lg-auto">
@@ -353,7 +362,11 @@
                                                 <span class="s_website_form_mark"> *</span>
                                             </label>
                                             <div class="col-sm">
-                                                <input id='performance_improvement_area' type="date" class="form-control s_website_form_input" name="performance_improvement_area"  required='1' t-att-value="exist_line_obj.performance_improvement_area"/>
+                                              <t t-if='improvement.state!="follow_up"' >
+                                                <input id='performance_improvement_area' type="text" class="form-control s_website_form_input" name="performance_improvement_area"  required='1' t-att-value="improvement.performance_improvement_area"/>
+                                              </t>    
+                                                <t t-esc='improvement.action_plan'/>
+
 
                                             </div>
                                         </div>
@@ -368,16 +381,41 @@
                                                <span class="s_website_form_label_content">Action Plan and Timeline</span>
                                             </label>
                                             <div class="col-sm">
-                                                <input id='action_plan' type="date" class="form-control s_website_form_input" name="action_plan"  required='1' t-att-value="exist_line_obj.action_plan"/>
-
-
+                                              <t t-if='improvement.state!="follow_up"' >
+                                                <input id='action_plan' type="text" class="form-control s_website_form_input" name="action_plan"  required='1' t-att-value="improvement.action_plan"/>
+                                              </t>  
+                                              <t t-esc='improvement.action_plan'/>
                                             </div>
                                         </div>
                                     </div>
                                     
                                 </div>
                                 <br/>
-                                <input id='id' type="hidden" class="form-control s_website_form_input" name="line_id"  t-att-value="exist_line_obj.id"/>                               
+                                <t t-if='improvement.state=="follow_up"' >
+                                 <div class="s_website_form_rows row s_col_no_bgcolor">
+                                  <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
+                                        <div class="row s_col_no_resize s_col_no_bgcolor">
+                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="action_plan">
+                                               <span class="s_website_form_label_content">Rating *</span>
+                                            </label>
+                                            <div class="col-sm">
+                                                
+                                            <select  id="managerratinglevelline" class="form-control  s_website_form_input" name="rating"  required='1'>
+                                                <option value="blank"> </option>
+                                                <option value="Outstanding Performance">Outstanding Performance</option>
+                                                <option value="Excellent Performance">Excellent Performance</option>
+                                                <option value="Strong Performance">Strong Performance</option>
+                                                <option value="Needs Improvement">Needs Improvement</option>
+                                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                            </select> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                               </t>     
+                                
+                                <input id='id' type="hidden" class="form-control s_website_form_input" name="line_id"  t-att-value="improvement.id"/>                               
                                                                                                   
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
                                     
@@ -449,20 +487,7 @@
                                     
                                 </div>
                                 <br/>
-                                 <div class="s_website_form_rows row s_col_no_bgcolor">
-                                 <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
-                                        <div class="row s_col_no_resize s_col_no_bgcolor">
-                                            <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="action_plan">
-                                               <span class="s_website_form_label_content">Rating *</span>
-                                            </label>
-                                            <div class="col-sm">
-                                                 <input type="float" class="form-control s_website_form_input" name="rating" required='1' />   
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <br/>
+                                
                                
                                 <input id='id' type="hidden" class="form-control s_website_form_input" name="rec_id"  t-att-value="improvement.id"/>                                                                                                
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
