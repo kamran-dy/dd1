@@ -39,6 +39,7 @@
         'data/sequence.xml',
         'security/ir.model.access.csv',
         'wizard/site_incharge_wizard.xml',
+        'wizard/hr_manager_wizard.xml', 
         'security/security.xml',
         'views/res_company_views.xml',
         'views/approval_request_views.xml',

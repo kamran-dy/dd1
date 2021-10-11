@@ -2,7 +2,7 @@
 <odoo>
     <data>
         
-    <data noupdate="1">
+    <data noupdate="0">
        <record id="site_attendance_incharge_server_action" model="ir.actions.server">
                   <field name="name">Site Attendance Incharge</field>
                   <field name="model_id" ref="de_site_attendance.model_hr_employee"/>
@@ -10,6 +10,14 @@
                   <field name="binding_view_types">list</field>
                   <field name="state">code</field>
                   <field name="code">action = records.action_assign_incharge() </field>
+    </record>
+    <record id="hr_manager_server_action" model="ir.actions.server">
+                  <field name="name">Manager</field>
+                  <field name="model_id" ref="de_site_attendance.model_hr_employee"/>
+                  <field name="binding_model_id" ref="de_site_attendance.model_hr_employee"/>            
+                  <field name="binding_view_types">list</field>
+                  <field name="state">code</field>
+                  <field name="code">action = records.action_assign_manager() </field>
     </record>
             
   </data>
