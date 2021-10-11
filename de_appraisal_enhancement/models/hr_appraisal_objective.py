@@ -18,15 +18,30 @@ class HrAppraisalObjective(models.Model):
         ('draft', 'Draft'),
         ('waiting', "Sent for Manager's review"),
         ('confirm', 'Confirmed'),
-    ], string='State', index=True, copy=False, default='draft', track_visibility='onchange')
-    
-    objective_year = fields.Selection([('2020', 'FY 2020-21'), ('2021', 'FY 2021-22'), ('2022', 'FY 2022-23'), ('2023', 'FY 2023-24')
-                                   , ('2024', 'FY 2024-25'), ('2025', 'FY 2025-26'), ('2026', 'FY 2026-27'), ('2027', 'FY 2027-28')
-                                   , ('2028', 'FY 2028-29'), ('2029', 'FY 2029-30'), ('2030', 'FY 2030-31'), ('2032', 'FY 2032-33')
-                                   , ('2033', 'FY 2023-34'), ('2034', 'FY 2034-35'), ('2035', 'FY 2035-36'), ('2036', 'FY 2036-37')
-                                   , ('2037', 'FY 2037-38'), ('2038', 'FY 2038-39'), ('2039', 'FY 2039-40'), ('2040', 'FY 2040-41')],
-                               string="Objective Year", default='2021', required = 'True')
-    
+    ], string='State', index=True, copy=False, default='draft', track_visibility='onchange')    
+    objective_year = fields.Selection([('2020', 'FY 2020-21'), 
+                                       ('2021', 'FY 2021-22'), 
+                                       ('2022', 'FY 2022-23'), 
+                                       ('2023', 'FY 2023-24'),
+                                       ('2024', 'FY 2024-25'), 
+                                       ('2025', 'FY 2025-26'), 
+                                       ('2026', 'FY 2026-27'), 
+                                       ('2027', 'FY 2027-28'),
+                                       ('2028', 'FY 2028-29'), 
+                                       ('2029', 'FY 2029-30'), 
+                                       ('2030', 'FY 2030-31'),
+                                       ('2031', 'FY 2031-32'),
+                                       ('2032', 'FY 2032-33'),
+                                       ('2033', 'FY 2023-34'), 
+                                       ('2034', 'FY 2034-35'), 
+                                       ('2035', 'FY 2035-36'), 
+                                       ('2036', 'FY 2036-37'),
+                                       ('2037', 'FY 2037-38'), 
+                                       ('2038', 'FY 2038-39'), 
+                                       ('2039', 'FY 2039-40'), 
+                                       ('2040', 'FY 2040-41')],
+                               string="Objective Year", default='2021', required=True)
+   
     objective_lines = fields.One2many('hr.appraisal.objective.line', 'objective_id')
     traing_need = fields.Char(string='Training Need')
     total_weightage = fields.Float("Total Weightage", compute = 'limit_weightage')
