@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<odoo>
-    
+<odoo>   
     <template id="portal_appraisal_feedbacks" name="Appraisals FeedBack">
          <t t-set="foo" t-value="2 + 1"/>
         <t t-call="portal.portal_layout">
@@ -540,6 +539,123 @@
                 </div>
                </div> 
                 
+                      <div class="s_website_form_rows row s_col_no_bgcolor">
+                 <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                     <div class="row s_col_no_resize s_col_no_bgcolor">
+                           <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="status">
+                                <span class="s_website_form_label_content">Status</span>
+                            </label>
+                     <div class="col-sm">
+                           <t t-if="feedback.state =='draft'">
+                             <i class="badge badge-pill badge-success" >Draft</i>      
+                          </t>
+                          <t t-if="feedback.state =='confirm'">
+
+                              <i class="badge badge-pill badge-success" >Confirm</i>
+                          </t>
+                          <t t-if="feedback.state =='sent'">
+
+                              <i class="badge badge-pill badge-success" >Send For Employee Review </i>
+                          </t>
+                          <t t-if="feedback.state =='endorsed_employee'">
+
+                              <i class="badge badge-pill badge-success" >Endorsed By Employee</i>
+                          </t>
+                         <t t-if="feedback.state =='endorsed_hod'">
+
+                              <i class="badge badge-pill badge-success" >Endorsed By HOD </i>
+                          </t>
+                        <t t-if="feedback.state =='done'">
+
+                              <i class="badge badge-pill badge-success" >Done </i>
+                          </t> 
+                          <t t-if="feedback.state =='end_year_appraisee_review'">
+
+                              <i class="badge badge-pill badge-success" > End Year Appraisee Review</i>
+                          </t>
+                          <t t-if="feedback.state =='end_year_appraiser_review'">
+
+                              <i class="badge badge-pill badge-success" >End Year Appraiser Review </i>
+                          </t>
+                           <t t-if="feedback.state =='end_year_sent_emp_view'">
+                             <i class="badge badge-pill badge-success" >End Year Sent EMP Review</i>      
+                          </t>
+                          <t t-if="feedback.state =='end_year_endorsed_emp'">
+
+                              <i class="badge badge-pill badge-success" >End Year Endorsed By Employee</i>
+                          </t>
+                          <t t-if="feedback.state =='end_year_endorse_hod'">
+
+                              <i class="badge badge-pill badge-success" >End Year Endorsed By HOD</i>
+                          </t>
+                         
+                         <t t-if="feedback.state =='closed'">
+
+                              <i class="badge badge-pill badge-success" >Closed  </i>
+                          </t> 
+                                                   
+                     </div>
+                  </div>
+                </div>
+                                    
+                <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
+                <div class="row s_col_no_resize s_col_no_bgcolor">
+                        <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="next_status">
+                                <span class="s_website_form_label_content">Next Status</span>
+                        </label>
+                        <div class="col-sm">
+                           <t t-if="feedback.state =='draft'">
+                             <i class="badge badge-pill badge-success" >Confirm</i>      
+                          </t>
+                          <t t-if="feedback.state =='confirm'">
+
+                              <i class="badge badge-pill badge-success" >Send For Employee Review</i>
+                          </t>
+                          <t t-if="feedback.state =='sent'">
+
+                              <i class="badge badge-pill badge-success" >Endorsed By Employee </i>
+                          </t>
+                          <t t-if="feedback.state =='endorsed_employee'">
+
+                              <i class="badge badge-pill badge-success" >Endorsed By HOD </i>
+                          </t> 
+                        <t t-if="feedback.state =='done'">
+
+                              <i class="badge badge-pill badge-success" >End Year Appraisee Review </i>
+                          </t> 
+                          <t t-if="feedback.state =='end_year_appraisee_review'">
+
+                              <i class="badge badge-pill badge-success" > End Year Appraiser Review</i>
+                          </t>
+                          <t t-if="feedback.state =='end_year_appraiser_review'">
+
+                              <i class="badge badge-pill badge-success" >End Year Sent EMP Review </i>
+                          </t>
+                           <t t-if="feedback.state =='end_year_sent_emp_view'">
+                             <i class="badge badge-pill badge-success" >End Year Endorsed By Employee</i>      
+                          </t>
+                          <t t-if="feedback.state =='end_year_endorsed_emp'">
+
+                              <i class="badge badge-pill badge-success" >End Year Endorsed By HOD</i>
+                          </t>
+                          <t t-if="feedback.state =='end_year_endorsed_hod'">
+
+                              <i class="badge badge-pill badge-success" >Closed </i>
+                          </t>
+                          <t t-if="feedback.state =='endorsed_hod'">
+
+                              <i class="badge badge-pill badge-success" >Done </i>
+                          </t> 
+                         <t t-if="feedback.state =='end_year_endorse_hod'">
+
+                              <i class="badge badge-pill badge-success" >Done </i>
+                          </t> 
+                                                     
+                    </div>
+                  </div>
+                </div>
+               </div> 
+                
          
                                     
             
@@ -630,7 +746,7 @@
                  </t>     
                 </div>
                     <br/>
-<!--                     <div class="s_website_form_rows row s_col_no_bgcolor">
+                    <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_full_remarks">
@@ -652,7 +768,7 @@
                                 </div>
                      </div>
                    </div>
-               </div> -->
+               </div>
                 
                      <h5><p style='color:blue;'>Core Values</p></h5>
                  <div>                
@@ -729,7 +845,7 @@
                  </t>     
                 </div>
                 
-<!--                     <div class="s_website_form_rows row s_col_no_bgcolor">
+                    <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_objective">
@@ -751,7 +867,7 @@
                                 </div>
                      </div>
                    </div>
-               </div> -->
+               </div>
                 
                 </t>                
                 <h3><p style='color:red;'>Half Year Review</p></h3>
@@ -832,7 +948,7 @@
                   </section> 
                  </t>     
                 </div> 
-<!--                     <div class="s_website_form_rows row s_col_no_bgcolor">
+                    <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_objective">
@@ -854,7 +970,7 @@
                                 </div>
                      </div>
                    </div>
-               </div>                 -->
+               </div>                
                   <h5 ><p style='color:blue;'>Core Values</p></h5>
                  <div>                 
                   <t t-set='sr_count' t-value='0'/>   
@@ -936,7 +1052,7 @@
                  </t>     
                 </div>
                 
-<!--                     <div class="s_website_form_rows row s_col_no_bgcolor">
+                    <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-6 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
                             <label class="col-form-label col-sm-auto s_website_form_label" style="width: 200px" for="employee_objective">
@@ -960,7 +1076,7 @@
                    </div>
                </div>
                 
-                <br/> -->
+                <br/>
                 
             <form id="feedbackdataentryForm"  action="/appraisal/feedback/data/save"  method="post"  enctype="multipart/form-data">
                     
@@ -968,6 +1084,7 @@
                     
                  <t t-if="feedback.state not in ('end_year_appraisee_review','end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed')">
                     <t t-if='feedback.name.user_id.id==uid'>
+                        <t t-if='feedback.state=="draft"'>
                          <div class="s_website_form_rows row s_col_no_bgcolor">
                          <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                             <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -1003,7 +1120,9 @@
                             </div>
                         </div>   
                      </t>
+                    </t>    
                   <t t-if='feedback.name.parent_id.user_id.id==uid'>
+                     <t t-if='feedback.state=="confirm"'> 
                       <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -1039,10 +1158,12 @@
                         </div>
                     </div> 
                     </t>
+                      </t>
                    </t> 
                     
                     <t t-if="feedback.state in ('end_year_appraisee_review','end_year_appraiser_review','end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed')">
                     <t t-if='feedback.name.user_id.id==uid'>
+                     <t t-if='feedback.state=="end_year_appraisee_review"'>   
                      <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -1078,7 +1199,9 @@
                         </div>
                     </div>   
                  </t>
+                 </t>       
                   <t t-if='feedback.name.parent_id.user_id.id==uid'>
+                     <t t-if='feedback.state=="end_year_appraiser_review"'> 
                       <div class="s_website_form_rows row s_col_no_bgcolor">
                     <div class="form-group col-12 s_website_form_field" data-type="char" data-name="Field">
                         <div class="row s_col_no_resize s_col_no_bgcolor">
@@ -1115,6 +1238,7 @@
                     </div> 
                      </t>
                     </t>  
+                    </t>      
                     
                     <!--  Comments End -->
                     
@@ -1298,7 +1422,7 @@
                                    
                                 
                                  </select>
-                                    <input id='agreement' type="hidden" class="form-control s_website_form_input" name="actual_agreement"  t-att-value="feedback.agreement"/>  
+                                    
                                 </t>
                                    <t t-if="feedback.agreement=='not_agree'">
                                        <i class="badge badge-pill badge-info" >Disagree</i>
@@ -1380,7 +1504,7 @@
                         
                         <t t-if="feedback.name.parent_id.user_id.id !=uid" >
                             
-                       <t t-if="feedback.name.department_id.manager_id.user_id.id ==uid ">    
+                       <t t-if="feedback.name.department_id.manager_id.user_id.id==uid ">    
                         <p style='color:blue;'><h4>Strengths/Weaknesses and Training</h4></p>    
                        <div class="row">                             
                            <br/>
