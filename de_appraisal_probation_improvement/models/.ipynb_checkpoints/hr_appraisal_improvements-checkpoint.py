@@ -96,7 +96,13 @@ class HrAppraisalImprovementsLine(models.Model):
     hr_aprsl_improve_id = fields.Many2one('hr.appraisal.improvements') #parent Model Connect ID
     performance_improvement_area = fields.Text('Performance Improvement Area')
     action_plan = fields.Text('Action Plan & Timeline')
-    rating = fields.Integer(string='Rating',default = 1)
+    rating = fields.Selection([
+        ('Outstanding Performance', 'Outstanding Performance'),
+        ('Excellent Performance', 'Excellent Performance'),
+        ('Strong Performance', 'Strong Performance'),
+        ('Needs Improvement', 'Needs Improvement'),
+        ('Unsatisfactory', 'Unsatisfactory'),
+    ], string='Employee Rating Level', index=True, copy=False,)
     state = fields.Selection([
         ('draft', 'Draft'),('confirmed', 'Confirmed'),
         ('employee_waiting', 'Waiting For Employees Review'),
@@ -114,6 +120,4 @@ class HrAppraisalImprovementsLine(models.Model):
         result = super(HrAppraisalImprovementsLine, self).write(vals)
         return result
     
-    def unlink(self):
-        if self.state == 'draft':
-            raise UserError(('A record not in draft state can`t be deleted!'))
+   
