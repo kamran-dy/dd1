@@ -29,6 +29,20 @@ def appraisal_improvements_page_content(flag = 0):
         'company_info': company_info,
     }
 
+def add_appraisal_improvements_page_content(ref):
+    global appraisal_improvements_list 
+    managers = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+    employees = request.env['hr.employee'].search([('parent_id.user_id','=',http.request.env.context.get('uid'))])
+    company_info = request.env['res.users'].search([('id','=',http.request.env.context.get('uid'))])
+    improvement = request.env['hr.appraisal.improvements'].sudo().search([('id','=',ref)])
+    return {
+        'managers': managers,
+        'employees' : employees,
+        'improvement': improvement,
+        'appraisal_improvements_list': appraisal_improvements_list,
+        'company_info': company_info,
+    }
+
 def paging(data, flag1 = 0, flag2 = 0):        
     if flag1 == 1:
         return config.list12
@@ -61,27 +75,46 @@ class CreateImprovements(http.Controller):
         appraisal_improvements_list.append(appraisal_val)
         return request.render("de_portal_appraisal.create_appraisal_improvement",appraisal_improvements_page_content())
     
-    @http.route('/appraisal/improvement/save', type="http", auth="public", website=True)
+    @http.route('/new/improvement/save', type="http", auth="public", website=True)
     def create_appraisal_improvement(self, **kw):
         obj_line = []
-        global appraisal_improvements_list
-        for emp_improve in appraisal_improvements_list:
-            obj_line.append((0,0,{
-                'performance_improvement_area':  emp_improve['performance_improvement_area'],
-                'action_plan':  emp_improve['action_plan'],
-                'rating': emp_improve['rating'],
-                }))
         improvement_val = {
-            'follow_up_period': kw.get('follow_up_period'),
             'employee_id': int(kw.get('employee_id')),
-            'follow_up_period': kw.get('follow_up_period'),
-            'comments': kw.get('comments'),
-            'appraisal_improve_line': obj_line,
         }
         record = request.env['hr.appraisal.improvements'].sudo().create(improvement_val)
-        record.action_confirmed()
-        appraisal_improvements_list = []
-        return request.render("de_portal_appraisal.appraisal_submited", {})
+        if kw.get('follow_up_period'):
+            if kw.get('follow_up_period') != 'blank':
+                record.update({
+                    'follow_up_period': kw.get('follow_up_period'),
+                }) 
+        if kw.get('comments'):
+            record.update({
+                'comments': kw.get('comments'),
+                })
+        return request.render("de_portal_appraisal.add_appraisal_improvement",add_appraisal_improvements_page_content(record.id))
+ 
+    @http.route('/add/improvement/line/save', type="http", auth="public", website=True)
+    def add_line_appraisal_improvement(self, **kw):
+        record = request.env['hr.appraisal.improvements'].sudo().search([('id','=',int(kw.get('rec_id')))])
+        line_vals = {
+            'hr_aprsl_improve_id':  record.id,
+            'rating': kw.get('rating'),
+            'performance_improvement_area': kw.get('performance_improvement_area'),
+        }
+        record_line = request.env['hr.appraisal.improvements.line'].sudo().create(line_vals)
+        if kw.get('action_plan'):
+            record_line.update({
+                'action_plan': kw.get('action_plan'),
+                })
+        return request.redirect('/appraisal/improvement/%s'%(record.id))
+    
+    @http.route('/add/improvement/line/save', type="http", auth="public", website=True)
+    def new_add_line_appraisal_improvement(self, **kw):
+        record = request.env['hr.appraisal.improvements'].sudo().search([('id','=',int(kw.get('rec_id')))])
+        return request.render("de_portal_appraisal.add_appraisal_improvement",add_appraisal_improvements_page_content(record.id))
+    
+   
+    
     
     
     
@@ -98,6 +131,8 @@ class CustomerPortal(CustomerPortal):
         values = {
             'page_name' : 'improvement',
             'improvement' : improvement,
+            'employee_name': improvement.employee_id,
+            'managers': improvement.employee_id.parent_id.name,
             'improvement_user_flag': improvement_user_flag,
             'next_id' : next_id,
             'edit_improvement': edit_improvement,
@@ -109,6 +144,21 @@ class CustomerPortal(CustomerPortal):
         }
         return self._get_page_view_values(improvement, access_token, values, 'my_improvement_history', False, **kwargs)
 
+    
+    @http.route(['/new/improvement/line/save/<int:line_id>'], type='http', auth="user", website=True)
+    def edit_improvement_line_template(self, line_id, access_token=None, **kw):
+        values = {}
+        active_user = http.request.env.context.get('uid')
+        appraisal_user = []
+        id = line_id
+        try:
+            appraisal_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)]), 
+        except (AccessError, MissingError):
+            return request.redirect('/my')   
+        obj_line_sudo = request.env['hr.appraisal.improvements'].sudo().search([('id','=', line_id)])
+        return request.render("de_portal_appraisal.add_appraisal_improvement", add_appraisal_improvements_page_content(obj_line_sudo.id))
+    
+    
     
     @http.route(['/appraisal/improvements', '/appraisal/improvement/page/<int:page>'], type='http', auth="user", website=True)
     def portal_appraisal_improvements(self, page=1, date_begin=None, date_end=None, sortby=None, filterby=None, search=None,

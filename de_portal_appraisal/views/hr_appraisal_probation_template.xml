@@ -146,7 +146,46 @@
                                         </t>                                      
                                     </td>                                                                               
                                 </tr>
-                            </t>                                                                              
+                            </t>                
+                                <t t-if="probation.employee_id.company_id.hr_id.user_id.id == uid">                                  
+                                <tr>                                    
+                                    <td class="text-left">
+                                        #<span t-esc="probation.id" />
+                                    </td>
+                                     <td>
+                                        <a t-attf-href="/appraisal/probation/#{probation.id}?{{ keep_query() }}"><span t-field="probation.employee_id.name"/></a>
+                                    </td>
+                                    
+                                     
+                                    <td class="text-left">
+                                        <span t-esc="probation.date_of_joining" t-options='{"widget": "date"}' />
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="probation.expiry"  t-options='{"widget": "date"}'/>
+                                    </td>
+                                   
+                                    <td class="text-left">
+                                        <t t-if="probation.state == 'draft'">
+                                            <i class="badge badge-pill badge-info" >Draft</i>
+                                        </t>
+                                        <t t-if="probation.state == 'employee_waiting'">
+                                            <i class="badge badge-pill badge-info" >Sent For Employees Review</i>
+                                        </t>
+                                        <t t-if="probation.state == 'confirmed'">
+                                            <i class="badge badge-pill badge-info" >Approved</i>
+                                        </t>
+                                        <t t-if="probation.state == 'employee_review'">
+                                            <i class="badge badge-pill badge-info" >Reviewed By Employee</i>
+                                        </t>
+                                        <t t-if="probation.state == 'hr_review'">
+                                            <i class="badge badge-pill badge-info" >Reviewd By HR</i>
+                                        </t>
+                                         <t t-if="probation.state == 'done'">
+                                            <i class="badge badge-pill badge-info" >Done</i>
+                                        </t>                                      
+                                    </td>                                                                               
+                                </tr>
+                            </t>                
                             </t>    
                         </tbody>
                     </t>
@@ -183,7 +222,7 @@
                             </t>
                             </t>     
                             </t> 
-                        <t t-if="probation.employee_id.user_id.id == uid">
+                        <t t-if="probation.employee_id.company_id.hr_id.user_id.id == uid">
                              <t t-if="probation.state=='employee_review'">
                                <t t-if="edit_hr_probation==False">  
                                 <a t-attf-href="/appraisal/edit/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%;">Edit</div> </a> 
@@ -266,7 +305,7 @@
                             </t>  
                         
                         <t t-if="probation.state == 'employee_review' ">
-                         <t t-if="probation.employee_id.parent_id.user_id.id == uid">
+                         <t t-if="probation.employee_id.company_id.hr_id.user_id.id == uid">
                                     <t class="col-lg-7 col-md-8" >
                                        <t t-if="edit_hr_probation == False"> 
                                         <a t-attf-href="/action/confirm/hrreview/probation/#{probation.id}?" > <div class="btn btn-primary pull-left" style="height:30px; line-height:100%; ">Confirm</div> </a> 

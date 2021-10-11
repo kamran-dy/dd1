@@ -379,6 +379,16 @@
                                     </t>
                                  </t>
                 </div>
+                <div  class='pull-right'>
+                    <t t-if='feedback.state in ("sent","endorsed_employee", "endorsed_hod","done","end_year_sent_emp_view","end_year_endorsed_emp","end_year_endorsed_hod","closed")'>
+                      Rating:   <i class="badge badge-pill badge-info" ><t t-esc='feedback.rating_level'/></i>
+                    </t>  
+                     <t t-if='feedback.state in ("confirm","end_year_appraiser_review")'>
+                     <t t-if='feedback.name.parent_id.user_id.id==uid'>
+                      Rating:   <i class="badge badge-pill badge-info" ><t t-esc='feedback.rating_level'/></i>
+                    </t>
+                    </t>     
+                </div>    
                     <br/>
                     <br/>
                                 

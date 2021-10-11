@@ -396,7 +396,7 @@ class CustomerPortal(CustomerPortal):
             edit_probation = True
         if probation_sudo.state =='employee_waiting' and probation_sudo.employee_id.user_id.id == http.request.env.context.get('uid'):
             edit_emp_probation = True   
-        if probation_sudo.state =='employee_review' and probation_sudo.employee_id.user_id.id == http.request.env.context.get('uid'):
+        if probation_sudo.state =='employee_review' and probation_sudo.employee_id.company_id.hr_id.user_id.id == http.request.env.context.get('uid'):
             edit_hr_probation = True
         if probation_sudo.state =='hr_review' and probation_sudo.employee_id.department_id.manager_id.user_id.id == http.request.env.context.get('uid'):
             edit_hod_probation = True    
