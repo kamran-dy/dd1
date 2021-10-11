@@ -5,15 +5,21 @@
                     <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
                         <t t-call="de_payroll_pdf_report.pdf_report_layout"/>
                      <div class="page">
-                         <strong><span t-field="o.name" style="color:blue"/></strong>
-                         <br/>
+                         <div style="text-align: center;">
+                         <span t-field="o.name" style="color:blue"/>
+                         </div>
+<!--                          <br/> -->
                          <div class="row">
-                             <div class="col-6" >
+                             <div style="font-size:12px" class="col-6" >
                                  <table style="border: 1px solid black;" width="400">
                                      <tbody style="color:blue">
-                                         <tr>
+                                         <tr style="font-weight: bold;">
                                              <td  style="border: 1px solid black;">Emp.Code:</td>
                                              <td  style="border: 1px solid black;"><span t-field="o.employee_id.emp_number"/></td>
+                                         </tr>
+                                         <tr>
+                                             <td  style="border: 1px solid black;">Name:</td>
+                                             <td  style="border: 1px solid black;"><span t-field="o.employee_id.name"/></td>
                                          </tr>
                                           <tr>
                                              <td  style="border: 1px solid black;">Joining Date:</td>
@@ -47,21 +53,21 @@
                                      </tbody>
                                  </table>
                              </div>
-                             <div class="col-6">
-                                 <table  style="border: 1px solid black;" width="300">
+                             <div style="font-size:10px" class="col-6">
+                                 <table  style="border: 1px solid black;" width="400">
                                      <tbody style="color:blue">
-                                         <tr>
+                                         <tr style="font-weight: bold;">
                                              <td colspan="2" style="background-color:#d4d4d4;">Salary &#38; Allowances</td>
                                          </tr>
                                          <tr>
                                             <td style="border: 1px solid black;">Base Salary</td>
                                              <td style="border: 1px solid black;"><span t-field= "o.contract_id.wage"/></td>
                                          </tr>
-                                          <tr>
+                                          <tr style="font-weight: bold;">
                                             <td style="border: 1px solid black;background-color:#d4d4d4;">Gross Pay</td>
                                              <td  style="border: 1px solid black;background-color:#d4d4d4;"><span t-esc="o.line_ids.filtered(lambda line: line.code == 'BASIC').total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.company_id.currency_id}"/></td>
                                          </tr>
-                                           <tr>
+                                           <tr style="font-weight: bold;">
                                             <td colspan="2" style="background-color:#d4d4d4;">Others</td>
                                            </tr>
                                      </tbody>
@@ -81,39 +87,42 @@
                                      </tbody>
                                  </table>
                                 </div>
-                             <div class="col-6">
-                                 <table style="border: 1px solid black;" width="300">
+                             <div style="font-size:12px" class="col-6">
+                                 <table style="border: 1px solid black;" width="400">
                                      <tbody style="color:blue">
                                     <tr>
                                         <td colspan="2" style="background-color:#d4d4d4;">Deductions</td>
                                         <td colspan="2" style="background-color:#d4d4d4;"></td>
                                     </tr>
                                     <tr>
-                                  <span t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip)" t-as="line">
-                                  <t t-if='line.code != "BASIC"'>  
-                                   <t t-if='line.code != "OT100"'>  
-                                    <t t-if='line.code != "GROSS"'>
-                                    <t t-set="line_style"/>
-                                    <t t-set="line_class"/>
-                                    <t t-if="line.code == 'NET'">
-                                    </t>
-                          
-                                    <t t-if="(line.code == 'BASIC') or (line.code == 'GROSS')">
-<!--                                        <t t-set="line_style" t-value="'color:#00A09D;'"/> -->
-<!--                                         <t t-set="line_class" t-value="'o_subtotal o_border_bottom'"/> --> -->
-                                    </t>
-                                    <tr>
-                                        <td style="border: 1px solid black;"><span t-field="line.name"/></td>
-                                        <td  style="border: 1px solid black;"><span t-if="line.quantity &gt; 1" t-esc="line.quantity"/></td>
                                         
-                                        <td  style="border: 1px solid black;"><span t-esc="line.total" t-options="{&quot;widget&quot;: &quot;monetary&quot;,&quot;display_currency&quot;: o.company_id.currency_id}"/></td>
-                                    </tr>
-                                    </t> 
-                                    </t>  
-                                    </t>
-                                </span>
-                                              
-                                    </tr>
+                        <tr>
+                            <t t-set='toto_parco' t-value='0'/>
+                            <td style="border: 1px solid black;">EOBI Employee Contribution</td>
+                            <td style="border: 1px solid black;"><span t-esc="o.line_ids.filtered(lambda line: line.code == 'EOB01').total"/>
+                            <t t-set='toto_parco' t-value='toto_parco + o.line_ids.filtered(lambda line: line.code == "EOB01").total'/>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td style="border: 1px solid black;">Income Tax</td>
+                            <td style="border: 1px solid black;"><span t-esc="o.line_ids.filtered(lambda line: line.code == 'INC01').total"/>
+                            <t t-set='toto_parco' t-value='toto_parco + o.line_ids.filtered(lambda line: line.code == "INC01").total'/>
+                            </td>
+                        </tr>
+                        <tr style="background-color:#d4d4d4;">
+                            <td style="border: 1px solid black;">Total Deductions:</td>
+                            <td style="border: 1px solid black;"><span t-esc="toto_parco"/>
+                            </td>
+                        </tr>
+                          <tr>
+                            <td style="border: 1px solid black;">Net Pay</td>
+                            <td style="border: 1px solid black;"><span t-esc="o.line_ids.filtered(lambda line: line.code == 'NET').total"/>
+                            </td>
+                                
+                         </tr>       
+                   
+               
+                        </tr>
                                          
                                      </tbody>
                                  </table>
@@ -122,8 +131,8 @@
                              
                          </div>
                            <div class ="row">
-                             <div class="col-6">
-                                 <table style="border: 1px solid black;" width="300">
+                             <div style="font-size:12px" class="col-6">
+                                 <table style="border: 1px solid black;" width="400">
                                      <tbody style="color:blue">
                                           <tr>
                                               <td style="border: 1px solid black;">Working days</td>
@@ -173,6 +182,33 @@
                                      </tbody>
                                  </table>
                              </div>
+                            </div>
+                               <br/>
+                         <br/>
+                        <div class="row">
+                             <div style="font-size:12px" >
+                                 <table style="color:blue" width="850">
+                                     <tr>
+                                             <td  ></td>
+                                             <td  >Contributions</td>
+                                             <td  >Withdrawals</td>
+                                            <td  >Balance</td>
+                                         </tr>
+                                     <tbody style="color:blue">
+                                         <tr>
+                                             <td  style="border: 1px solid black;">Provident Fund Contributions and Withdrawals</td>
+                                            <td  style="border: 1px solid black;"></td>
+                                             <td  style="border: 1px solid black;"></td>
+                                            <td  style="border: 1px solid black;"></td>
+                                         </tr>
+                                     </tbody>
+                                 </table>
+                                 <div style="text-align: center;">
+                                  <p style="color:blue">System generated document, does not require signature</p>
+                                      <div style="border-bottom: 1px solid black;"/>
+                                 </div>
+                         </div>   
+                               
                           </div>
                                  
                     

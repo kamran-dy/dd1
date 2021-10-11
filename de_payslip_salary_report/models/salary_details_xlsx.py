@@ -167,7 +167,7 @@ class GenerateXLSXReport(models.Model):
         tot_Car_allown = 0
         tot_Utilities_bills = 0
         tot_special_allown = 0 
-        tot_gross_sal = 0
+        tot_Gross = 0
         tot_accomadation_allwn = 0
         tot_salry_allown = 0
         tot_washing = 0
@@ -208,11 +208,10 @@ class GenerateXLSXReport(models.Model):
                 date_end = date_end.strftime("%d/%m/%Y")
             else:
                 date_end = None
-            payslips = self.env['hr.payslip'].search([('payslip_run_id','=',id.name),])
+            payslips = self.env['hr.payslip'].search([('payslip_run_id','=',id.name),], limit=1)
          
             for payslip in payslips:
                 total_ded = 0
-                tot_total_ded += total_ded
                 
                 if payslip.company_id:
                     company = payslip.company_id.name
@@ -290,16 +289,18 @@ class GenerateXLSXReport(models.Model):
                 total_days = 0
                 gross_salry = 0
                 Income_tax = 0
-                gross_sal = 0
+                Gross = 0
                 gross_payable = 0
                 total = 0
                 PF = 0
                 EOBI = 0
-                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),('date','>=',data.date_start),('date','<=',data.date_end)], limit=1)
+                payroll = self.env['hr.payslip'].search([('employee_id','=',employee.id),], limit=1)
+                
                 for payslip_line in payroll.line_ids:
                     if payslip_line.code == 'NET':
                         Net_Payable = payslip_line.amount 
                         tot_Net_Payable += Net_Payable
+                for basic in payroll.line_ids:
                     if basic.code == 'BASIC':
                         basic_salry = basic.amount     
                         tot_basic_salry += basic_salry 
@@ -315,11 +316,11 @@ class GenerateXLSXReport(models.Model):
                 for payslip_line in payroll.line_ids:
                     if payslip_line.code == 'INC01':
                         Income_tax = payslip_line.amount 
-                        tot_Income_tax += Income_ta
+                        tot_Income_tax += Income_tax
                 for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('BASIC', 'ALW'):
-                        gross_sal = gros_line.amount 
-                        tot_gross_sal += gross_sal      
+                        gros_line.amount 
+                        tot_Gross += Gross    
                 for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('GROSS', 'COMP'):
                         gross_payable = gros_line.amount 
@@ -327,7 +328,7 @@ class GenerateXLSXReport(models.Model):
                 for gros_line in payroll.line_ids:
                     if gros_line.category_id.code in ('GROSS', 'COMP'):
                         total = gros_line.amount
-                        tot_total += totaL
+                        tot_total += total
                 for gros_line in payroll.line_ids:
                     if gros_line.code in ('PF01'):
                         PF = gros_line.amount 
@@ -508,24 +509,25 @@ class GenerateXLSXReport(models.Model):
                     if sal.input_type_id.code == 'ARR01':
                         Arrears = sal.amount 
                         tot_Arrears += Arrears
+                        
+                        
                 for was in Hr_rent.benefit_line_ids:
                     if was.input_type_id.code == 'WA01':
                         washing = was.amount 
-                        tot_washing += washing
-                        
-                    
-                total_ded = PF + EOBI + Prof + Income_tax + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total 
+                        tot_washing += washing 
+                total_ded = PF + EOBI + Prof + Income_tax + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total               
                 
-
-                
-                
-                over_all = basic_salry + House_rent + Conv_allown + Utilities_bills + Car_allown + special_allown + gross_sal + accomadation_allwn + salry_allown + washing + Shift_bills + Bonus + Arrears + Overtime + Site_All + Variable_Pay + Variable_Pay_Adj + Shutdown_Allowance + Other + gross_payable + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total_ded + Net_Payable + PF + EOBI + Prof
+                over_all = basic_salry + House_rent + Conv_allown + Utilities_bills + Car_allown + special_allown + Gross + accomadation_allwn + salry_allown + washing + Shift_bills + Bonus + Arrears + Overtime + Site_All + Variable_Pay + Variable_Pay_Adj + Shutdown_Allowance + Other + gross_payable + Srchrg_On_ITax + Pf_Loan_Inst + Pf_Loan_Markup + Adv_Sala + Spcl_Loan + Tele_Comm + Fac + Variable_Pay_Deductions + Variable_Pay_Adj_Ded + Misc_Deduct + total_ded + Net_Payable + PF + EOBI + Prof
             
-                
+            
+            
+            
+            
+                tot_total_ded += total_ded
                 cost_account = ' '    
                 contract = self.env['hr.contract'].search([('employee_id','=',employee.id)], limit=1)  
                 for cost_line in contract.cost_center_information_line:
-                    cost_account = cost_line.cost_center.code
+                    cost_account = cost_line.cost_center_id.name
                 sheet.set_column('A:A', 5,)
                 sheet.write(row, 0, sr_no, format2)
                 sheet.write(row, 1, company, format2)
@@ -556,7 +558,7 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 26, Utilities_bills, format2)
                 sheet.write(row, 27, Car_allown, format2)
                 sheet.write(row, 28, special_allown, format2)
-                sheet.write(row, 29, gross_sal, format2)
+                sheet.write(row, 29, Gross,format2)
                 sheet.write(row, 30, accomadation_allwn, format2)
                 sheet.write(row, 31, salry_allown, format2)
                 sheet.write(row, 32, washing, format2)
@@ -593,6 +595,7 @@ class GenerateXLSXReport(models.Model):
                 sheet.write(row, 63, Net_Payable, format2)
                 
                 row = row + 1
+                sr_no += 1
             sheet.write(row, 0,  str())
             sheet.write(row, 1,  str())
             sheet.write(row, 2,  str())
@@ -622,7 +625,7 @@ class GenerateXLSXReport(models.Model):
             sheet.write(row, 26, tot_Utilities_bills, bold)
             sheet.write(row, 27, tot_Car_allown, bold)
             sheet.write(row, 28, tot_special_allown, bold)
-            sheet.write(row, 29, tot_gross_sal, bold)
+            sheet.write(row, 29, tot_Gross, bold)
             sheet.write(row, 30, tot_accomadation_allwn, bold)
             sheet.write(row, 31, tot_salry_allown, bold)
             sheet.write(row, 32, tot_washing, bold)
@@ -656,10 +659,7 @@ class GenerateXLSXReport(models.Model):
             sheet.write(row, 60, tot_Variable_Pay_Adj_Ded, bold)
             sheet.write(row, 61, tot_Misc_Deduct, bold)
             sheet.write(row, 62, tot_total_ded, bold)
-            sheet.write(row, 63, tot_Net_Payable, bold)    
-
-
-               
+            sheet.write(row, 63, tot_Net_Payable, bold)                  
                 
                 
                     
