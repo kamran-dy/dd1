@@ -106,8 +106,6 @@ class HrAppraisalImprovementsLine(models.Model):
     
     @api.model
     def create(self, vals):
-        if int(vals['rating']) < 1 or int(vals['rating']) > 500:
-            raise UserError(('Please Enter Rating Between 0 & 500'))
         result = super(HrAppraisalImprovementsLine, self).create(vals)
         return result
     
