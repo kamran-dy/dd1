@@ -79,17 +79,6 @@ class GenerateXLSXReport(models.Model):
         sheet.write(3, 63, 'Net Payable', format1)
 
 
-
-
- 
-
-
-
-        
-
-
-
-
         
         format2 = workbook.add_format({'font_size': '12', 'align': 'center',})
         row = 4
@@ -337,10 +326,7 @@ class GenerateXLSXReport(models.Model):
                     if gros_line.code in ('EOB01'):
                         EOBI = gros_line.amount   
                         tot_EOBI += EOBI        
-                       
-                
-                        
-                        
+               
                 House_rent = 0
                 Misc_Deduct = 0
                 Variable_Pay_Adj_Ded = 0
