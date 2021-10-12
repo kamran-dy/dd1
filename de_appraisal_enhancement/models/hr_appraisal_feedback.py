@@ -7,8 +7,7 @@ class HrAppraisalFeedback(models.Model):
     _rec_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     
-#     objective_id = fields.Many2one('hr.appraisal.objective')
-#     appraisal_id = fields.Many2one('hr.appraisal')
+
 
     company_id = fields.Many2one('res.company', default=lambda self:self.env.company.id)
     description = fields.Char('Description')
@@ -18,19 +17,32 @@ class HrAppraisalFeedback(models.Model):
     job_title = fields.Char('Job Title', related = 'name.job_title')
     manager = fields.Char('Manager', related = 'name.parent_id.name')
     department = fields.Char('Department', related = 'name.department_id.name')
-#     date_joining = fields.Date('Date of Joining' related = 'name.contract_id.job_id.name')
     date_joining = fields.Date('Date of Joining')
-#     grade = fields.Char('Grade', related = 'name.department_id.name')
     grade = fields.Char('Grade')
-#      performance_period = fields.Float('Performance Period'related = 'name.department_id.name')
-    performance_period = fields.Selection([('2020', '2020'), ('2021', '2021'), ('2022', '2022'), ('2023', '2023')
-                                   , ('2024', '2024'), ('2025', '2025'), ('2026', '2026'), ('2027', '2027')
-                                   , ('2028', '2028'), ('2029', '2029'), ('2030', '2031'), ('2032', '2032')
-                                   , ('2033', '2033'), ('2034', '2034'), ('2035', '2035'), ('2036', '2036')
-                                   , ('2037', '2037'), ('2038', '2038'), ('2039', '2039'), ('2040', '2040')],
+    performance_period = fields.Selection([('2020', 'FY 2020-21'), 
+                                           ('2021', 'FY 2021-22'), 
+                                           ('2022', 'FY 2022-23'), 
+                                           ('2023', 'FY 2023-24'),
+                                           ('2024', 'FY 2024-25'), 
+                                           ('2025', 'FY 2025-26'), 
+                                           ('2026', 'FY 2026-27'), 
+                                           ('2027', 'FY 2027-28'),
+                                           ('2028', 'FY 2028-29'), 
+                                           ('2029', 'FY 2029-30'), 
+                                           ('2030', 'FY 2030-31'), 
+                                           ('2031', 'FY 2031-32'),
+                                           ('2032', 'FY 2032-33'),
+                                           ('2033', 'FY 2033-34'), 
+                                           ('2034', 'FY 2034-35'), 
+                                           ('2035', 'FY 2035-36'), 
+                                           ('2036', 'FY 2036-37'),
+                                           ('2037', 'FY 2037-38'), 
+                                           ('2038', 'FY 2038-39'), 
+                                           ('2039', 'FY 2039-40'), 
+                                           ('2040', 'FY 2040-41')],
                                string="Performance Period", readonly=True)
-    note = fields.Text('Note', compute = 'get_default_note')
     
+    note = fields.Text('Note', compute = 'get_default_note')   
     objective_comment = fields.Text('Emp. Half Year Comments')
     full_year_objective_comment = fields.Text('Manager Half Year Comments')
     value_comment = fields.Text('Emp. Half Year Comments')
@@ -51,9 +63,9 @@ class HrAppraisalFeedback(models.Model):
         ('Strong Performance', 'Strong Performance'),
         ('Needs Improvement', 'Needs Improvement'),
         ('Unsatisfactory', 'Unsatisfactory'),
-    ], string='Employee Rating Level', index=True, copy=False, compute='compute_total_rating_level')
+    ], string='Rating Level', index=True, copy=False, compute='compute_total_rating_level')
     rating_score = fields.Float(string='Manager Rating Score', compute='compute_rating_level')
-    rating_score_calc = fields.Float(string='Manager Rating Score')
+    rating_score_calc = fields.Float(string='Rating Score')
     
     def compute_rating_level(self):
         for line in self:

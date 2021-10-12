@@ -82,22 +82,20 @@
                         <group>
                             <field name="mid_year_date" readonly="1"/>
                             <field name="date_mid_deadline" readonly="1"/>
-                            <field name="future_aspiration" attrs="{'readonly':[('state','!=','draft')]}"/>
-                            <field name="training_need" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            
+                            
                         </group>
                         <group>
                             <field name="end_year_date" readonly="1"/>
                             <field name="date_end_deadline" readonly="1"/>
-                            <field name="feedback_to_manager" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            
                         </group>
 					</group>
                     <group>
                         <group>
-                            <field name="rating_level" />
                             <field name="concerned_person" widget="radio" readonly="1" invisible="1"/>
                         </group>
                         <group>
-                            <field name="rating_score" />
                             <field name="rating_score_calc"  invisible='1'/>
                             <field name="appraisal_period" widget="radio" readonly="1" invisible="1"/>
                         </group>
@@ -113,11 +111,12 @@
                                attrs="{'invisible': [('state','in',('draft','confirm','expired','sent',
                                                     'endorsed_employee','endorsed_hod','done',
                                                     'end_year_appraisee_review'))]}">
-                            
-                            <field name="objective_score" readonly = "1"/>
-                            <field name="objective_rating" readonly = "1"/>
-                            <field name="behavioral_score" readonly = "1"/>
-                            <field name="behavioral_rating" readonly = "1"/>
+                            <field name="rating_level" />
+                            <field name="rating_score" />
+                            <field name="objective_score" readonly = "1" invisible="1"/>
+                            <field name="objective_rating" readonly = "1"  invisible="1"/>
+                            <field name="behavioral_score" readonly = "1"  invisible="1"/>
+                            <field name="behavioral_rating" readonly = "1" invisible="1"/>
                         </group>
                         <group string="Agreement with Full Year Evaluation"
                                attrs="{'invisible': [('state','in',('draft','confirm','expired','sent',
@@ -145,7 +144,7 @@
                                     <field name="remarks" attrs="{'readonly':[('state','!=','draft')]}"/>
                                     <field name='percentage_score' attrs="{'readonly':[('state','!=','draft')]}" invisible="1"/>
                                     <field name="remarks_mngr" attrs="{'readonly':[('state','!=','confirm')]}"/>
-                                    <field name='percentage_score_mngr' attrs="{'readonly':[('state','!=','confirm')]}" invisibl='1'/>
+                                    <field name='percentage_score_mngr' attrs="{'readonly':[('state','!=','confirm')]}" invisible='1'/>
                                     <field name="manager_rating_score" invisible='1'/>
                                     <field name="manager_rating_level" />
                                     <field name="concerned_person" invisible='1'/>
@@ -306,6 +305,11 @@
                             </group>
                         </page>
                         <page string="Note">
+                            <group>
+                                <field name="training_need" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="future_aspiration" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="feedback_to_manager" attrs="{'readonly':[('state','not in',['draft','end_year_appraisee_review'])]}"/>
+                            </group>
                             <group>
                                 <field name="note" readonly = "1"/>
                             </group>
