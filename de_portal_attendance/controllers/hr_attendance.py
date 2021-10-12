@@ -115,7 +115,7 @@ class CreateAttendance(http.Controller):
                     check1_in = checkout1_date_rectify
                     if checkout1_date_rectify:
                         check1_in = datetime.strptime(checkout1_date_rectify, '%Y-%m-%d') + timedelta(1) 
-                    checkout_date_rectify = datetime.strptime(str(check1_in) , '%Y-%m-%d')
+                    checkout_date_rectify = datetime.strptime(str(check1_in) , '%Y-%m-%d %H:%M:%S')
                     checkout_duration_obj = datetime.strptime(kw.get('check_out'), '%H:%M')
                     checkout_date_in = checkout_date_rectify + timedelta(hours=checkout_duration_obj.hour, minutes=checkout_duration_obj.minute)
                 
