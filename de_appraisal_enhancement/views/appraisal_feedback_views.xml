@@ -102,11 +102,7 @@
                     </group>          
                 
                     <group>
-                        <group string="Agreement with Half Year Evaluation" attrs="{'invisible': [('state','in',('draft','confirm','expired'))]}">
-                            <field name="agreement" widget="radio" attrs="{'readonly':[('state','!=','sent')]}"/>
-                            <field name="reason_for_disagreement"
-                                   attrs="{'readonly':['|',('agreement','=','fully'),('state','not in','sent')]}"/>
-                        </group>
+                        
                         <group string="Employee Overall Score"
                                attrs="{'invisible': [('state','in',('draft','confirm','expired','sent',
                                                     'endorsed_employee','endorsed_hod','done',
@@ -118,17 +114,7 @@
                             <field name="behavioral_score" readonly = "1"  invisible="1"/>
                             <field name="behavioral_rating" readonly = "1" invisible="1"/>
                         </group>
-                        <group string="Agreement with Full Year Evaluation"
-                               attrs="{'invisible': [('state','in',('draft','confirm','expired','sent',
-                                                    'endorsed_employee','endorsed_hod','done',
-                                                    'end_year_appraisee_review','end_year_appraiser_review'))]}">
-
-                            <field name="full_year_agreement"
-                                   attrs="{'readonly':[('state','!=','end_year_sent_emp_view')]}"
-                                   widget="radio"/>
-                            <field name="full_reason_for_disagreement"
-                                   attrs="{'readonly':['|',('full_year_agreement','=','fully'),('state','not in','end_year_sent_emp_view')]}"/>
-                        </group>
+                        
 					</group>
                     <notebook>
                         
