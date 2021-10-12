@@ -527,7 +527,7 @@ class GenerateXLSXReport(models.Model):
                 cost_account = ' '    
                 contract = self.env['hr.contract'].search([('employee_id','=',employee.id)], limit=1)  
                 for cost_line in contract.cost_center_information_line:
-                    cost_account = cost_line.cost_center_id.name
+                    cost_account = cost_line.cost_center.name
                 sheet.set_column('A:A', 5,)
                 sheet.write(row, 0, sr_no, format2)
                 sheet.write(row, 1, company, format2)
