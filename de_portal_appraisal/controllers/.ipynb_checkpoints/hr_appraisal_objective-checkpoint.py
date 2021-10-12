@@ -654,7 +654,9 @@ class CreateAppraisal(http.Controller):
         if line_count > 8:
             raise UserError(_('Maximum 8 objectives require to Submit Objective Setting (Minimum=3, Maximum=8)')) 
         if record.total_weightage != 100:
-            raise UserError('Total Weightage must be equal 100')  
+            raise UserError('Total Weightage must be equal 100')
+        if record.state == 'draft':    
+            record.action_sent_review()    
         return request.render("de_portal_appraisal.appraisal_submited", {})
     
     @http.route('/appraisal/extra/objective/save', type="http", auth="public", website=True)
