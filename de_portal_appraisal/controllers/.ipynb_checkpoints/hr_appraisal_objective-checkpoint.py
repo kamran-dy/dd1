@@ -153,6 +153,15 @@ class CreateAppraisal(http.Controller):
                 feedback.update({
                     'full_year_value_comment': kw.get('full_year_value_comment')
                 })
+            if kw.get('reason_for_disagreement'):
+                feedback.update({
+                    'reason_for_disagreement': kw.get('reason_for_disagreement')
+                })
+            if kw.get('full_reason_for_disagreement'):
+                feedback.update({
+                    'full_reason_for_disagreement': kw.get('full_reason_for_disagreement')
+                })    
+                
             if kw.get('full_year_value_comment'):
                 feedback.update({
                     'full_year_value_comment': kw.get('full_year_value_comment')
@@ -250,10 +259,10 @@ class CreateAppraisal(http.Controller):
                     feedback.update({
                         'recommend_promotion': kw.get('recommend_promotion')
                     })
-            if kw.get('promotion_position'):
-                if kw.get('promotion_position') !='blank':
+            if kw.get('promotion_grade'):
+                if kw.get('promotion_grade') !='blank':
                     feedback.update({
-                        'promotion_position': kw.get('promotion_position')
+                        'promotion_grade': kw.get('promotion_grade')
                     })
             if kw.get('date_effective'):
                 feedback.update({

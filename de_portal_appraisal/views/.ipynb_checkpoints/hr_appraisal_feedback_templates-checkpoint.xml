@@ -320,9 +320,7 @@
                                      <td class="text-left">
                                         <span t-esc="feedback.end_year_date" t-options='{"widget": "date"}' />
                                     </td>
-                                    <td class="text-left">
-                                        <span t-esc="feedback.performance_period" />
-                                    </td> 
+                                   
                                       <td class="text-left">
                                           <t t-if="feedback.performance_period == '2020'">
                                             <i class="badge badge-pill badge-info" >FY 2020-21</i>
@@ -495,8 +493,8 @@
                                   <t t-if="feedback.state == 'endorsed_employee'">
                                    
                                       <t t-if="feedback.name.department_id.manager_id.user_id.id == uid">
-                                        <a t-attf-href="/action/endorsed/hr/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%; ">Endorsed By HOD</div> </a>
-                                           <a t-attf-href="/action/reset/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%; ">Refuse </div> </a> 
+                                        <a t-attf-href="/action/endorsed/hr/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%;margin-left:12px;">Confirm</div> </a>
+                                           <a t-attf-href="/action/reset/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%;margin-right:8px;">Refuse </div> </a> 
                                     </t>
                                  </t>  
                                <t t-if="feedback.state == 'end_year_appraisee_review'">
@@ -521,7 +519,7 @@
                                 <t t-if="feedback.state == 'end_year_endorsed_emp'">
                                    
                                       <t t-if="feedback.name.department_id.manager_id.user_id.id == uid">
-                                        <a t-attf-href="/action/end/endoresd/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%;margin-left:12px;">Endorsed By HOD </div> </a>
+                                        <a t-attf-href="/action/end/endoresd/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%;margin-left:12px;">Confirm </div> </a>
                                         <a t-attf-href="/action/reset/hod/#{feedback.id}?" > <div class="btn btn-primary pull-right" style="height:30px; line-height:100%;margin-right:8px;">Refuse </div> </a>    
                                     </t>
                                  </t>
@@ -1295,7 +1293,7 @@
                                 <span class="s_website_form_label_content">Core Value Comments</span>
                             </label>
                             <div class="col-sm"> 
-                               <t t-if='feedback.state!="confirm"'>
+                               <t t-if='feedback.state=="confirm"'>
                                   <input id='full_year_value_comment' type="text" class="form-control s_website_form_input" name="full_year_value_comment"  t-att-value="feedback.full_year_value_comment"/>
                                 </t>    
                                  <t t-if='feedback.state!="confirm"'>
@@ -1471,6 +1469,9 @@
                                 if ( reason_disagree === "partially" ) {                                    
                                    $("#disagreereson").hide();                                   
                                   }
+                                 if ( reason_disagree === "blank" ) {                                    
+                                   $("#disagreereson").hide();                                   
+                                  }
                             
                                 var full_reason_disagree = $( "#full_reason_disagree" ).val();
                                 if ( full_reason_disagree === "not_agree" ) {                                    
@@ -1479,8 +1480,8 @@
                                 if ( full_reason_disagree === "fully" ) {                                    
                                    $("#fulldisagreereson").hide();                                   
                                   }
-                                if ( reason_disagree === "blank" ) {                                    
-                                   $("#disagreereson").hide();                                   
+                                if ( full_reason_disagree === "blank" ) {                                    
+                                   $("#fulldisagreereson").hide();                                   
                                   }
                                 if ( full_reason_disagree === "partially" ) {                                    
                                    $("#fulldisagreereson").show();                                   
@@ -1497,9 +1498,7 @@
                                     $("#promotion_position").show();  
                                     $("#promotion_grade").show();                                    
                                   }
-                                if ( reason_disagree === "blank" ) {                                    
-                                   $("#disagreereson").hide();                                   
-                                  }
+                               
                                
                             
                             });
@@ -1532,8 +1531,8 @@
                                 if ( full_reason_disagree === "partially" ) {                                    
                                    $("#fulldisagreereson").show();                                   
                                   }
-                                if ( reason_disagree === "blank" ) {                                    
-                                   $("#disagreereson").hide();                                   
+                                if ( full_reason_disagree === "blank" ) {                                    
+                                   $("#fulldisagreereson").hide();                                   
                                   }
                               });
                             
@@ -1549,8 +1548,9 @@
                                     $("#promotion_position").show();  
                                     $("#promotion_grade").show();                                 
                                   }
-                                 if ( reason_disagree === "blank" ) {                                    
-                                   $("#disagreereson").hide();                                   
+                                 if ( promotion_measure === "blank" ) {                                    
+                                   $("#promotion_position").hide();  
+                                    $("#promotion_grade").hide();                                     
                                   }                                
                               });                                                          
                             }); 
@@ -1563,6 +1563,7 @@
                                  <div class="col-md-6">
                                  
                                  <t t-if="feedback.state=='sent'">   
+                                  <t t-if='feedback.name.user_id.id==uid'>
                                   <select   id='reason_disagree'  t-att-value="feedback.agreement"  class="form-control  s_website_form_input" name="agreement" >
                                      <option value="blank"> </option>     
                                      <option value="fully">Agree</option>  
@@ -1570,7 +1571,7 @@
                                    
                                 
                                  </select>
-                                    
+                                </t>    
                                 </t>
                                    <t t-if="feedback.agreement=='not_agree'">
                                        <i class="badge badge-pill badge-info" >Disagree</i>
@@ -1607,13 +1608,13 @@
                        <t t-if="feedback.state in ('end_year_sent_emp_view','end_year_endorsed_emp','end_year_endorse_hod','closed')"> 
                         <h4><p style='color:blue;'>Agreement with Full Year Evaluation</p></h4>                          
                                  <div class="col-md-6">
-                                 
+                                <t t-if='feedback.name.user_id.id==uid'>
                                   <select   id='full_reason_disagree'  t-att-value="feedback.full_year_agreement"  class="form-control  s_website_form_input" name="full_year_agreement" >
                                     <option value="blank"> </option>
                                     <option value="fully">Agree</option>
                                     <option value="not_agree">Disagree</option>
                                  </select>
-                                     <br/>
+                                </t>   
                                      <br/>
                                    <t t-if="feedback.full_year_agreement=='not_agree'">
                                        <i class="badge badge-pill badge-info" >Disagree</i>
@@ -1637,8 +1638,8 @@
                                                 <input id='full_reason_for_disagreement' type="text" class="form-control s_website_form_input" name="full_reason_for_disagreement"  t-att-value="feedback.full_reason_for_disagreement"/>
                                             </t> 
                                              </t>    
-                                            <t t-if='feedback.name.user_id.id!=uid'>
-                                               <t t-esc="feedback.full_reason_for_disagreement" /> 
+                                                <t t-if="feedback.state!='end_year_sent_emp_view'">      
+                                                <t t-esc="feedback.full_reason_for_disagreement" /> 
                                             </t>    
                                         </div>
                                    </div>
@@ -1652,7 +1653,7 @@
                                <p style='color:blue;'><h4>Strengths/Weaknesses and Training</h4></p>    
                        <div class="row">                             
                            <br/>                      
-                               <div class="col-md-6" style='color:blue;'> <strong>Strengths/Achievements</strong>
+                               <div class="col-md-6" style='color:blue;'> <strong>Strengths/Achievements</strong><br/>
                                   <span t-esc="feedback.strength_1" />                                       
                                   <span t-esc="feedback.strength_2" />    
                                   <span t-esc="feedback.strength_3" />                                       
@@ -1660,7 +1661,7 @@
                                   <span t-esc="feedback.strength_5" />                                    
                                </div>  
                            
-                               <div class="col-md-6" style='color:blue;'> <strong>Weaknesses/Area for Improvement : </strong>
+                               <div class="col-md-6" style='color:blue;'> <strong>Weaknesses/Area for Improvement : </strong><br/>
                                  <span t-esc="feedback.improvements_1" />                                       
                                   <span t-esc="feedback.improvements_2" />    
                                   <span t-esc="feedback.improvements_3" />                                       
@@ -1672,7 +1673,7 @@
                               
                      <div class="row">                             
                            <br/>                       
-                               <div class="col-md-6" style='color:blue;'> <strong>Training</strong>
+                               <div class="col-md-6" style='color:blue;'> <strong>Training</strong><br/>
                                  <span t-esc="feedback.training_1" />                                       
                                   <span t-esc="feedback.training_2" />    
                                   <span t-esc="feedback.training_3" />                                       
@@ -1681,7 +1682,7 @@
                                  
                                </div>  
                            
-                               <div class="col-md-6" style='color:blue;'> <strong>Reason : </strong>
+                               <div class="col-md-6" style='color:blue;'> <strong>Reason : </strong><br/>
                                      <span t-esc="feedback.reason_1" />                                       
                                       <span t-esc="feedback.reason_2" />    
                                       <span t-esc="feedback.reason_3" />                                       
@@ -1689,7 +1690,79 @@
                                       <span t-esc="feedback.reason_5" />  
                             </div>
                          
-                    </div>       
+                       </div>       
+                          </t>  
+                        </t>    
+                       
+                       <t t-if="feedback.state in ('end_year_sent_emp_view','end_year_endorsed_emp','end_year_endore_hod','closed')">
+                          <t t-if="feedback.name.department_id.manager_id.user_id.id ==uid" >
+                               <p style='color:blue;'><h4>Strengths/Weaknesses and Training</h4></p>    
+                       <div class="row">                             
+                           <br/>                      
+                               <div class="col-md-6" style='color:blue;'> <strong>Strengths/Achievements</strong><br/>
+                                  <span t-esc="feedback.strength_1" />                                       
+                                  <span t-esc="feedback.strength_2" />    
+                                  <span t-esc="feedback.strength_3" />                                       
+                                  <span t-esc="feedback.strength_4" />
+                                  <span t-esc="feedback.strength_5" />                                    
+                               </div>  
+                           
+                               <div class="col-md-6" style='color:blue;'> <strong>Weaknesses/Area for Improvement : </strong><br/>
+                                 <span t-esc="feedback.improvements_1" />                                       
+                                  <span t-esc="feedback.improvements_2" />    
+                                  <span t-esc="feedback.improvements_3" />                                       
+                                  <span t-esc="feedback.improvements_4" />
+                                  <span t-esc="feedback.improvements_5" />
+                                
+                              </div>
+                    </div> 
+                              
+                     <div class="row">                             
+                           <br/>                       
+                               <div class="col-md-6" style='color:blue;'> <strong>Training</strong><br/>
+                                 <span t-esc="feedback.training_1" />                                       
+                                  <span t-esc="feedback.training_2" />    
+                                  <span t-esc="feedback.training_3" />                                       
+                                  <span t-esc="feedback.training_4" />
+                                  <span t-esc="feedback.training_5" />                  
+                                 
+                               </div>  
+                           
+                               <div class="col-md-6" style='color:blue;'> <strong>Reason : </strong><br/>
+                                     <span t-esc="feedback.reason_1" />                                       
+                                      <span t-esc="feedback.reason_2" />    
+                                      <span t-esc="feedback.reason_3" />                                       
+                                      <span t-esc="feedback.reason_4" />
+                                      <span t-esc="feedback.reason_5" />  
+                            </div>
+                         
+                       </div> 
+                              <br/>
+                              <div class='row'>
+                                     
+                                       <strong>Promotion To Position	: </strong><br/>
+                                            <i class="badge badge-pill badge-info" ><span t-esc="feedback.promotion_position" /></i><br/> 
+                                       
+                              
+                              </div>    
+                              <br/>
+                              <div class='row'>
+                                     
+                                       
+                                       <strong>Promotion To Grade : </strong>
+                                          <br/>
+                                           <i class="badge badge-pill badge-info" ><span t-esc="feedback.promotion_grade" /></i><br/> 
+                                       
+                              
+                              </div> 
+                              <br/>
+                              <div class='row'>
+                                     
+                                       <strong>With Effect From : </strong><br/>
+                                       <span t-esc="feedback.date_effective"  t-options='{"widget": "date"}'/>
+                                     
+                              
+                              </div>    
                           </t>  
                         </t>    
                          
@@ -1713,7 +1786,8 @@
                                    
                                    <input id="strength_5"  type="float" class="form-control s_website_form_input" name="strength_5"  t-att-value="feedback.strength_5"  multiple="true" />
                                 </t>
-                                   <t t-if="feedback.state != 'end_year_appraiser_review'">    
+                                   <t t-if="feedback.state != 'end_year_appraiser_review'">
+                                       <br/>
                                         <span t-esc="feedback.strength_1" />                                     
                                         <span t-esc="feedback.strength_2" />    
                                         <span t-esc="feedback.strength_3" />                                       
@@ -1735,7 +1809,8 @@
                                    
                                    <input id="improvements_5"  type="float" class="form-control s_website_form_input" name="improvements_5"  t-att-value="feedback.improvements_5"  multiple="true" />
                                  </t>
-                                   <t t-if="feedback.state != 'end_year_appraiser_review'">    
+                                   <t t-if="feedback.state != 'end_year_appraiser_review'">  
+                                       <br/>
                                         <span t-esc="feedback.improvements_1" />                                       
                                         <span t-esc="feedback.improvements_2" />    
                                         <span t-esc="feedback.improvements_3" />                                       
@@ -1743,9 +1818,9 @@
                                         <span t-esc="feedback.improvements_5" />   
                                    </t>
                                 
-                                </div>
+                               </div>
                          
-                    </div> 
+                         </div> 
                               
                      <div class="row">                             
                            <br/>
@@ -1763,7 +1838,8 @@
                                    
                                    <input id="training_5"  type="float" class="form-control s_website_form_input" name="training_5"  t-att-value="feedback.training_5"  multiple="true" />
                                 </t>
-                                   <t t-if="feedback.state != 'end_year_appraiser_review'">    
+                                   <t t-if="feedback.state != 'end_year_appraiser_review'">
+                                       <br/>
                                         <span t-esc="feedback.training_1" />                                     
                                         <span t-esc="feedback.training_2" />    
                                         <span t-esc="feedback.training_3" />                                       
@@ -1786,7 +1862,8 @@
 
                                        <input id="reason_5"  type="float" class="form-control s_website_form_input" name="reason_5"  t-att-value="feedback.reason_5"  multiple="true" />
                                 </t>
-                                  <t t-if="feedback.state != 'end_year_appraiser_review'">    
+                                  <t t-if="feedback.state != 'end_year_appraiser_review'"> 
+                                      <br/>
                                         <span t-esc="feedback.reason_1" />                                     
                                         <span t-esc="feedback.reason_2" />    
                                         <span t-esc="feedback.reason_3" />                                       
@@ -1835,8 +1912,20 @@
                                        <strong>With Effect From : </strong>
                                        <input id="date_effective"  type="date" class="form-control s_website_form_input" name="date_effective"  t-att-value="feedback.date_effective"  multiple="true" />
                                 </t> 
+                                    <!--  Review Feedback -->
                                    
-                               
+                                   <t t-if="feedback.state != 'end_year_appraiser_review'">    
+                                       
+                                       <strong>Promotion To Position	: </strong><br/>
+                                            <i class="badge badge-pill badge-info" ><span t-esc="feedback.promotion_position" /></i><br/> 
+                                       <strong>Promotion To Grade : </strong>
+                                          <br/>
+                                           <i class="badge badge-pill badge-info" ><span t-esc="feedback.promotion_grade" /></i><br/> 
+                                       
+                                       <strong>With Effect From : </strong>
+                                       <span t-esc="feedback.date_effective"  t-options='{"widget": "date"}'/><br/>
+                                     
+                                   </t>
                                   
                                 </div>              
                                 
@@ -1844,7 +1933,8 @@
                     </t>
                     
                     <!-- End   -->                   
-                    
+                    <br/>
+                    <br/>
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> 
 
                 <input id='recordid' type="hidden" class="form-control s_website_form_input" name="record_id"   t-att-value="feedback.id"/>
